@@ -22,7 +22,74 @@
 (추가 예정)
 
 ### 🛠 Development Environment   
-<img src="https://img.shields.io/badge/Node.js-v16-green"/> <img src="https://img.shields.io/badge/PostgreSQL-v12.5-blue"/> <img src="https://img.shields.io/badge/Express-v4.17.2-green"/> <img src="https://img.shields.io/badge/Javascript-es6-yellow"/> <img src="https://img.shields.io/badge/firebase-yellow"/>   
+<img src="https://img.shields.io/badge/Node.js-v16-green"/> <img src="https://img.shields.io/badge/PostgreSQL-v12.5-blue"/> <img src="https://img.shields.io/badge/Express-v4.17.2-green"/> <img src="https://img.shields.io/badge/Javascript-es6-yellow"/> <img src="https://img.shields.io/badge/firebase-yellow"/>  
+
+### 📁 Foldering
+
+```
+
+📁 functions _ 
+            |_ 📁 api _ 
+            |         |_ 📋 index.js
+            |         |_ 📁 routes _
+            |                      |_ 📋 index.js
+            |                      |_ 📁 auth 
+            |			   |_ 📁 user
+            |                      |_ 📁 content           
+            |                      |_ 📁 category
+	    |                      |_ 📁 recommendation
+	    |                      |_ 📁 notification
+            |
+            |_ 📁 constants _ 
+            |               |_ 📋responseMessage.js
+            |               |_ 📋 statusCode.js
+            |
+            |_ 📁 lib _ 
+            |	      |_ 📋 util.js
+            |
+            |_ 📁 db _
+                      |_ 📋 index.js
+                      |_ 📋 db.js
+                      |_ 📋 user.js
+                      |_ 📋 category.js
+		      |_ 📋 content.js
+		      |_ 📋 category_content.js
+		      |_ 📋 notification.js
+		      |_ 📋 recommendation.js
+		      |_ 📋 category_image.js
+
+```
+
+### 📌 담당 API 및 구현 진척도
+
+| 기능명 | 담당자 | 완료 여부 |
+| :-----: | :---: | :---: |
+| 카카오 로그인 | `주효식` |  |
+| 마이페이지 조회 | `주효식` |  |
+| 스크랩 | `주효식` |  |
+| 콘텐츠 생성 | `주효식` |  |
+| 콘텐츠 조회 여부 토글 | `주효식` |  |
+| 전체 콘텐츠 조회 | `주효식` |  |
+| 전체 콘텐츠 검색 | `주효식` |  |
+| 콘텐츠 카테고리 이동 | `주효식` |  |
+| 최근 저장 콘텐츠 조회 | `주효식` |  |
+| 봐야 하는 콘텐츠 조회 | `채정아` |  |
+| 콘텐츠 삭제 | `주효식` |  |
+| 콘텐츠 제목 변경 | `주효식` |  |
+| 추천 사이트 조회 | `채정아` |  |
+| 카테고리 전체 조회 | `채정아` |  |
+| 카테고리 생성 | `채정아` |  |
+| 카테고리 수정 | `채정아` |  |
+| 카테고리 삭제 | `채정아` |  |
+| 카테고리 별 콘텐츠 조회 | `채정아` |  |
+| 카테고리 이름 조회 | `채정아` |  |
+| 카테고리 별 콘텐츠 검색 | `채정아` |  |
+| 카테고리 아이콘 이미지 조회 | `채정아` |  |
+| 카테고리 순서 변경 | `채정아` |  |
+| 알림 전체 조회 | `채정아` |  |
+| 알림 수정 | `채정아` |  |
+| 알림 삭제 | `채정아` |  |
+
 
 ### 📌 Branch Strategy
 
