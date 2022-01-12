@@ -13,6 +13,9 @@ module.exports = {
     NO_USER: '존재하지 않는 회원입니다.',
     INVALID_EMAIL: '잘못된 이메일입니다.',
     MISS_MATCH_PW: '비밀번호가 맞지 않습니다.',
+
+    //카테고리
+    ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
   
     // 프로필 조회
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
