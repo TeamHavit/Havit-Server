@@ -30,14 +30,23 @@ const checkUser = async (req, res, next) => {
         // 유저id가 없을 시의 에러 처리입니다.
         if (!userId) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_INVALID));
 
+        /**
+         * 로그인 구현 전 jwt token 으로 user id만 찾아 오기 위해 주석 처리함
+         */
+
         // 위의 id 값으로 유저를 조회합니다.
-        const user = await userDB.getUserById(client, userId);
+        // const user = await userDB.getUserById(client, userId);
 
         // 유저가 없을 시의 에러 처리입니다.
-        if (!user) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.NO_USER));
+        // if (!user) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.NO_USER));
 
         // 유저를 찾았으면, req.user에 유저 객체를 담아서 next()를 이용해 다음 middleware로 보냅니다.
         // 다음 middleware는 req.user에 담긴 유저 정보를 활용할 수 있습니다.
+        // req.user = user;
+        /**
+         * 로그인 구현 전 개발 테스트 용
+         */
+        const user = { userId };
         req.user = user;
         next();
     } catch (error) {
