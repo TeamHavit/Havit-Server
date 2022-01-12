@@ -19,7 +19,8 @@
 [API 명세서 초안](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
 
 ### 📑 ERD
-(추가 예정)
+<img src="https://user-images.githubusercontent.com/20807197/149094399-3bf9bbe5-41e4-49ed-abcf-378c6ede413e.png" width="600px" height="600px" />
+
 
 ### 🛠 Development Environment   
 <img src="https://img.shields.io/badge/Node.js-v16-green"/> <img src="https://img.shields.io/badge/PostgreSQL-v12.5-blue"/> <img src="https://img.shields.io/badge/Express-v4.17.2-green"/> <img src="https://img.shields.io/badge/Javascript-es6-yellow"/> <img src="https://img.shields.io/badge/firebase-yellow"/>  
