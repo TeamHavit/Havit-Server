@@ -16,7 +16,7 @@
 ![image](https://user-images.githubusercontent.com/20807197/148189262-1dec5ee4-e543-4822-b930-e796ef405863.png)
 
 ### 💡 API 명세서
-(추가 예정)
+[API 명세서 초안](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
 
 ### 📑 ERD
 (추가 예정)
