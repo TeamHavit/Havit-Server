@@ -29,6 +29,7 @@ jobs:
           echo "${{ secrets.DB_PASSWORD }}" >> .env
           echo "${{ secrets.JWT_SECRET }}" >> .env
           echo "${{ secrets.TYPE }}" >> .env
+          echo "${{ secrets.PROJECT_ID }}" >> .env
           echo "${{ secrets.PRIVATE_KEY }}" >> .env
           echo "${{ secrets.PRIVATE_KEY_ID }}" >> .env
           echo "${{ secrets.CLIENT_EMAIL }}" >> .env
