@@ -27,7 +27,7 @@ const toggleContent = async (client, contentId) => {
         const { rows } = await client.query(
             `
             UPDATE content
-            SET is_seen = true
+            SET is_seen = true, seen_at = now()
             WHERE id = $1
             RETURNING id, is_seen
             `,
@@ -39,7 +39,7 @@ const toggleContent = async (client, contentId) => {
         const { rows } = await client.query(
             `
             UPDATE content
-            SET is_seen = false
+            SET is_seen = false, seen_at = null
             WHERE id = $1
             RETURNING id, is_seen
             `,
