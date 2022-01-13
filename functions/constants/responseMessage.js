@@ -14,6 +14,9 @@ module.exports = {
     INVALID_EMAIL: '잘못된 이메일입니다.',
     MISS_MATCH_PW: '비밀번호가 맞지 않습니다.',
 
+    // 콘텐츠
+    SCRAP_CONTENT_SUCCESS: '콘텐츠 스크랩 성공',
+
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
   
