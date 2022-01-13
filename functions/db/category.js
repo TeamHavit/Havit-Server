@@ -16,6 +16,20 @@ const getAllCategories = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
+const getCategoryNames = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.title 
+        FROM category c
+        WHERE user_id = $1 
+        AND is_deleted = FALSE
+        ORDER BY c.order_index
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
 const addCategory = async (client, userId, title, imageId, content_number, order_index) => {
     const { rows } = await client.query(
         `
@@ -30,4 +44,4 @@ const addCategory = async (client, userId, title, imageId, content_number, order
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getAllCategories, addCategory };
+module.exports = { getAllCategories, addCategory, getCategoryNames };
