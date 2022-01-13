@@ -1,4 +1,5 @@
 module.exports = {
     categoryDB: require('./category'),
-    contentDB: require('./content')
+    contentDB: require('./content'),
+    notificationDB: require('./notification')
 };
