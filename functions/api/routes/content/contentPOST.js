@@ -19,7 +19,9 @@ module.exports = async (req, res) => {
   const {userId} = req.user;
 
   // 필수 데이터가 없을 경우 에러 처리
-  if (!title || !url) return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
+  if (!title || !url) {
+      return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
+  }
 
   let client;
   
@@ -29,7 +31,6 @@ module.exports = async (req, res) => {
     const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified);
     const contentId = content.id;
     const notification = await notificationDB.addNotification(client, userId, contentId, notificationTime);
-    console.log(content, notification);
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.ADD_ONE_CONTENT_SUCCESS));
     
   } catch (error) {
