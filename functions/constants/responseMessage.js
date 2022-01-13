@@ -17,6 +17,7 @@ module.exports = {
     // 콘텐츠
     SCRAP_CONTENT_SUCCESS: '콘텐츠 스크랩 성공',
     ADD_ONE_CONTENT_SUCCESS: '콘텐츠 생성 성공',
+    TOGGLE_CONTENT_SUCCESS: '콘텐츠 조회 여부 토글 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
