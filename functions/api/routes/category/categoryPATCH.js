@@ -6,6 +6,11 @@ const slackAPI = require('../../../middlewares/slackAPI');
 const db = require('../../../db/db');
 const { categoryDB } = require('../../../db');
 
+/**
+ *  @route PATCH /category/:categoryId
+ *  @desc 카테고리 수정 
+ *  @access Private
+ */
 module.exports = async (req, res) => {
     const { categoryId } = req.params;
     const { title, imageId } = req.body;

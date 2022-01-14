@@ -10,7 +10,7 @@ const ogs = require('open-graph-scraper');
  */
 
 module.exports = async(req, res) => {
-    const {link} = req.body; // 클라이언트에게 받은 url 링크
+    const { link } = req.body; // 클라이언트에게 받은 url 링크
     
     if (!link) { 
       // url 링크가 존재하지 않을 때
