@@ -13,7 +13,7 @@ const addContent = async (client, userId, title, description, image, url, isNoti
         [userId, title, description, image, url, isNotified]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
-}
+};
 
 const toggleContent = async (client, contentId) => {
     const { rows } = await client.query(
@@ -32,7 +32,7 @@ const toggleContent = async (client, contentId) => {
             RETURNING id, is_seen
             `,
             [contentId]
-        )
+        );
         return convertSnakeToCamel.keysToCamel(rows[0]);
     }
     else {
@@ -44,9 +44,27 @@ const toggleContent = async (client, contentId) => {
             RETURNING id, is_seen
             `,
             [contentId]
-        )
+        );
         return convertSnakeToCamel.keysToCamel(rows[0]);
     }
-}
+};
 
-module.exports = { addContent, toggleContent };
+const getAllContents = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        FROM content c
+        JOIN notification n on c.id = n.content_id
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
+        UNION ALL
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
+        ORDER BY created_at
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+module.exports = { addContent, toggleContent, getAllContents };
