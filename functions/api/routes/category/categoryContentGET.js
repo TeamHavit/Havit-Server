@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
             contents = await categoryContentDB.getCategoryContentByFilterAndSeen(client, userId, categoryId, seen, filter);
         }
         if (filter == "reverse") {
-            //filter 가 과거순일 경우 created_at 기준 reverse
+            // filter가 과거순일 경우 created_at 기준 reverse
             contents = contents.reverse();
         }
         contents.map(obj => {
