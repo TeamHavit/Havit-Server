@@ -37,9 +37,9 @@ module.exports = async (req, res) => {
              * 클라이언트가 사용할 createdAt, notificationTime 은 day js로 format 수정
              * is_notified = null 이면 빈 문자열로 수정
              */
-            obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD hh:mm");
+            obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm");
             if (obj.notificationTime) {
-                obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD hh:mm");
+                obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
             } else {
                 obj.notificationTime = "";
             }
