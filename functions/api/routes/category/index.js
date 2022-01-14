@@ -6,5 +6,6 @@ router.post('/', checkUser, require('./categoryPOST'));
 router.get('/', checkUser, require('./categoryGET'));
 router.get('/name', checkUser, require('./categoryNameGET'));
 router.get('/:categoryId', checkUser, require('./categoryContentGET'));
+router.patch('/:categoryId', checkUser, require('./categoryPATCH'));
 
 module.exports = router;

@@ -1,5 +1,10 @@
 const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const getAllCategories = async (client, userId) => {
     const { rows } = await client.query(
@@ -44,4 +49,31 @@ const addCategory = async (client, userId, title, imageId, content_number, order
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getAllCategories, addCategory, getCategoryNames };
+const updateCategory = async (client, categoryId, title, imageId) => {
+    const currentTime = dayjs().tz("Asia/Seoul").format();
+    const { rows: existingRows } = await client.query(
+        `
+    SELECT * FROM category c
+    WHERE id = $1
+       AND is_deleted = FALSE
+    `,
+    [categoryId],
+    );
+
+    if (existingRows.length === 0) return false;
+
+    const data = _.merge({}, convertSnakeToCamel.keysToCamel(existingRows[0]), { title, imageId });
+ 
+    const { rows } = await client.query(
+    `
+    UPDATE category c
+    SET title = $1, category_image_id = $2, edited_at = $4
+    WHERE id = $3
+    RETURNING * 
+    `,
+    [data.title, data.imageId, categoryId, currentTime],
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory };

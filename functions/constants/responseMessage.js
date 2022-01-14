@@ -26,6 +26,8 @@ module.exports = {
     READ_CATEGORY_SUCCESS: '카테고리 전체 조회 성공',
     READ_CATEGORY_NAME_SUCCESS: '카테고리 이름 조회 성공',
     READ_CATEGORY_CONTENT_SUCCESS: '카테고리 별 콘텐츠 조회 성공',
+    UPDATE_ONE_CATEGORY_SUCCESS: '카테고리 수정 성공',
+    NO_CATEGORY: '존재하지 않는 카테고리',
     
     // 프로필 조회
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
