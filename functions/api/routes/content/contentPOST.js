@@ -4,8 +4,7 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const {contentDB} = require('../../../db');
-const {notificationDB} = require('../../../db');
+const { contentDB, categoryDB, categoryContentDB, notificationDB } = require('../../../db');
 
 /**
  *  @route POST /content
@@ -15,11 +14,11 @@ const {notificationDB} = require('../../../db');
 
 module.exports = async (req, res) => {
 
-  const {title, description = '', image = '', url, isNotified, notificationTime = ''} = req.body;
-  const {userId} = req.user;
+  const { title, description = '', image = '', url, isNotified, notificationTime = null, categoryId} = req.body;
+  const { userId } = req.user;
 
   // 필수 데이터가 없을 경우 에러 처리
-  if (!title || !url) {
+  if (!title || !url || !categoryId) {
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
@@ -29,8 +28,10 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified);
-    const contentId = content.id;
-    const notification = await notificationDB.addNotification(client, userId, contentId, notificationTime);
+    const notification = await notificationDB.addNotification(client, userId, content.id, notificationTime);
+    const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+    const categoryNumber = await categoryDB.increaseContentNum(client, userId, categoryId);
+   
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.ADD_ONE_CONTENT_SUCCESS));
     
   } catch (error) {
