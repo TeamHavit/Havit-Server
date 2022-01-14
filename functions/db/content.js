@@ -1,10 +1,5 @@
 const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const addContent = async (client, userId, title, description, image, url, isNotified) => {
     const { rows } = await client.query(
@@ -29,15 +24,14 @@ const toggleContent = async (client, contentId) => {
         [contentId]
     );
     if (rows[0].is_seen === false) {
-        const currentTime = dayjs().tz("Asia/Seoul").format();
         const { rows } = await client.query(
             `
             UPDATE content
-            SET is_seen = true, seen_at = $2
+            SET is_seen = true, seen_at = now()
             WHERE id = $1
             RETURNING id, is_seen
             `,
-            [contentId, currentTime]
+            [contentId]
         );
         return convertSnakeToCamel.keysToCamel(rows[0]);
     }
