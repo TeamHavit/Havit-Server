@@ -13,7 +13,7 @@ const addContent = async (client, userId, title, description, image, url, isNoti
         [userId, title, description, image, url, isNotified]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
-}
+};
 
 const toggleContent = async (client, contentId) => {
     const { rows } = await client.query(
@@ -32,7 +32,7 @@ const toggleContent = async (client, contentId) => {
             RETURNING id, is_seen
             `,
             [contentId]
-        )
+        );
         return convertSnakeToCamel.keysToCamel(rows[0]);
     }
     else {
@@ -44,10 +44,10 @@ const toggleContent = async (client, contentId) => {
             RETURNING id, is_seen
             `,
             [contentId]
-        )
+        );
         return convertSnakeToCamel.keysToCamel(rows[0]);
     }
-}
+};
 
 const getAllContents = async (client, userId) => {
     const { rows } = await client.query(
@@ -63,8 +63,8 @@ const getAllContents = async (client, userId) => {
         ORDER BY created_at
         `,
         [userId]
-    )
+    );
     return convertSnakeToCamel.keysToCamel(rows);
-}
+};
 
 module.exports = { addContent, toggleContent, getAllContents };

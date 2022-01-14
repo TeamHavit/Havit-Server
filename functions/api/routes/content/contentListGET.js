@@ -10,7 +10,7 @@ const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 module.exports = async (req, res) => {
 
-  const {userId} = req.user;
+  const { userId } = req.user;
 
   let client;
   
@@ -28,8 +28,7 @@ module.exports = async (req, res) => {
         if (obj.notificationTime) {
             // notificationTime이 존재할 경우, format 수정
             obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD hh:mm");
-        }
-        else {
+        } else {
             // notificationTime이 존재하지 않는 경우, null을 빈 문자열로 변경
             obj.notificationTime = "";
         }
