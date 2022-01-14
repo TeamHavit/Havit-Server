@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const functions = require('firebase-functions');
 const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
@@ -13,16 +14,13 @@ const { categoryDB } = require('../../../db');
  */
 module.exports = async (req, res) => {
     const { userId } = req.user;
-    let titles = [];
     
     let client;
     
     try {
         client = await db.connect(req);
         const categoryNames = await categoryDB.getCategoryNames(client, userId);
-        categoryNames.map(obj => {
-            titles.push(obj.title);
-        });
+        const titles = _.map(categoryNames, 'title');
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_NAME_SUCCESS, titles));
     } catch (error) {
         console.log(error);
