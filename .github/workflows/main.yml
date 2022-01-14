@@ -42,16 +42,16 @@ jobs:
           cd functions
           touch havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
           echo '{' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "type": "${{ secrets.TYPE }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "project_id": "${{ secrets.PROJECT_ID }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "private_key": "${{ secrets.PRIVATE_KEY }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "private_key_id": "${{ secrets.PRIVATE_KEY_ID }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_email": "${{ secrets.CLIENT_EMAIL }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_id": "${{ secrets.CLIENT_ID }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "auth_uri": "${{ secrets.AUTH_URI }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "token_uri": "${{ secrets.TOKEN_URI }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_CERT_URL }}" ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_x509_cert_url": "${{ secrets.CLIENT_CERT_URL }} " ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "type": "${{ secrets.TYPE }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "project_id": "${{ secrets.PROJECT_ID }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "private_key": "${{ secrets.PRIVATE_KEY }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "private_key_id": "${{ secrets.PRIVATE_KEY_ID }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "client_email": "${{ secrets.CLIENT_EMAIL }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "client_id": "${{ secrets.CLIENT_ID }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "auth_uri": "${{ secrets.AUTH_URI }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "token_uri": "${{ secrets.TOKEN_URI }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_CERT_URL }}", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+          echo ' "client_x509_cert_url": "${{ secrets.CLIENT_CERT_URL }} ", ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
           echo '}' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
       
       - name: Install npm pacakges
