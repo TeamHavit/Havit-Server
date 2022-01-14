@@ -50,14 +50,14 @@ const addCategory = async (client, userId, title, imageId, content_number, order
 };
 
 const updateCategory = async (client, categoryId, title, imageId) => {
-    const nowTime = dayjs().tz("Asia/Seoul").format();
+    const currentTime = dayjs().tz("Asia/Seoul").format();
     const { rows: existingRows } = await client.query(
         `
     SELECT * FROM category c
     WHERE id = $1
        AND is_deleted = FALSE
     `,
-        [categoryId],
+    [categoryId],
     );
 
     if (existingRows.length === 0) return false;
@@ -71,7 +71,7 @@ const updateCategory = async (client, categoryId, title, imageId) => {
     WHERE id = $3
     RETURNING * 
     `,
-        [data.title, data.imageId, categoryId, nowTime],
+    [data.title, data.imageId, categoryId, currentTime],
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
