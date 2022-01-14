@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
                 obj.notificationTime = "";
             }
         });
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_SUCCESS, contents));
+        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_CONTENT_SUCCESS, contents));
     } catch (error) {
         console.log(error);
         functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
