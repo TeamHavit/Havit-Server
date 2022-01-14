@@ -4,8 +4,7 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const {contentDB, categoryDB, categoryContentDB} = require('../../../db');
-const {notificationDB} = require('../../../db');
+const { contentDB, categoryDB, categoryContentDB, notificationDB } = require('../../../db');
 
 /**
  *  @route POST /content
@@ -32,12 +31,7 @@ module.exports = async (req, res) => {
     const notification = await notificationDB.addNotification(client, userId, content.id, notificationTime);
     const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
     const categoryNumber = await categoryDB.increaseContentNum(client, userId, categoryId);
-    const result = {
-      content: content,
-      notification: notification,
-      categoryContent: categoryContent,
-      categoryNumber: categoryNumber
-    }
+   
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.ADD_ONE_CONTENT_SUCCESS));
     
   } catch (error) {
