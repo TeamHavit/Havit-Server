@@ -12,7 +12,6 @@ module.exports = async (req, res) => {
     const { userId } = req.user;
     const categoryId = req.params.categoryId;
     const { seen, filter } = req.query;
-    console.log(seen, filter)
     let contents = {};
     let client;
 
