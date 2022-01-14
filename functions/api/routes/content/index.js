@@ -6,4 +6,5 @@ router.get('/scrap', checkUser, require('./scrap'));
 router.post('/', checkUser, require('./contentPOST'));
 router.patch('/check', checkUser, require('./checkPATCH'));
 router.get('/', checkUser, require('./contentListGET'));
+router.get('/search', checkUser, require('./contentSearchGET'));
 module.exports = router;
