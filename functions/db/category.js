@@ -70,4 +70,17 @@ const updateCategory = async (client, categoryId, title, imageId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory };
+const increaseContentNum = async (client, userId, categoryId) => {
+    const { rows } = await client.query(
+        `
+        UPDATE category
+        SET content_number = content_number + 1
+        WHERE user_id = $1 AND id = $2
+        RETURNING content_number
+        `,
+        [userId, categoryId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}; 
+
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, increaseContentNum };
