@@ -18,12 +18,15 @@ module.exports = {
     SCRAP_CONTENT_SUCCESS: '콘텐츠 스크랩 성공',
     ADD_ONE_CONTENT_SUCCESS: '콘텐츠 생성 성공',
     TOGGLE_CONTENT_SUCCESS: '콘텐츠 조회 여부 토글 성공',
+    READ_ALL_CONTENT_SUCCESS: '전체 콘텐츠 조회 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
     READ_CATEGORY_SUCCESS: '카테고리 전체 조회 성공',
     READ_CATEGORY_NAME_SUCCESS: '카테고리 이름 조회 성공',
     READ_CATEGORY_CONTENT_SUCCESS: '카테고리 별 콘텐츠 조회 성공',
+    UPDATE_ONE_CATEGORY_SUCCESS: '카테고리 수정 성공',
+    NO_CATEGORY: '존재하지 않는 카테고리',
     
     // 프로필 조회
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
