@@ -1,10 +1,5 @@
 const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const getAllCategories = async (client, userId) => {
     const { rows } = await client.query(
@@ -36,22 +31,20 @@ const getCategoryNames = async (client, userId) => {
 };
 
 const addCategory = async (client, userId, title, imageId, content_number, order_index) => {
-    const currentTime = dayjs().tz("Asia/Seoul").format();
     const { rows } = await client.query(
         `
         INSERT INTO category
-        (user_id, title, category_image_id, content_number, order_index, created_at, edited_at)
+        (user_id, title, category_image_id, content_number, order_index)
         VALUES
-        ($1, $2, $3, $4, $5, $6, $6)
+        ($1, $2, $3, $4, $5)
         RETURNING *
         `,
-        [userId, title, imageId, content_number, order_index, currentTime],
+        [userId, title, imageId, content_number, order_index],
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
 const updateCategory = async (client, categoryId, title, imageId) => {
-    const currentTime = dayjs().tz("Asia/Seoul").format();
     const { rows: existingRows } = await client.query(
         `
     SELECT * FROM category c
@@ -68,11 +61,11 @@ const updateCategory = async (client, categoryId, title, imageId) => {
     const { rows } = await client.query(
     `
     UPDATE category c
-    SET title = $1, category_image_id = $2, edited_at = $4
+    SET title = $1, category_image_id = $2, edited_at = now()
     WHERE id = $3
     RETURNING * 
     `,
-    [data.title, data.imageId, categoryId, currentTime],
+    [data.title, data.imageId, categoryId],
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
