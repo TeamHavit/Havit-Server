@@ -36,15 +36,16 @@ const getCategoryNames = async (client, userId) => {
 };
 
 const addCategory = async (client, userId, title, imageId, content_number, order_index) => {
+    const currentTime = dayjs().tz("Asia/Seoul").format();
     const { rows } = await client.query(
         `
         INSERT INTO category
-        (user_id, title, category_image_id, content_number, order_index)
+        (user_id, title, category_image_id, content_number, order_index, created_at, edited_at)
         VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3, $4, $5, $6, $6)
         RETURNING *
         `,
-        [userId, title, imageId, content_number, order_index],
+        [userId, title, imageId, content_number, order_index, currentTime],
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
