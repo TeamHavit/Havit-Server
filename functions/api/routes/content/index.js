@@ -7,4 +7,5 @@ router.post('/', checkUser, require('./contentPOST'));
 router.patch('/check', checkUser, require('./contentCheckPATCH'));
 router.get('/', checkUser, require('./contentListGET'));
 router.get('/search', checkUser, require('./contentSearchGET'));
+router.get('/recent', checkUser, require('./contentRecentListGET'));
 module.exports = router;
