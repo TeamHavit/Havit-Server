@@ -112,5 +112,22 @@ const updateContentIsDeleted = async (client, categoryId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const getRecentContents = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        FROM content c
+        JOIN notification n on c.id = n.content_id
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
+        UNION ALL
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted };
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents };
