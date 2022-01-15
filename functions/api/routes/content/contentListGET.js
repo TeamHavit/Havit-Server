@@ -4,12 +4,12 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const {contentDB} = require('../../../db');
+const { contentDB } = require('../../../db');
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route PATCH /content
+ *  @route GET /content
  *  @desc 콘텐츠 전체 조회
  *  @access Private
  */

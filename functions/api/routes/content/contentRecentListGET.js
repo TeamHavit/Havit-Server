@@ -5,29 +5,42 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB } = require('../../../db');
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route PATCH /content/check
- *  @desc 콘텐츠 조회 여부 토글
+ *  @route GET /content/recent
+ *  @desc 최근 저장 콘텐츠 조회
  *  @access Private
  */
 
 module.exports = async (req, res) => {
 
-  const { contentId } = req.body
-  
-  if (!contentId) {
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
-  }
-  
-  let client;
+  const { userId } = req.user;
 
+  let client;
+  
   try {
     client = await db.connect(req);
 
-    const content = await contentDB.toggleContent(client, contentId);
-    
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.TOGGLE_CONTENT_SUCCESS, content));
+    const contents = await contentDB.getRecentContents(client, userId); // 최대 20개까지 조회
+
+    dayjs().format()
+    dayjs.extend(customParseFormat)
+
+    contents.map(obj => {
+        // 시간 데이터 dayjs로 format 수정
+        obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm"); // createdAt 수정
+        if (obj.notificationTime) {
+            // notificationTime이 존재할 경우, format 수정
+            obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
+        } else {
+            // notificationTime이 존재하지 않는 경우, null을 빈 문자열로 변경
+            obj.notificationTime = "";
+        }
+    });
+
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_RECENT_SAVED_CONTENT_SUCCESS, contents)); 
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);

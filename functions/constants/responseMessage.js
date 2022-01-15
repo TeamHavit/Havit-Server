@@ -20,6 +20,7 @@ module.exports = {
     TOGGLE_CONTENT_SUCCESS: '콘텐츠 조회 여부 토글 성공',
     READ_ALL_CONTENT_SUCCESS: '전체 콘텐츠 조회 성공',
     KEYWORD_SEARCH_CONTENT_SUCCESS: '전체 콘텐츠 키워드 검색 성공',
+    READ_RECENT_SAVED_CONTENT_SUCCESS: '최근 저장 콘텐츠 조회 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
