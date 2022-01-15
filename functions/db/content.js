@@ -88,6 +88,47 @@ const searchContent = async (client, userId, keyword) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
+const updateContentIsDeleted = async (client, categoryId) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET is_deleted = true, edited_at = now()
+        FROM ( 
+            SELECT ca_content.content_id , COUNT(*) AS category_count
+            FROM (
+                SELECT category_id, cc.content_id
+                FROM category_content cc, (
+                    SELECT cc.content_id
+                    FROM category_content cc
+                    WHERE cc.category_id = $1
+                ) AS sub_content_id
+                WHERE cc.content_id = sub_content_id.content_id ) AS ca_content
+            GROUP BY ca_content.content_id
+            HAVING COUNT(ca_content.content_id) > 0 ) AS count_content
+        WHERE count_content.category_count <= 1 AND content.id = count_content.content_id
+        `,
+        [categoryId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
 
+const getRecentContents = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        FROM content c
+        JOIN notification n on c.id = n.content_id
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
+        UNION ALL
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
+        ORDER BY created_at DESC
+        LIMIT 20
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent };
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents };

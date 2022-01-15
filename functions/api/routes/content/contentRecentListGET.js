@@ -9,8 +9,8 @@ const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route GET /content
- *  @desc 콘텐츠 전체 조회
+ *  @route GET /content/recent
+ *  @desc 최근 저장 콘텐츠 조회
  *  @access Private
  */
 
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const contents = await contentDB.getAllContents(client, userId);
+    const contents = await contentDB.getRecentContents(client, userId); // 최대 20개까지 조회
 
     dayjs().format()
     dayjs.extend(customParseFormat)
@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
         }
     });
 
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_ALL_CONTENT_SUCCESS , contents));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_RECENT_SAVED_CONTENT_SUCCESS, contents)); 
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);

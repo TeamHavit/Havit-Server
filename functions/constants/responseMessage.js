@@ -20,6 +20,7 @@ module.exports = {
     TOGGLE_CONTENT_SUCCESS: '콘텐츠 조회 여부 토글 성공',
     READ_ALL_CONTENT_SUCCESS: '전체 콘텐츠 조회 성공',
     KEYWORD_SEARCH_CONTENT_SUCCESS: '전체 콘텐츠 키워드 검색 성공',
+    READ_RECENT_SAVED_CONTENT_SUCCESS: '최근 저장 콘텐츠 조회 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
@@ -27,6 +28,7 @@ module.exports = {
     READ_CATEGORY_NAME_SUCCESS: '카테고리 이름 조회 성공',
     READ_CATEGORY_CONTENT_SUCCESS: '카테고리 별 콘텐츠 조회 성공',
     UPDATE_ONE_CATEGORY_SUCCESS: '카테고리 수정 성공',
+    DELETE_ONE_CATEGORY_SUCCESS: '카테고리 삭제 성공',
     NO_CATEGORY: '존재하지 않는 카테고리',
     
     // 프로필 조회
