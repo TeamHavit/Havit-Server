@@ -124,6 +124,7 @@ const getRecentContents = async (client, userId) => {
         FROM content c
         WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
         ORDER BY created_at DESC
+        LIMIT 20
         `,
         [userId]
     );

@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const contents = await contentDB.getRecentContents(client, userId);
+    const contents = await contentDB.getRecentContents(client, userId); // 최대 20개까지 조회
 
     dayjs().format()
     dayjs.extend(customParseFormat)
