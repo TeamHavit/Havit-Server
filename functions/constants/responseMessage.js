@@ -25,6 +25,7 @@ module.exports = {
     DELETE_CONTENT_SUCCESS: '콘텐츠 삭제 성공',
     NO_CONTENT: '존재하지 않는 콘텐츠',
     RENAME_CONTENT_SUCCESS: '콘텐츠 제목 변경 성공',
+    CHANGE_CONTENT_CATEGORY_SUCCESS: '콘텐츠 카테고리 변경 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
