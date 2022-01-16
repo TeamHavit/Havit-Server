@@ -6,9 +6,17 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, notificationDB, categoryContentDB } = require('../../../db');
 
+/**
+ *  @route DELETE /content/:contentId
+ *  @desc 콘텐츠 삭제
+ *  @access Private
+ */
+
 module.exports = async (req, res) => {
 
   const { contentId } = req.params;
+  console.log(contentId);
+  const { userId } = req.user;
   
   if (!contentId) {
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
@@ -23,24 +31,18 @@ module.exports = async (req, res) => {
 
     if (!content) {
       // 대상 콘텐츠가 없는 경우, 콘텐츠 삭제 실패
-      return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.NO_CONTENT, responseMessage.NO_CONTENT));
+      return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
     }
 
-    const categoryContent = await categoryContentDB.deleteCategoryContent(client, contentId);
+    const categoryContent = await categoryContentDB.deleteCategoryContentByContentId(client, contentId);
+    console.log(categoryContent);
 
-    let notification;
     if (content.isNotified === true) {
       // 알림이 설정되어 있는 경우, 알림도 삭제
-      notification = await notificationDB.deleteNotification(client, contentId);
+      const notification = await notificationDB.deleteNotification(client, userId, contentId);
     }
 
-    const result = {
-      content : content,
-      categoryContent: categoryContent,
-      notification: notification
-    };
-    
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_CONTENT_SUCCESS, result));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_CONTENT_SUCCESS));
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
