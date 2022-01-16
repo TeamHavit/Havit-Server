@@ -22,6 +22,8 @@ module.exports = {
     KEYWORD_SEARCH_CONTENT_SUCCESS: '전체 콘텐츠 키워드 검색 성공',
     READ_RECENT_SAVED_CONTENT_SUCCESS: '최근 저장 콘텐츠 조회 성공',
     READ_UNSEEN_CONTENT_SUCCESS: '봐야 하는 콘텐츠 조회 성공',
+    RENAME_CONTENT_SUCCESS: '콘텐츠 제목 변경 성공',
+    NO_CONTENT: '존재하지 않는 콘텐츠',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
