@@ -15,14 +15,13 @@ const addNotification = async (client, userId, contentId, notificationTime) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-const deleteNotification = async (client, contentId) => {
+const deleteNotification = async (client, userId, contentId) => {
     const { rows } = await client.query(
         `
         DELETE FROM notification
-        WHERE content_id = $1
-        RETURNING *
+        WHERE user_id = $1 AND content_id = $2
         `,
-        [contentId]
+        [userId, contentId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
