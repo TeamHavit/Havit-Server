@@ -10,5 +10,6 @@ router.get('/search', checkUser, require('./contentSearchGET'));
 router.get('/recent', checkUser, require('./contentRecentListGET'));
 router.get('/unseen', checkUser, require('./contentUnseenListGET'));
 router.delete('/:contentId', checkUser, require('./contentDELETE.js'));
+router.patch('/:contentId', checkUser, require('./contentRenamePATCH'));
 
 module.exports = router;

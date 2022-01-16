@@ -159,7 +159,19 @@ const deleteContent = async (client, contentId) => {
         `,
         [contentId]
     );
+}
+
+const renameContent = async (client, contentId, newTitle) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET title = $2, edited_at = now()
+        WHERE id = $1 AND is_deleted = FALSE
+        RETURNING *
+        `,
+        [contentId, newTitle]
+    );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent };
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent, renameContent };

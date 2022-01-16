@@ -23,7 +23,8 @@ module.exports = {
     READ_RECENT_SAVED_CONTENT_SUCCESS: '최근 저장 콘텐츠 조회 성공',
     READ_UNSEEN_CONTENT_SUCCESS: '봐야 하는 콘텐츠 조회 성공',
     DELETE_CONTENT_SUCCESS: '콘텐츠 삭제 성공',
-    NO_CONTENT: '콘텐츠가 없습니다',
+    NO_CONTENT: '존재하지 않는 콘텐츠',
+    RENAME_CONTENT_SUCCESS: '콘텐츠 제목 변경 성공',
 
     //카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
