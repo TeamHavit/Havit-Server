@@ -159,7 +159,8 @@ const deleteContent = async (client, contentId) => {
         `,
         [contentId]
     );
-}
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
 
 const renameContent = async (client, contentId, newTitle) => {
     const { rows } = await client.query(
