@@ -149,4 +149,17 @@ const getUnseenContents = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents };
+const deleteContent = async (client, contentId) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET is_deleted = TRUE
+        WHERE id = $1
+        RETURNING *
+        `,
+        [contentId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent };
