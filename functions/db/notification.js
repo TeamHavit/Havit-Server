@@ -15,4 +15,16 @@ const addNotification = async (client, userId, contentId, notificationTime) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-module.exports = { addNotification };
+const deleteNotification = async (client, contentId) => {
+    const { rows } = await client.query(
+        `
+        DELETE FROM notification
+        WHERE content_id = $1
+        RETURNING *
+        `,
+        [contentId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
+module.exports = { addNotification, deleteNotification };
