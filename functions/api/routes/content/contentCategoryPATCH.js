@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 
     const deletedCategoryIds = await categoryContentDB.deleteCategoryContentByContentId(client, contentId); // 기존 카테고리-콘텐츠 관계 모두 삭제
 
-    for (var newCategoryId of newCategoryIds) {
+    for (const newCategoryId of newCategoryIds) {
         // 새로운 카테고리마다 새로운 카테고리-콘텐츠 관계 생성
         const newCategoryContent = await categoryContentDB.addCategoryContent(client, newCategoryId, contentId);
     }
