@@ -4,9 +4,9 @@ const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 const getAllCategories = async (client, userId) => {
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.content_number, c.order_index, i.url
+        SELECT c.id, c.title, c.order_index, i.url
         FROM category c
-        JOIN category_image i on  c.category_image_id = i.id
+        JOIN category_image i on c.category_image_id = i.id
         WHERE user_id = $1
         AND is_deleted = FALSE
         ORDER BY c.order_index
@@ -30,16 +30,16 @@ const getCategoryNames = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-const addCategory = async (client, userId, title, imageId, content_number, order_index) => {
+const addCategory = async (client, userId, title, imageId, order_index) => {
     const { rows } = await client.query(
         `
         INSERT INTO category
-        (user_id, title, category_image_id, content_number, order_index)
+        (user_id, title, category_image_id, order_index)
         VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3, $4)
         RETURNING *
         `,
-        [userId, title, imageId, content_number, order_index],
+        [userId, title, imageId, order_index],
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
@@ -70,19 +70,6 @@ const updateCategory = async (client, categoryId, title, imageId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const increaseContentNum = async (client, userId, categoryId) => {
-    const { rows } = await client.query(
-        `
-        UPDATE category
-        SET content_number = content_number + 1
-        WHERE user_id = $1 AND id = $2
-        RETURNING content_number
-        `,
-        [userId, categoryId]
-    );
-    return convertSnakeToCamel.keysToCamel(rows[0]);
-}; 
-
 const deleteCategory = async (client, categoryId) => {
     const { rows } = await client.query(
         `
@@ -95,4 +82,4 @@ const deleteCategory = async (client, categoryId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, increaseContentNum, deleteCategory };
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory };
