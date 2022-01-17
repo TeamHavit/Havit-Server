@@ -131,7 +131,7 @@ const deleteContent = async (client, contentId) => {
     const { rows } = await client.query(
         `
         UPDATE content
-        SET is_deleted = TRUE
+        SET is_deleted = TRUE, is_notified = FALSE, notification_time = null
         WHERE id = $1
         RETURNING *
         `,
