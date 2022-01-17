@@ -4,7 +4,7 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const { contentDB, categoryDB, categoryContentDB, notificationDB } = require('../../../db');
+const { contentDB, categoryDB, categoryContentDB } = require('../../../db');
 
 /**
  *  @route POST /content
@@ -14,11 +14,11 @@ const { contentDB, categoryDB, categoryContentDB, notificationDB } = require('..
 
 module.exports = async (req, res) => {
 
-  const { title, description = '', image = '', url, isNotified, notificationTime = null, categoryId} = req.body;
+  const { title, description = '', image = '', url, isNotified, notificationTime = null, categoryIds} = req.body;
   const { userId } = req.user;
 
-  // 필수 데이터가 없을 경우 에러 처리
-  if (!title || !url || !categoryId) {
+  if (!title || !url || !categoryIds) {
+      // 필수 데이터가 없을 경우 에러 처리
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
@@ -27,10 +27,11 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified);
-    const notification = await notificationDB.addNotification(client, userId, content.id, notificationTime);
-    const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
-    const categoryNumber = await categoryDB.increaseContentNum(client, userId, categoryId);
+    const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
+    for (const categoryId of categoryIds) {
+      // 중복 카테고리 허용
+      const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+    }
    
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.ADD_ONE_CONTENT_SUCCESS));
     
