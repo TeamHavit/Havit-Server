@@ -1,16 +1,16 @@
 const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 
-const addContent = async (client, userId, title, description, image, url, isNotified) => {
+const addContent = async (client, userId, title, description, image, url, isNotified, notificationTime) => {
     const { rows } = await client.query(
         `
         INSERT INTO content
-        (user_id, title, description, image, url, is_notified)
+        (user_id, title, description, image, url, is_notified, notification_time)
         VALUES
-        ($1, $2, $3, $4, $5, $6)
+        ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
         `, 
-        [userId, title, description, image, url, isNotified]
+        [userId, title, description, image, url, isNotified, notificationTime]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
