@@ -19,28 +19,27 @@ module.exports = async(req, res) => {
     }
 
     try {
-        const data = await ogs({ url : link });
-        let response;
-        if (!data.result.ogImage) { 
-          // 이미지가 존재하지 않는 경우
-          response = {
-            ogTitle: data.result.ogTitle,
-            ogDescription: data.result.ogDescription,
-            ogImage: '',
-            ogUrl: data.result.ogUrl,
-            }
+      const data = await ogs({ url : link });
+      let response;
+      if (!data.result.ogImage) { 
+        // 이미지가 존재하지 않는 경우
+        response = {
+          ogTitle: data.result.ogTitle,
+          ogDescription: data.result.ogDescription,
+          ogImage: '',
+          ogUrl: data.result.ogUrl,
         }
-        else { 
-          // 이미지가 존재하는 경우
-          response = {
-            ogTitle: data.result.ogTitle,
-            ogDescription: data.result.ogDescription,
-            ogImage: data.result.ogImage,
-            ogUrl: data.result.ogUrl,
-            }
+      } else { 
+        // 이미지가 존재하는 경우
+        response = {
+          ogTitle: data.result.ogTitle,
+          ogDescription: data.result.ogDescription,
+          ogImage: data.result.ogImage,
+          ogUrl: data.result.ogUrl,
         }
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SCRAP_CONTENT_SUCCESS, response));
+      }
+      res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SCRAP_CONTENT_SUCCESS, response));
     } catch(error) {
-        console.log(error);
+      console.log(error);
     }
 };
