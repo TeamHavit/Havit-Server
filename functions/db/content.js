@@ -120,7 +120,7 @@ const getUnseenContents = async (client, userId) => {
         SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
         WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_seen = FALSE
-        ORDER BY created_at
+        ORDER BY created_at DESC
         `,
         [userId]
     );
