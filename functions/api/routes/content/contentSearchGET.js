@@ -9,7 +9,7 @@ const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route GET /content
+ *  @route GET /content/search?keyword=
  *  @desc 전체 콘텐츠 키워드 검색
  *  @access Private
  */
