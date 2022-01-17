@@ -103,14 +103,9 @@ const updateContentIsDeleted = async (client, categoryId) => {
 const getRecentContents = async (client, userId) => {
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
-        JOIN notification n on c.id = n.content_id
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
-        UNION ALL
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
-        FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE
         ORDER BY created_at DESC
         LIMIT 20
         `,
