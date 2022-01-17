@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const functions = require('firebase-functions');
 const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
@@ -8,9 +9,15 @@ const { categoryContentDB } = require('../../../db');
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat');
 
+/**
+ *  @route GET /category/:categoryId
+ *  @desc 카테고리 별 콘텐츠 조회
+ *  @access Private
+ */
+
 module.exports = async (req, res) => {
     const { userId } = req.user;
-    const categoryId = req.params.categoryId;
+    const { categoryId } = req.params;
     const { seen, filter } = req.query;
     let contents = {};
     let client;
@@ -24,24 +31,35 @@ module.exports = async (req, res) => {
         if (seen == "all") {
             // 전체 조회
             contents = await categoryContentDB.getAllCategoryContentByFilter(client, userId, categoryId, filter);
+            if (filter == "seen_at") {
+                // 최근 조회 순 기준인 경우, 조회하지 않은 콘텐츠 제외
+                const removedElements = _.remove(contents, function(content) {
+                    return content.isSeen === false;
+                });
+            }
         } else {
             // is_seen에 따라 조회
             contents = await categoryContentDB.getCategoryContentByFilterAndSeen(client, userId, categoryId, seen, filter);
         }
         if (filter == "reverse") {
-            // filter가 과거순일 경우 created_at 기준 reverse
+            // DESC를 이용했으므로 다시 reverse
             contents = contents.reverse();
         }
         contents.map(obj => {
             /**
-             * 클라이언트가 사용할 createdAt, notificationTime 은 day js로 format 수정
-             * is_notified = null 이면 빈 문자열로 수정
+             * 클라이언트가 사용할 createdAt, notificationTime, seenAt 은 day js로 format 수정
+             * 시간이 null이면 빈 문자열로 수정
              */
             obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm");
             if (obj.notificationTime) {
                 obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
             } else {
                 obj.notificationTime = "";
+            }
+            if (obj.seenAt) {
+                obj.seenAt = dayjs(`${obj.seenAt}`).format("YYYY-MM-DD HH:mm");
+            } else {
+                obj.seenAt = "";
             }
         });
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_CONTENT_SUCCESS, contents));

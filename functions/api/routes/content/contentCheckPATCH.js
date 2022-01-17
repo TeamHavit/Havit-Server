@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
 
     if (!content) {
       // 특정 콘텐츠 id를 가진 콘텐츠가 존재하지 않을 때
-      return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
+      return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_CONTENT));
     }
     
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.TOGGLE_CONTENT_SUCCESS, content));
