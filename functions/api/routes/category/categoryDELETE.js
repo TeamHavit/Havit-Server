@@ -11,6 +11,7 @@ const { categoryDB, categoryContentDB, contentDB } = require('../../../db');
  *  @desc 카테고리 삭제
  *  @access Private
  */
+
 module.exports = async (req, res) => {
     const { categoryId } = req.params;
 
