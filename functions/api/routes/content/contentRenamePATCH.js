@@ -7,7 +7,7 @@ const db = require('../../../db/db');
 const { contentDB } = require('../../../db');
 
 /**
- *  @route PATCH /content/:contentId
+ *  @route PATCH /content/title/:contentId
  *  @desc 콘텐츠 제목 변경
  *  @access Private
  */
