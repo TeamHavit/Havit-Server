@@ -4,13 +4,14 @@ const responseMessage = require('../../../constants/responseMessage');
 const ogs = require('open-graph-scraper');
 
 /**
- *  @route GET /content/scrap
+ *  @route GET /content/scrap?link=
  *  @desc 콘텐츠 스크랩
  *  @access Private
  */
 
 module.exports = async(req, res) => {
-    const { link } = req.body; // 클라이언트에게 받은 url 링크
+    const { link } = req.query; // 클라이언트에게 받은 url 링크
+    console.log(link);
     
     if (!link) { 
       // url 링크가 존재하지 않을 때
@@ -38,11 +39,8 @@ module.exports = async(req, res) => {
             ogUrl: data.result.ogUrl,
             }
         }
-        console.log(response);
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SCRAP_CONTENT_SUCCESS, response));
     } catch(error) {
         console.log(error);
     }
-  
-    
-}
+};
