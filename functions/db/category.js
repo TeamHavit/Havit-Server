@@ -91,6 +91,17 @@ const getCategory = async (client, categoryId) => {
         [categoryId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
-}
+};
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory };
+const updateCategoryIndex = async (client, userId, contentId, orderIndex) => {
+    const { rows } = await client.query(
+        `
+        UPDATE category
+        SET order_index = $3
+        WHERE id = $2 AND user_id = $1
+        `,
+        [userId, contentId, orderIndex]
+    );
+};
+
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory, updateCategoryIndex };
