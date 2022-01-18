@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
         const newIndex = oldCategory[oldCategory.length-1].orderIndex + 1; // 새 카테고리 인덱스는 마지막 카테고리 인덱스 + 1
         const category = await categoryDB.addCategory(client, userId, title, imageId, 0, newIndex);
         
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.ADD_ONE_CATEGORY_SUCCESS));
+        res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CATEGORY_SUCCESS));
     } catch (error) {
         console.log(error);
         functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
