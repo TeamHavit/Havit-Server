@@ -27,14 +27,29 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
+    let flag = true; // flag 변수 결과에 따라 categoryContent를 추가할 지, 에러를 보낼 지 결정
     for (const categoryId of categoryIds) {
-      // 중복 카테고리 허용
-      const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+      // 카테고리 배열의 id 중 하나라도 유저의 카테고리가 아닐 경우, categoryContent를 추가하지 않고 에러 전송
+      const category = await categoryDB.getCategory(client, categoryId);
+      if (!category || category.userId !== userId) {
+        // 카테고리가 아예 존재하지 않거나, 해당 유저의 카테고리가 아닌 경우
+        flag = false;
+      }
     }
-   
-    res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS));
-    
+
+    if (flag) {
+      // 유저가 해당 카테고리를 가지고 있을 때
+      const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
+      for (const categoryId of categoryIds) {
+        // 중복 카테고리 허용
+        const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+      }
+      res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS));
+    } else {
+      // 유저가 해당 카테고리를 가지고 있지 않을 때
+      res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
+    }
+
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
