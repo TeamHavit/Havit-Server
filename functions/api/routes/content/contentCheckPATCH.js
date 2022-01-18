@@ -4,7 +4,7 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const {contentDB} = require('../../../db');
+const { contentDB } = require('../../../db');
 
 /**
  *  @route PATCH /content/check
@@ -17,6 +17,7 @@ module.exports = async (req, res) => {
   const { contentId } = req.body
   
   if (!contentId) {
+    // 콘텐츠 id가 없을 때
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
   
@@ -26,6 +27,11 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const content = await contentDB.toggleContent(client, contentId);
+
+    if (!content) {
+      // 특정 콘텐츠 id를 가진 콘텐츠가 존재하지 않을 때
+      return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_CONTENT));
+    }
     
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.TOGGLE_CONTENT_SUCCESS, content));
     

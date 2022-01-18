@@ -4,12 +4,12 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const {contentDB} = require('../../../db');
+const { contentDB } = require('../../../db');
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route PATCH /content
+ *  @route GET /content
  *  @desc 콘텐츠 전체 조회
  *  @access Private
  */
@@ -29,14 +29,14 @@ module.exports = async (req, res) => {
     dayjs.extend(customParseFormat)
 
     contents.map(obj => {
-        // 시간 데이터 dayjs로 format 수정
-        obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm"); // createdAt 수정
-        if (obj.notificationTime) {
-            // notificationTime이 존재할 경우, format 수정
-            obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
-        } else {
-            // notificationTime이 존재하지 않는 경우, null을 빈 문자열로 변경
-            obj.notificationTime = "";
+      // 시간 데이터 dayjs로 format 수정
+      obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm"); // createdAt 수정
+      if (obj.notificationTime) {
+        // notificationTime이 존재할 경우, format 수정
+        obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
+      } else {
+        // notificationTime이 존재하지 않는 경우, null을 빈 문자열로 변경
+        obj.notificationTime = "";
         }
     });
 

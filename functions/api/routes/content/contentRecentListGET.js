@@ -9,26 +9,21 @@ const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
- *  @route GET /content/search?keyword=
- *  @desc 전체 콘텐츠 키워드 검색
+ *  @route GET /content/recent
+ *  @desc 최근 저장 콘텐츠 조회
  *  @access Private
  */
 
 module.exports = async (req, res) => {
 
-  const { keyword } = req.query; 
   const { userId } = req.user;
 
-  if (!keyword) {
-    // 검색 키워드가 없을 때 에러 처리
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
-  }
   let client;
   
   try {
     client = await db.connect(req);
 
-    const contents = await contentDB.searchContent(client, userId, keyword);
+    const contents = await contentDB.getRecentContents(client, userId); // 최대 20개까지 조회
 
     dayjs().format()
     dayjs.extend(customParseFormat)
@@ -45,7 +40,7 @@ module.exports = async (req, res) => {
       }
     });
 
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KEYWORD_SEARCH_CONTENT_SUCCESS, contents));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_RECENT_SAVED_CONTENT_SUCCESS, contents)); 
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);

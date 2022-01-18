@@ -11,6 +11,7 @@ const { categoryDB, categoryContentDB, contentDB } = require('../../../db');
  *  @desc 카테고리 삭제
  *  @access Private
  */
+
 module.exports = async (req, res) => {
     const { categoryId } = req.params;
 
@@ -21,7 +22,7 @@ module.exports = async (req, res) => {
 
         await categoryDB.deleteCategory(client, categoryId); // 해당 카테고리 soft delete
         await contentDB.updateContentIsDeleted(client, categoryId); // 카테고리 개수가 1개 (해당 카테고리뿐)인 콘텐츠 soft delete
-        await categoryContentDB.deleteCategoryContent(client, categoryId); // category_content 테이블 내 해당 카테고리 삭제
+        await categoryContentDB.deleteCategoryContentByCategoryId(client, categoryId); // category_content 테이블 내 해당 카테고리 삭제
 
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_ONE_CATEGORY_SUCCESS));
     } catch (error) {

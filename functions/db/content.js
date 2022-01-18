@@ -1,16 +1,16 @@
 const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 
-const addContent = async (client, userId, title, description, image, url, isNotified) => {
+const addContent = async (client, userId, title, description, image, url, isNotified, notificationTime) => {
     const { rows } = await client.query(
         `
         INSERT INTO content
-        (user_id, title, description, image, url, is_notified)
+        (user_id, title, description, image, url, is_notified, notification_time)
         VALUES
-        ($1, $2, $3, $4, $5, $6)
+        ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
         `, 
-        [userId, title, description, image, url, isNotified]
+        [userId, title, description, image, url, isNotified, notificationTime]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
@@ -52,14 +52,9 @@ const toggleContent = async (client, contentId) => {
 const getAllContents = async (client, userId) => {
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
-        JOIN notification n on c.id = n.content_id
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
-        UNION ALL
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
-        FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE
         ORDER BY created_at
         `,
         [userId]
@@ -71,17 +66,10 @@ const searchContent = async (client, userId, keyword) => {
     const searchKeyword = '%' + keyword + '%';
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, n.notification_time
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
-        JOIN notification n on c.id = n.content_id
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = true
-        AND c.title like $2
-        UNION ALL
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.created_at, null as notification_time
-        FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = false
-        AND c.title like $2
-        ORDER BY created_at
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.title like $2
+        ORDER BY created_at DESC
         `,
         [userId, searchKeyword]
     );
@@ -112,5 +100,57 @@ const updateContentIsDeleted = async (client, categoryId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const getRecentContents = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE
+        ORDER BY created_at DESC
+        LIMIT 20
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted };
+const getUnseenContents = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_seen = FALSE
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const deleteContent = async (client, contentId) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET is_deleted = TRUE, is_notified = FALSE, notification_time = null
+        WHERE id = $1
+        RETURNING *
+        `,
+        [contentId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const renameContent = async (client, contentId, newTitle) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET title = $2, edited_at = now()
+        WHERE id = $1 AND is_deleted = FALSE
+        RETURNING *
+        `,
+        [contentId, newTitle]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent, renameContent };
