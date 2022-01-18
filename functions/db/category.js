@@ -82,4 +82,15 @@ const deleteCategory = async (client, categoryId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory };
+const getCategory = async (client, categoryId) => {
+    const { rows } = await client.query(
+        `
+        SELECT * FROM category
+        WHERE id = $1
+        `,
+        [categoryId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory };
