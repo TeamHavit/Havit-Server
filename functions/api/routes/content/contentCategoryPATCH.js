@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
         // 새로운 카테고리마다 새로운 카테고리-콘텐츠 관계 생성
         const newCategoryContent = await categoryContentDB.addCategoryContent(client, newCategoryId, contentId);
       }
-      res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.CHANGE_CONTENT_CATEGORY_SUCCESS));    
+      res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.UPDATE_CONTENT_CATEGORY_SUCCESS));    
     } else {
       // 카테고리를 변경할 수 없는 경우, 에러 전송
       res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
