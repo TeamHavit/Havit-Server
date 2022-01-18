@@ -37,6 +37,7 @@ module.exports = {
     UPDATE_ONE_CATEGORY_SUCCESS: '카테고리 수정 성공',
     DELETE_ONE_CATEGORY_SUCCESS: '카테고리 삭제 성공',
     NO_CATEGORY: '존재하지 않는 카테고리',
+    UPDATE_CATEGORY_ORDER_SUCCESS: '카테고리 순서 변경 성공',
     
     // 프로필 조회
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
