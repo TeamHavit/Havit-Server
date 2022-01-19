@@ -23,7 +23,12 @@ const toggleContent = async (client, contentId) => {
         `,
         [contentId]
     );
+    if (rows[0] === undefined) {
+        // 특정 콘텐츠 id를 가진 콘텐츠가 존재하지 않을 때
+        return convertSnakeToCamel.keysToCamel(rows[0]);
+    }
     if (rows[0].is_seen === false) {
+        // 특정 콘텐츠 id를 가진 콘텐츠가 존재할 때
         const { rows } = await client.query(
             `
             UPDATE content
