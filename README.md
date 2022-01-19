@@ -19,7 +19,7 @@
 [API 명세서 초안](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
 
 ### 📑 ERD
-<img src="https://user-images.githubusercontent.com/20807197/149094399-3bf9bbe5-41e4-49ed-abcf-378c6ede413e.png" width="600px" height="600px" />
+<img src="https://user-images.githubusercontent.com/20807197/150192494-6900c2e9-954b-4846-b764-2a95d4d5edf3.png" width="600px" height="600px" />
 
 ### ⚙️ Server Architecture
 <img width="1920" alt="해빗앱서버아키텍쳐" src="https://user-images.githubusercontent.com/20807197/150191075-585f5c5e-a147-4be7-96bc-38e2e2c6e4a8.png">
@@ -67,6 +67,38 @@
 		      |_ 📋 recommendation.js
 		      |_ 📋 category_image.js
 
+```
+
+### 📌 Dependencies Module
+```json
+{
+  "dependencies": {
+    "axios": "^0.24.0",
+    "busboy": "^0.3.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "express": "^4.17.2",
+    "firebase-admin": "^9.8.0",
+    "firebase-functions": "^3.14.1",
+    "helmet": "^5.0.1",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "open-graph-scraper": "^4.11.0",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.6.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^0.2.0",
+    "mocha": "^9.1.4",
+    "supertest": "^6.2.2"
+  }
+}
 ```
 
 ### 📌 담당 API 및 구현 진척도
@@ -131,7 +163,7 @@
 | develop | 로컬 develop merge 브랜치 |
 | philip | 효식 로컬 develop 브랜치 |
 | jobchae | 정아 로컬 develop 브랜치 |
-| localdevelop/#issue | 각자 기능 추가 브랜치 |
+| localdevelop_#issue | 각자 기능 추가 브랜치 |
 
 ### 📌 Commit Convention
 
