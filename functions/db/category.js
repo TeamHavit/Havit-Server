@@ -4,7 +4,7 @@ const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 const getAllCategories = async (client, userId) => {
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.order_index, i.url
+        SELECT c.id, c.title, c.order_index, i.id as image_id, i.url as image_url
         FROM category c
         JOIN category_image i on c.category_image_id = i.id
         WHERE user_id = $1
