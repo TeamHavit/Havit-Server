@@ -39,6 +39,8 @@ module.exports = {
     NO_CATEGORY: '존재하지 않는 카테고리',
     UPDATE_CATEGORY_ORDER_SUCCESS: '카테고리 순서 변경 성공',
     
+    // 추천 사이트
+    READ_ALL_RECOMMENDATION_SUCCESS: '추천 사이트 조회 성공',
     // 프로필 조회
     READ_PROFILE_SUCCESS: '프로필 조회 성공',
   
