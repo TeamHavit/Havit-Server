@@ -4,7 +4,7 @@ const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 const getAllCategories = async (client, userId) => {
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.order_index, i.url
+        SELECT c.id, c.title, c.order_index, i.id as image_id, i.url as image_url
         FROM category c
         JOIN category_image i on c.category_image_id = i.id
         WHERE user_id = $1
@@ -91,6 +91,17 @@ const getCategory = async (client, categoryId) => {
         [categoryId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
-}
+};
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory };
+const updateCategoryIndex = async (client, userId, contentId, orderIndex) => {
+    const { rows } = await client.query(
+        `
+        UPDATE category
+        SET order_index = $3
+        WHERE id = $2 AND user_id = $1
+        `,
+        [userId, contentId, orderIndex]
+    );
+};
+
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory, updateCategoryIndex };

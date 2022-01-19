@@ -151,6 +151,20 @@ const renameContent = async (client, contentId, newTitle) => {
         [contentId, newTitle]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const updateContentNotification = async (client, contentId, notificationTime) => {
+    const { rows } = await client.query(
+        `
+        UPDATE content
+        SET notification_time = $2, edited_at = now()
+        WHERE id = $1 AND is_deleted = FALSE AND is_notified = TRUE
+        RETURNING *
+        `,
+        [contentId, notificationTime]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent, renameContent };
+module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent,
+     renameContent, updateContentNotification };

@@ -18,7 +18,7 @@ const customParseFormat = require('dayjs/plugin/customParseFormat');
 module.exports = async (req, res) => {
     const { userId } = req.user;
     const { categoryId } = req.params;
-    const { seen, filter } = req.query;
+    const { option, filter } = req.query;
     let contents = {};
     let client;
 
@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
     try {
         client = await db.connect(req);
         
-        if (seen == "all") {
+        if (option == "all") {
             // 전체 조회
             contents = await categoryContentDB.getAllCategoryContentByFilter(client, userId, categoryId, filter);
             if (filter == "seen_at") {
@@ -37,9 +37,13 @@ module.exports = async (req, res) => {
                     return content.isSeen === false;
                 });
             }
+        } else if (option == "notified") {
+            // 알림 설정된 콘텐츠만 조회
+            contents = await categoryContentDB.getCategoryContentByFilterAndNotified(client, userId, categoryId, true, filter)
+
         } else {
             // is_seen에 따라 조회
-            contents = await categoryContentDB.getCategoryContentByFilterAndSeen(client, userId, categoryId, seen, filter);
+            contents = await categoryContentDB.getCategoryContentByFilterAndSeen(client, userId, categoryId, option, filter);
         }
         if (filter == "reverse") {
             // DESC를 이용했으므로 다시 reverse
