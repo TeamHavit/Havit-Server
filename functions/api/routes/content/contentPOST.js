@@ -44,7 +44,10 @@ module.exports = async (req, res) => {
         // 중복 카테고리 허용
         const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
       }
-      res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS));
+      const data = {
+        contentId: content.id
+      };
+      res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, data));
     } else {
       // 유저가 해당 카테고리를 가지고 있지 않을 때
       res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
