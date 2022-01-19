@@ -14,12 +14,18 @@ const { contentDB, categoryDB, categoryContentDB } = require('../../../db');
 
 module.exports = async (req, res) => {
 
-  const { title, description = '', image = '', url, isNotified, notificationTime = null, categoryIds} = req.body;
+  const { title, description = '', image = '', url, isNotified, categoryIds } = req.body;
+  let { notificationTime } = req.body; // notificationTime 없는 경우, 클라이언트에서 빈 문자열로 제공
   const { userId } = req.user;
 
   if (!title || !url || !categoryIds) {
       // 필수 데이터가 없을 경우 에러 처리
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
+  }
+
+  if (notificationTime == "") {
+    // notificationTime이 빈 문자열로 온 경우, null로 변경
+    notificationTime = null;
   }
 
   let client;

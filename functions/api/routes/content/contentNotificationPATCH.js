@@ -11,6 +11,7 @@ const { contentDB } = require('../../../db');
  *  @desc 콘텐츠 알림 시각 수정
  *  @access Private
  */
+
 module.exports = async (req, res) => {
     const { contentId } = req.params;
     const { notificationTime } = req.body;

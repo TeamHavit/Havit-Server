@@ -11,6 +11,7 @@ const { categoryDB } = require('../../../db');
  *  @desc 카테고리 순서 변경
  *  @access Private
  */
+
 module.exports = async (req, res) => {
     const { categoryIndexArray } = req.body;
     const { userId } = req.user;
