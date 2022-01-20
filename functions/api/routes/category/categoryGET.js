@@ -4,7 +4,7 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const slackAPI = require('../../../middlewares/slackAPI');
 const db = require('../../../db/db');
-const { categoryDB } = require('../../../db');
+const { categoryDB, categoryContentDB } = require('../../../db');
 
 /**
  *  @route GET /category
@@ -18,7 +18,11 @@ module.exports = async (req, res) => {
 
     try {
         client = await db.connect(req);
-        const categories = await categoryDB.getAllCategories(client, userId);
+        let categories = await categoryDB.getAllCategories(client, userId);
+        for (let category of categories) {
+            const categoryContent = await categoryContentDB.getAllCategoryContentByFilter(client, userId, category.id, 'created_at');
+            category.contentNumber = categoryContent.length;
+        }
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_SUCCESS, categories));
     } catch (error) {
         console.log(error);
