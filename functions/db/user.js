@@ -9,7 +9,6 @@ const getUser = async (client, userId) => {
         `,
         [userId]
     );
-    console.log(rows);
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
