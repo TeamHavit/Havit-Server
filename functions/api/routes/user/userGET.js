@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const user = await userDB.getUser(client, userId);
-    const contents = await contentDB.getAllContents(client, userId);
+    const contents = await contentDB.getContentsByFilter(client, userId, 'created_at');
     const categories = await categoryDB.getAllCategories(client, userId);
     const unSeenContents = await contentDB.getUnseenContents(client, userId);
     
