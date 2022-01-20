@@ -62,7 +62,6 @@ jobs:
       
       - name: Deploy to Firebase
         run: |
-          cd functions
           firebase deploy
         env: 
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
