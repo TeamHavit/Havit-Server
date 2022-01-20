@@ -67,3 +67,6 @@ node_modules/
 
 # Firebase service account
 havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+
+# Deploy Message To Slack
+deployMessageToSlack.sh
