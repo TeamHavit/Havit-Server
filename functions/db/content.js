@@ -162,8 +162,8 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
     const { rows } = await client.query(
         `
         UPDATE content
-        SET notification_time = $2, edited_at = now()
-        WHERE id = $1 AND is_deleted = FALSE AND is_notified = TRUE
+        SET notification_time = $2, edited_at = now(), is_notified = TRUE
+        WHERE id = $1 AND is_deleted = FALSE
         RETURNING *
         `,
         [contentId, notificationTime]
