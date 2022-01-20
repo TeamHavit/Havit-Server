@@ -54,13 +54,51 @@ const toggleContent = async (client, contentId) => {
     }
 };
 
-const getAllContents = async (client, userId) => {
+const getContentsByFilter = async (client, userId, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
+        filter = "created_at"; 
+    }
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
         FROM content c
         WHERE c.user_id = $1 AND c.is_deleted = FALSE
-        ORDER BY created_at
+        ORDER BY ${filter} DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentsByFilterAndNotified = async (client, userId, option, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
+        filter = "created_at";
+    }
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option}
+        ORDER BY ${filter} DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentsByFilterAndSeen = async (client, userId, option, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 createdAt 기준으로 정렬한다.
+        filter = "created_at";
+    }
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_seen = ${option}
+        ORDER BY ${filter} DESC
         `,
         [userId]
     );
@@ -171,5 +209,5 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent,
-     renameContent, updateContentNotification };
+module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification };
