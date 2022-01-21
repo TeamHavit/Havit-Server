@@ -8,12 +8,6 @@ const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../d
 const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
-const dayjs = require('dayjs');
-var utc = require('dayjs/plugin/utc')
-var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
 /**
  *  @route POST /content
  *  @desc 콘텐츠 생성
