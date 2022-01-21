@@ -19,7 +19,7 @@ jobs:
       - name: Setting Slack API
         run: |
          touch deployMessageToSlack.sh
-         echo 'curl -X POST -H 'Content-type: application/json' —data  "{\"text\":\" [DEPLOY] [HAVIT_SERVER] deployment successful.\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }}' >> deployMessageToSlack.sh
+         echo 'curl -X POST -H 'Content-type: application/json' --data  "{\"text\":\" [DEPLOY] [HAVIT_SERVER] deployment successful.\", \"icon_emoji\": \":ghost:\"}" ${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }}' >> deployMessageToSlack.sh
          chmod 755 deployMessageToSlack.sh
          
       - name: create env file
