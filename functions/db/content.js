@@ -23,7 +23,12 @@ const toggleContent = async (client, contentId) => {
         `,
         [contentId]
     );
+    if (rows[0] === undefined) {
+        // 특정 콘텐츠 id를 가진 콘텐츠가 존재하지 않을 때
+        return convertSnakeToCamel.keysToCamel(rows[0]);
+    }
     if (rows[0].is_seen === false) {
+        // 특정 콘텐츠 id를 가진 콘텐츠가 존재할 때
         const { rows } = await client.query(
             `
             UPDATE content
@@ -49,13 +54,51 @@ const toggleContent = async (client, contentId) => {
     }
 };
 
-const getAllContents = async (client, userId) => {
+const getContentsByFilter = async (client, userId, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
+        filter = "created_at"; 
+    }
     const { rows } = await client.query(
         `
-        SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
         FROM content c
         WHERE c.user_id = $1 AND c.is_deleted = FALSE
-        ORDER BY created_at
+        ORDER BY ${filter} DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentsByFilterAndNotified = async (client, userId, option, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
+        filter = "created_at";
+    }
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option}
+        ORDER BY ${filter} DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentsByFilterAndSeen = async (client, userId, option, filter) => {
+    if (filter == "reverse") {
+        // API 로직에서 reverse 할 것이므로 createdAt 기준으로 정렬한다.
+        filter = "created_at";
+    }
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
+        FROM content c
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_seen = ${option}
+        ORDER BY ${filter} DESC
         `,
         [userId]
     );
@@ -157,8 +200,8 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
     const { rows } = await client.query(
         `
         UPDATE content
-        SET notification_time = $2, edited_at = now()
-        WHERE id = $1 AND is_deleted = FALSE AND is_notified = TRUE
+        SET notification_time = $2, edited_at = now(), is_notified = TRUE
+        WHERE id = $1 AND is_deleted = FALSE
         RETURNING *
         `,
         [contentId, notificationTime]
@@ -166,5 +209,5 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-module.exports = { addContent, toggleContent, getAllContents, searchContent, updateContentIsDeleted, getRecentContents, getUnseenContents, deleteContent,
-     renameContent, updateContentNotification };
+module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification };

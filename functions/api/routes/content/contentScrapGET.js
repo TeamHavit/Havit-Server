@@ -34,7 +34,7 @@ module.exports = async(req, res) => {
         response = {
           ogTitle: data.result.ogTitle,
           ogDescription: data.result.ogDescription,
-          ogImage: data.result.ogImage,
+          ogImage: data.result.ogImage.url,
           ogUrl: data.result.ogUrl,
         }
       }
