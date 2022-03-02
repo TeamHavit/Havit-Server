@@ -1,10 +1,13 @@
+const util = require('../lib/util');
+const statusCode = require('../constants/statusCode');
+const responseMessage = require('../constants/responseMessage');
 const request = require('request-promise');
 const firebaseAdmin = require('firebase-admin');
-const { response } = require('express');
+const { res } = require('express');
 const requestMeUrl = 'https://kapi.kakao.com/v2/user/me?secure_resource=true';
 
 /**
- *  @desc Kakao API에 유저 프로필 요청
+ *  @desc Kakao 서버에 유저 프로필 정보 요청
  *  @param {String} KakaoAccessToken
  */
 const requestMe = async (kakaoAccessToken) => {
@@ -25,7 +28,8 @@ const requestMe = async (kakaoAccessToken) => {
 const updateOrCreateUser = async (userId, email, displayName, photoURL) => {
   const updateParams = {
     provider: 'KAKAO',
-    displayName: displayName,
+    email,
+    displayName,
   };
   if (displayName) {
     updateParams['displayName'] = displayName;
@@ -47,61 +51,38 @@ const updateOrCreateUser = async (userId, email, displayName, photoURL) => {
     }
     throw error;
   });
-}
-
-// /**
-//  * createFirebaseToken - returns Firebase token using Firebase Admin SDK
-//  *
-//  * @param  {String} kakaoAccessToken access token from Kakao Login API
-//  * @return {Promise<String>}                  Firebase token in a promise
-//  */
-// function createFirebaseToken(kakaoAccessToken) {
-//   return requestMe(kakaoAccessToken).then((response) => {
-//     console.log('requestMe Finished');
-//     const body = JSON.parse(response);
-//     console.log(body);
-//     const userId = `kakao:${body.id}`;
-//     if (!userId) {
-//       return response.status(404)
-//       .send({message: 'There was no user with the given access token.'});
-//     }
-//     let nickname = null;
-//     let profileImage = null;
-//     if (body.properties) {
-//       nickname = body.properties.nickname;
-//       profileImage = body.properties.profile_image;
-//     }
-//     return updateOrCreateUser(userId, body.kaccount_email, nickname,
-//       profileImage);
-//   }).then((userRecord) => {
-//     const userId = userRecord.uid;
-//     console.log(`creating a custom firebase token based on uid ${userId}`);
-//     return firebaseAdmin.auth().createCustomToken(userId, {provider: 'KAKAO'});
-//   });
-// };
+};
 
 /**
  *  @desc Firebase Token 생성
  *  @param {String} KakaoAccessToken
  */
 const createFirebaseToken = async (kakaoAccessToken) => {
-  const userData = await requestMe(kakaoAccessToken);
-  const body = JSON.parse(userData);
-  const userId = `kakao:${body.id}`;
-  if (!userId) {
-    return response.status(404).send({message: 'There was no user with the given access token.'});
+  const kakaoUser = await requestMe(kakaoAccessToken); // Kakao 유저 정보
+  const kakaoUserData = JSON.parse(kakaoUser);
+  const KakaoUserId = `kakao:${kakaoUserData.id}`; // Kakao 고유 ID
+  if (!KakaoUserId) {
+    // 해당 Kakao Access Token에 해당하는 Kakao 유저가 존재하지 않을 때
+    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.TOKEN_INVALID));
   }
   let nickname = null;
   let profileImage = null;
-  if (body.properties) {
-    nickname = body.properties.nickname;
-    profileImage = body.properties.profile_image;
+  const email =  kakaoUserData.kakao_account.email;
+  if (kakaoUserData.kakao_account) {
+    nickname = kakaoUserData.kakao_account.profile.nickname;
+    profileImage = kakaoUserData.kakao_account.profile.profile_image_url;
   }
 
-  const userRecord = await updateOrCreateUser(userId, body.kaccount_email, nickname, profileImage);
-  const userRecordId = userRecord.uid;
-  console.log(`creating a custom firebase token based on uid ${userRecordId}`);
-  return firebaseAdmin.auth().createCustomToken(userRecordId, {provider: 'KAKAO'});    
-}
+  const firebaseUser = await updateOrCreateUser(KakaoUserId, email, nickname, profileImage); // Kakao 유저 정보를 가지고 있는 Firebase 유저
+  const firebaseUserId = firebaseUser.uid;
+
+  const firebaseUserData = {
+    'firebaseToken' : await firebaseAdmin.auth().createCustomToken(firebaseUserId, {provider: 'KAKAO'}),
+    'firebaseUserId' : firebaseUserId,
+    'nickname' : nickname,
+    'email' : email,
+  }
+  return firebaseUserData;
+};
 
 module.exports = { requestMe, updateOrCreateUser, createFirebaseToken };
