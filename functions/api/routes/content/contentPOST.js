@@ -4,8 +4,10 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const { contentDB, categoryDB, categoryContentDB } = require('../../../db');
-
+const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
+const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 /**
  *  @route POST /content
  *  @desc 콘텐츠 생성
@@ -32,7 +34,7 @@ module.exports = async (req, res) => {
   
   try {
     client = await db.connect(req);
-
+    const user = await userDB.getUser(client, userId);
     let flag = true; // flag 변수 결과에 따라 categoryContent를 추가할 지, 에러를 보낼 지 결정
     for (const categoryId of categoryIds) {
       // 카테고리 배열의 id 중 하나라도 유저의 카테고리가 아닐 경우, categoryContent를 추가하지 않고 에러 전송
@@ -53,6 +55,20 @@ module.exports = async (req, res) => {
       const data = {
         contentId: content.id
       };
+
+      if (user.mongoUserId && content.isNotified) {
+        // 데모데이용 알림 생성 -> 릴리즈때 수정 필요
+        let date = new Date(content.notificationTime);
+        date = date.setHours(date.getHours()-9);
+        const notification = await axios.post(process.env.PUSH_SERVER_URL+"reminder", {
+            userId: user.mongoUserId, 
+            contentId: content.id,
+            time: date,
+            ogTitle: content.title,
+            ogImage: content.image,
+            url: content.url
+        });
+      }
       res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, data));
     } else {
       // 유저가 해당 카테고리를 가지고 있지 않을 때

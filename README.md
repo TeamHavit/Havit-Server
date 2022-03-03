@@ -1,7 +1,6 @@
 # Havit-Server  
 ### 기억하고 싶은 모든 콘텐츠를 내 손 안에, HAVIT
-
-![image](https://user-images.githubusercontent.com/20807197/148192962-6206fce8-ee3f-437d-9475-f67256819195.png)
+![해빗표지2](https://user-images.githubusercontent.com/20807197/150502331-7122ba4e-5544-496b-baac-0cee2a21edc5.png)
 
 
 > 쉽고 빠르게 콘텐츠를 저장하고 카테고라이징하며    
@@ -12,14 +11,25 @@
 >
 > 프로젝트 기간: 2022.01.02 ~ 2022.01.22
 
+### ✅ 서비스 핵심 기능
+#### 1. Saving Process   
+> 나에게 유용한 콘텐츠를 낮은 뎁스로 간단하게 저장할 수 있습니다.   
+iOS의 Share Extension, Android의 Intent Filter를 사용하여 홈 화면으로 나가서 앱을 키지 않아도, 콘텐츠를 보다가 사용자가 원하는 카테고리에 저장할 수 있습니다.
+
+#### 2. Category
+> 사용자가 카테고리를 직접 생성하며, 콘텐츠를 원하는대로 카테고라이징 할 수 있습니다. 카테고리는 여러 분야에서 적용 가능한 15개의 3D 아이콘을 제공합니다.
+
+#### 3. Contents
+> 사용자가 저장한 콘텐츠를 잊지 않도록 도와줍니다. 저장 과정에서 기억하기 쉬운 제목으로 수정 가능하고, 저장한 콘텐츠는 직접 지정한 시간에 알림 받을 수 있습니다.
+
 ### 📋 IA   
 ![image](https://user-images.githubusercontent.com/20807197/148189262-1dec5ee4-e543-4822-b930-e796ef405863.png)
 
 ### 💡 API 명세서
-[API 명세서 초안](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
+[API 명세서](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
 
 ### 📑 ERD
-<img src="https://user-images.githubusercontent.com/20807197/150192494-6900c2e9-954b-4846-b764-2a95d4d5edf3.png" width="600px" height="600px" />
+<img src="https://user-images.githubusercontent.com/20807197/150504403-e81c79ed-8b13-4c07-b69d-e379f21a2358.png" width="600px" height="600px" />
 
 ### ⚙️ Server Architecture
 <img width="1920" alt="해빗앱서버아키텍쳐" src="https://user-images.githubusercontent.com/20807197/150191075-585f5c5e-a147-4be7-96bc-38e2e2c6e4a8.png">
@@ -37,12 +47,10 @@
             |         |_ 📋 index.js
             |         |_ 📁 routes _
             |                      |_ 📋 index.js
-            |                      |_ 📁 auth 
             |			   |_ 📁 user
             |                      |_ 📁 content           
             |                      |_ 📁 category
 	    |                      |_ 📁 recommendation
-	    |                      |_ 📁 notification
             |
             |_ 📁 constants _ 
             |               |_ 📋responseMessage.js
@@ -51,9 +59,15 @@
             |_ 📁 lib _ 
             |	      |_ 📋 util.js
 	    |         |_ 📋 convertSnakeToCamel.js
+	    |         |_ 📋 jwtHandlers.js 
 	    |
 	    |_ 📁 config _ 
             |	        |_ 📋 dbConfig.js
+	    |
+	    |
+	    |_ 📁 middlewares _
+	    |                |_ 📋 auth.js
+	    |                |_ 📋 slackAPI.js
 	    |           
             |
             |_ 📁 db _
@@ -62,10 +76,8 @@
                       |_ 📋 user.js
                       |_ 📋 category.js
 		      |_ 📋 content.js
-		      |_ 📋 category_content.js
-		      |_ 📋 notification.js
+		      |_ 📋 categoryContent.js
 		      |_ 📋 recommendation.js
-		      |_ 📋 category_image.js
 
 ```
 
@@ -106,7 +118,7 @@
 | 기능명 | 담당자 | 완료 여부 |
 | :-----: | :---: | :---: |
 | 카카오 로그인 | `주효식` | 앱잼 내 구현 X  |
-| 마이페이지 조회 | `주효식` | 앱잼 내 구현 X |
+| 마이페이지 조회 | `주효식` | ✅ |
 | 스크랩 | `주효식` | ✅ |
 | 콘텐츠 생성 | `주효식` | ✅ |
 | 콘텐츠 조회 여부 토글 | `주효식` | ✅ |
@@ -130,6 +142,7 @@
 | 알림 전체 조회 | `채정아` | 앱잼 내 구현 X |
 
 > FCM-Push-Server
+[Gihub Link](https://github.com/TeamHavit/Havit-Push-Server)
 
 
 | 기능명 | 담당자 | 완료 여부 |
@@ -138,6 +151,8 @@
 | 알림 생성 | `채정아` | ✅ |
 | 알림 수정 | `채정아` | ✅ |
 
+### 📌 Mocha API 유닛 테스트 
+[결과 보고서](https://skitter-sloth-be4.notion.site/Mocha-API-7069530fb39a4293b11cab3ca77fe0ec)
 
 ### 📌 Branch Strategy
 
