@@ -1,4 +1,4 @@
-const util = require('../lib/util');
+const util = require('./util');
 const statusCode = require('../constants/statusCode');
 const responseMessage = require('../constants/responseMessage');
 const request = require('request-promise');
