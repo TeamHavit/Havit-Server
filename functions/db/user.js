@@ -37,4 +37,17 @@ const addUser = async (client, firebaseUserId, nickname, email) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getUser, getUserByFirebaseId, addUser };
+const updateUserByLogin = async (client, firebaseUserId, nickname, email) => {
+    const { rows } = await client.query(
+        `
+        UPDATE "user"
+        SET nickname = $2, email = $3
+        WHERE id_firebase = $1
+        RETURNING *
+        `,
+        [firebaseUserId, nickname, email]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin };
