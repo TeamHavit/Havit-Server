@@ -9,50 +9,55 @@ const { userDB } = require('../db');
 const { TOKEN_INVALID, TOKEN_EXPIRED } = require('../constants/jwt');
 
 const checkUser = async (req, res, next) => {
-    // request headers에 accesstoken라는 이름으로 담긴 값(jwt)을 가져옵니다.
-    const accesstoken = req.header("x-auth-token");
+    // request headers로 전송받은 accessToken
+    const accessToken = req.header("x-auth-token");
 
-    // accesstoken이 없을 시의 에러 처리입니다.
-    if (!accesstoken) return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.TOKEN_EMPTY));
+    // accessToken이 없을 때
+    if (!accessToken) {
+        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.TOKEN_EMPTY));
+    }
 
     let client;
     try {
         client = await db.connect(req);
 
-        // jwt를 해독하고 인증 절차를 거칩니다.
-        const decodedToken = jwtHandlers.verify(accesstoken);
+        // accessToken 인증 및 해독
+        const decodedToken = jwtHandlers.verify(accessToken);
 
-        // jwt가 만료되었거나 잘못되었을 시의 에러 처리입니다.
-        if (decodedToken === TOKEN_EXPIRED) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_EXPIRED));
-        if (decodedToken === TOKEN_INVALID) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_INVALID));
+        if (decodedToken === TOKEN_EXPIRED) {
+            // 토큰 만료
+            return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_EXPIRED));
+        }
+        if (decodedToken === TOKEN_INVALID) {
+            // 유효하지 않은 토큰
+            return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_INVALID));
+        }
 
-        // 해독된 jwt에 담긴 id 값이 우리가 DB에서 찾고자 하는 user의 id입니다.
-        const userId = decodedToken.id;
-        // 유저id가 없을 시의 에러 처리입니다.
-        if (!userId) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_INVALID));
+        // 토큰에 담긴 유저 id
+        const userId = decodedToken.userId;
+        if (!userId) {
+            // 토큰에 유저 id가 존재하지 않을 때 (유효하지 않은 토큰)
+            return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.TOKEN_INVALID));
+        }
 
-        /**
-         * 로그인 구현 전 jwt token 으로 user id만 찾아 오기 위해 주석 처리함
-         */
+        // 유저 DB에서 해당 유저의 정보 조회
+        const user = await userDB.getUser(client, userId);
 
-        // 위의 id 값으로 유저를 조회합니다.
-        // const user = await userDB.getUserById(client, userId);
-
-        // 유저가 없을 시의 에러 처리입니다.
-        // if (!user) return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.NO_USER));
-
-        // 유저를 찾았으면, req.user에 유저 객체를 담아서 next()를 이용해 다음 middleware로 보냅니다.
-        // 다음 middleware는 req.user에 담긴 유저 정보를 활용할 수 있습니다.
-        // req.user = user;
-        /**
-         * 로그인 구현 전 개발 테스트 용
-         */
-        const user = { userId };
-        req.user = user;
+        if (!user) {
+            // 해당 유저가 존재하지 않을 때
+            return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.NO_USER));
+        }
+    
+        // 유저 DB로부터 받아 온 유저 정보를 req.user에 담아 다음 미들웨어로 전달
+        const returnUser = {
+            userId : user.id,
+            firebaseId : user.idFirebase,
+        }
+        req.user = returnUser;
         next();
     } catch (error) {
         console.log(error);
-        functions.logger.error(`[AUTH ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, accesstoken);
+        functions.logger.error(`[AUTH ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, accessToken);
         const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
         slackAPI.sendMessageToSlack(slackMessage, slackAPI.DEV_WEB_HOOK_ERROR_MONITORING);
         

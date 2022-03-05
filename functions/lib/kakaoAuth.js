@@ -77,7 +77,7 @@ const createFirebaseToken = async (kakaoAccessToken) => {
   const firebaseUserId = firebaseUser.uid;
 
   const firebaseUserData = {
-    'firebaseToken' : await firebaseAdmin.auth().createCustomToken(firebaseUserId, {provider: 'KAKAO'}),
+    'firebaseAuthToken' : await firebaseAdmin.auth().createCustomToken(firebaseUserId, {provider: 'KAKAO'}),
     'firebaseUserId' : firebaseUserId,
     'nickname' : nickname,
     'email' : email,
