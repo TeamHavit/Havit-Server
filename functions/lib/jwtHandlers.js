@@ -5,8 +5,8 @@ const { TOKEN_INVALID, TOKEN_EXPIRED } = require('../constants/jwt');
 // JWT를 발급/인증할 때 사용할 secretKey, options 설정
 const secretKey = process.env.JWT_SECRET;
 const options = {
-    algorithm: 'HS256',
-    expiresIn: '30d',
+    algorithm: process.env.JWT_ALGORITHM,
+    expiresIn: process.env.JWT_ACCESS_EXPIRE,
     issuer: 'havit',
 };
 
