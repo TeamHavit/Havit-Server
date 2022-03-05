@@ -30,9 +30,18 @@ module.exports = async (req, res) => {
     try {
       client = await db.connect(req);
   
-      const user = await userDB.addUser(client, firebaseUserId, nickname, email);
+      const user = await userDB.getUserByFirebaseId(client, firebaseUserId);
+      let newUser;
+      if (!user) {
+        // 신규 유저인 경우 (최초 로그인) - DB에 새로운 유저 생성
+        newUser = await userDB.addUser(client, firebaseUserId, nickname, email);
+      }
+      else {
+        // 기존 유저인 경우 (토큰 만료로 인한 재 로그인) - DB 정보 업데이트
+        newUser = await userDB.updateUserByLogin(client, firebaseUserId, nickname, email);
+      }
 
-      const accessToken = jwtHandlers.sign({id: user.id, idFirebase: user.idFirebase}).accesstoken;
+      const accessToken = jwtHandlers.sign({ newUser });
       
       res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KAKAO_LOGIN_SUCCESS, { firebaseAuthToken, accessToken, nickname }));
       
