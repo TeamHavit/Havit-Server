@@ -6,6 +6,7 @@ const db = require('../../../db/db');
 const { userDB } = require('../../../db');
 const functions = require('firebase-functions');
 const slackAPI = require('../../../middlewares/slackAPI');
+const jwtHandlers = require('../../../lib/jwtHandlers');
 
 /**
  *  @route POST /auth/kakao
@@ -22,7 +23,7 @@ module.exports = async (req, res) => {
     }
 
     const firebaseUserData = await kakao.createFirebaseToken(kakaoAccessToken);
-    const { firebaseToken, firebaseUserId, nickname, email } = firebaseUserData;
+    const { firebaseAuthToken, firebaseUserId, nickname, email } = firebaseUserData;
 
     let client;
   
@@ -30,8 +31,10 @@ module.exports = async (req, res) => {
       client = await db.connect(req);
   
       const user = await userDB.addUser(client, firebaseUserId, nickname, email);
+
+      const accessToken = jwtHandlers.sign({id: user.id, idFirebase: user.idFirebase}).accesstoken;
       
-      res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KAKAO_LOGIN_SUCCESS, { user, firebaseToken }));
+      res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KAKAO_LOGIN_SUCCESS, { firebaseAuthToken, accessToken, nickname }));
       
     } catch (error) {
       functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
