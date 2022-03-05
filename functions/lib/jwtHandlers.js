@@ -10,17 +10,15 @@ const options = {
     issuer: 'havit',
 };
 
-// id, email, name, idFirebase가 담긴 JWT를 발급합니다.
+// id, idFirebase가 담긴 JWT를 발급합니다.
 const sign = (user) => {
     const payload = {
         id: user.id,
         idFirebase: user.idFirebase,
     };
 
-    const result = {
-        accesstoken: jwt.sign(payload, secretKey, options),
-    };
-    return result;
+    const accessToken =  jwt.sign(payload, secretKey, options);
+    return accessToken;
 };
 
 // JWT를 해독하고, 해독한 JWT가 우리가 만든 JWT가 맞는지 확인합니다 (인증).
