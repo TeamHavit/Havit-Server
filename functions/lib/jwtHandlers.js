@@ -2,28 +2,26 @@ const functions = require('firebase-functions');
 const jwt = require('jsonwebtoken');
 const { TOKEN_INVALID, TOKEN_EXPIRED } = require('../constants/jwt');
 
-// JWT를 발급/인증할 떄 필요한 secretKey를 설정합니다. 값은 .env로부터 불러옵니다.
+// JWT를 발급/인증할 때 사용할 secretKey, options 설정
 const secretKey = process.env.JWT_SECRET;
 const options = {
-    algorithm: 'HS256',
-    expiresIn: '30d',
+    algorithm: process.env.JWT_ALGORITHM,
+    expiresIn: process.env.JWT_ACCESS_EXPIRE,
     issuer: 'havit',
 };
 
-// id, email, name, idFirebase가 담긴 JWT를 발급합니다.
+// id, idFirebase가 담긴 JWT를 발급
 const sign = (user) => {
     const payload = {
-        id: user.id,
+        userId: user.id,
         idFirebase: user.idFirebase,
     };
 
-    const result = {
-        accesstoken: jwt.sign(payload, secretKey, options),
-    };
-    return result;
+    const accessToken =  jwt.sign(payload, secretKey, options);
+    return accessToken;
 };
 
-// JWT를 해독하고, 해독한 JWT가 우리가 만든 JWT가 맞는지 확인합니다 (인증).
+// JWT를 해독해 우리가 만든 JWT가 맞는지 확인 (인증)
 const verify = (token) => {
     let decoded;
     try {
@@ -43,7 +41,7 @@ const verify = (token) => {
             return TOKEN_INVALID;
         }
     }
-    // 해독 / 인증이 완료되면, 해독된 상태의 JWT를 반환합니다.
+    // 해독 / 인증이 완료된 JWT 반환
     return decoded;
 };
 
