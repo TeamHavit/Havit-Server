@@ -9,5 +9,6 @@ router.get('/:categoryId', checkUser, require('./categoryContentGET'));
 router.patch('/order', checkUser, require('./categoryOrderPATCH'));
 router.patch('/:categoryId', checkUser, require('./categoryPATCH'));
 router.delete('/:categoryId', checkUser, require('./categoryDELETE'));
+router.get('/search', checkUser, require('./categoryContentSearchGET'));
 
 module.exports = router;
