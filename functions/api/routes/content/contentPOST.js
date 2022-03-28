@@ -6,8 +6,10 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
 const axios = require('axios');
+const ogs = require('open-graph-scraper');
 const dotenv = require('dotenv');
 dotenv.config();
+
 /**
  *  @route POST /content
  *  @desc 콘텐츠 생성
@@ -16,7 +18,7 @@ dotenv.config();
 
 module.exports = async (req, res) => {
 
-  const { title, description = '', image = '', url, isNotified, categoryIds } = req.body;
+  const { title, url, isNotified, categoryIds } = req.body; // 변경된 title은 클라이언트에게 전달 받음
   let { notificationTime } = req.body; // notificationTime 없는 경우, 클라이언트에서 빈 문자열로 제공
   const { userId } = req.user;
 
@@ -29,6 +31,10 @@ module.exports = async (req, res) => {
     // notificationTime이 빈 문자열로 온 경우, null로 변경
     notificationTime = null;
   }
+
+  const scrapData = await ogs({ url : url });
+  const description = scrapData.result.ogDescription;
+  const image = scrapData.result.ogImage.url;
 
   let client;
   
@@ -50,7 +56,7 @@ module.exports = async (req, res) => {
       const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
       for (const categoryId of categoryIds) {
         // 중복 카테고리 허용
-        const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+        await categoryContentDB.addCategoryContent(client, categoryId, content.id);
       }
       const data = {
         contentId: content.id
