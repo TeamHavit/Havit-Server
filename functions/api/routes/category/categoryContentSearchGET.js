@@ -16,7 +16,8 @@ const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 module.exports = async (req, res) => {
 
-  const { categoryId, keyword } = req.query;
+  const { categoryId } = req.params;
+  const { keyword } = req.query;
   const { userId } = req.user;
 
   if (!categoryId || !keyword) {
