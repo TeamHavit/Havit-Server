@@ -96,5 +96,21 @@ const deleteCategoryContentByContentId = async (client, contentId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const searchCategoryContent = async (client, userId, categoryId, keyword) => {
+    const searchKeyword = '%' + keyword + '%';
+    const { rows } = await client.query(
+        `
+        SELECT co.id, co.title, co.image, co.description, co.url, co.is_seen, co.is_notified, co.notification_time, co.created_at, co.seen_at
+        FROM content co
+        JOIN category_content cc on co.id = cc.content_id
+        JOIN category ca on ca.id = cc.category_id
+        WHERE ca.id = $2 AND co.user_id = $1 AND co.is_deleted = FALSE AND co.title like $3
+        ORDER BY co.created_at DESC
+        `,
+        [userId, categoryId, searchKeyword]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
 module.exports = { getAllCategoryContentByFilter, getCategoryContentByFilterAndNotified, getCategoryContentByFilterAndSeen, addCategoryContent, 
-    deleteCategoryContentByCategoryId, deleteCategoryContentByContentId };
+    deleteCategoryContentByCategoryId, deleteCategoryContentByContentId, searchCategoryContent };
