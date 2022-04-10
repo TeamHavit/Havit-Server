@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
     
     const result = {
         nickname : user.nickname,
+        email: user.email,
         totalContentNumber : contents.length,
         totalCategoryNumber : categories.length,
         totalSeenContentNumber : contents.length - unSeenContents.length
