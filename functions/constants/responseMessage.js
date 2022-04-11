@@ -12,6 +12,7 @@ module.exports = {
     TOKEN_EXPIRED: '토큰이 만료되었습니다.',
     TOKEN_INVALID: '토큰이 유효하지 않습니다.',
     TOKEN_EMPTY: '토큰이 없습니다.',
+    TOKEN_REISSUE_SUCCESS: '토큰 재발급 성공',
 
     // 유저
     READ_ONE_USER_SUCCESS: '유저 조회 성공',
