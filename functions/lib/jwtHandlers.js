@@ -4,9 +4,14 @@ const { TOKEN_INVALID, TOKEN_EXPIRED } = require('../constants/jwt');
 
 // JWT를 발급/인증할 때 사용할 secretKey, options 설정
 const secretKey = process.env.JWT_SECRET;
-const options = {
+const accessTokenOptions = {
     algorithm: process.env.JWT_ALGORITHM,
     expiresIn: process.env.JWT_ACCESS_EXPIRE,
+    issuer: 'havit',
+};
+const refreshTokenOptions = {
+    algorithm: process.env.JWT_ALGORITHM,
+    expiresIn: process.env.JWT_REFRESH_EXPIRE,
     issuer: 'havit',
 };
 
@@ -16,16 +21,21 @@ const sign = (user) => {
         userId: user.id,
         idFirebase: user.idFirebase,
     };
-
-    const accessToken =  jwt.sign(payload, secretKey, options);
+    const accessToken =  jwt.sign(payload, secretKey, accessTokenOptions);
     return accessToken;
 };
 
+// Refresh Token 발급 (payload가 없음)
+const signRefresh = () => {
+    const refreshToken = jwt.sign({}, secretKey, refreshTokenOptions);
+    return refreshToken;
+}
+
 // JWT를 해독해 우리가 만든 JWT가 맞는지 확인 (인증)
-const verify = (token) => {
+const verify = (jwtToken) => {
     let decoded;
     try {
-        decoded = jwt.verify(token, secretKey);
+        decoded = jwt.verify(jwtToken, secretKey);
     } catch (err) {
         if (err.message === 'jwt expired') {
             console.log('expired token');
@@ -48,4 +58,5 @@ const verify = (token) => {
 module.exports = {
     sign,
     verify,
+    signRefresh,
 };

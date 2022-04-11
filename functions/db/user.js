@@ -50,4 +50,15 @@ const updateUserByLogin = async (client, firebaseUserId, nickname, email) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin };
+const updateRefreshToken = async (client, userId, newRefreshToken) => {
+    const { rows } = await client.query(
+        `
+        UPDATE "user"
+        SET refresh_token = $2
+        WHERE id = $1
+        `,
+        [userId, newRefreshToken]
+    );
+};
+
+module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken };
