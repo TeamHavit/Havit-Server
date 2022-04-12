@@ -5,7 +5,7 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { userDB } = require('../../../db');
-import axios from 'axios';
+const { default: axios } = require('axios');
 
 module.exports = async (req, res) => {
     const { fcmToken } = req.body;
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
             return res.status(updatedToken.statusCode).send(util.fail(updatedToken.statusCode, updatedToken.statusText));
         }
 
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_ONE_USER_SUCCESS));
+        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.UPDATE_FCM_TOKEN_SUCCESS));
 
     } catch (error) {
         functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
