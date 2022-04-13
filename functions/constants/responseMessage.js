@@ -48,4 +48,7 @@ module.exports = {
   
     // 서버 내 오류
     INTERNAL_SERVER_ERROR: '서버 내 오류',
+
+    // 푸시 서버
+    UPDATE_FCM_TOKEN_SUCCESS: 'fcm 토큰 수정 성공',
   };
