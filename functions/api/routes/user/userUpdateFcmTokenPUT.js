@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     if (!fcmToken) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
     }
-    console.log(userId)
+    
     let client;
 
     try {
