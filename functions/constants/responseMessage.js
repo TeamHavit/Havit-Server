@@ -16,7 +16,7 @@ module.exports = {
 
     // 유저
     READ_ONE_USER_SUCCESS: '유저 조회 성공',
-    UPDATE_ONE_USER_SUCCESS: '유저 수정 성공',
+    UPDATE_USER_NICKNAME_SUCCESS: '유저 수정 성공',
     READ_PROFILE_SUCCESS: '프로필 조회 성공',    
 
     // 콘텐츠
@@ -48,4 +48,7 @@ module.exports = {
   
     // 서버 내 오류
     INTERNAL_SERVER_ERROR: '서버 내 오류',
+
+    // 푸시 서버
+    UPDATE_FCM_TOKEN_SUCCESS: 'fcm 토큰 수정 성공',
   };
