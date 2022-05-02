@@ -61,4 +61,15 @@ const updateRefreshToken = async (client, userId, newRefreshToken) => {
     );
 };
 
-module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken };
+const updateNickname = async (client, userId, newNickname) => {
+    const { rows } = await client.query(
+        `
+        UPDATE "user"
+        SET nickname = $2 AND edited_at = now()
+        WHERE id = $1
+        `,
+        [userId, newNickname]
+    );
+};
+
+module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken, updateNickname };

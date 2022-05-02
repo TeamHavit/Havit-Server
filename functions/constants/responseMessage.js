@@ -16,7 +16,7 @@ module.exports = {
 
     // 유저
     READ_ONE_USER_SUCCESS: '유저 조회 성공',
-    UPDATE_ONE_USER_SUCCESS: '유저 수정 성공',
+    UPDATE_USER_NICKNAME_SUCCESS: '유저 수정 성공',
     READ_PROFILE_SUCCESS: '프로필 조회 성공',    
 
     // 콘텐츠
