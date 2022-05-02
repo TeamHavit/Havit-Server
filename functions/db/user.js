@@ -65,7 +65,7 @@ const updateNickname = async (client, userId, newNickname) => {
     const { rows } = await client.query(
         `
         UPDATE "user"
-        SET nickname = $2
+        SET nickname = $2 AND edited_at = now()
         WHERE id = $1
         `,
         [userId, newNickname]
