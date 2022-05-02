@@ -33,8 +33,13 @@ module.exports = async (req, res) => {
   }
 
   const scrapData = await ogs({ url : url });
-  const description = scrapData.result.ogDescription;
+  let description = scrapData.result.ogDescription;
   const image = scrapData.result.ogImage.url;
+
+  if (!description) {
+    // description이 null일 경우, 빈 문자열로 변경
+    description = "";
+  }
 
   let client;
   
