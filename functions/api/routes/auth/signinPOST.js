@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
       if (!kakaoUser) {
         // 신규 사용자
         isAlreadyUser = false;
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_USER, { isAlreadyUser }));
+        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.NO_USER, { isAlreadyUser }));
       }
       else {
         // 기존 사용자
@@ -62,7 +62,7 @@ module.exports = async (req, res) => {
       if (!appleUser) {
         // 신규 사용자
         isAlreadyUser = false;
-        return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_USER, { isAlreadyUser }));
+        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.NO_USER, { isAlreadyUser }));
       }
       else {
         // 기존 사용자
