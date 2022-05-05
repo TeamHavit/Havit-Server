@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/kakao', require('./kakaoPOST'));
-router.post('/reissue', require('./reissueTokenPOST'));
+router.post('/signin', require('./signinPOST'));
+router.post('/token', require('./reissueTokenPOST'));
 
 module.exports = router;

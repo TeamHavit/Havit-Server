@@ -7,11 +7,12 @@ const util = {
             data,
         };
     },
-    fail: (status, message) => {
+    fail: (status, message, data) => {
         return {
             status,
             success: false,
             message,
+            data
         };
     },
 };
