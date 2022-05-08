@@ -11,14 +11,14 @@ const jwtHandlers = require("../../../lib/jwtHandlers");
 /**
  *  @route POST /auth/signin
  *  @desc 기존 유저 로그인
- *  @access Private
+ *  @access Public
  */
 
 module.exports = async (req, res) => {
   const { fcmToken, kakaoAccessToken, firebaseUID } = req.body;
 
   if (!fcmToken || (!firebaseUID && !kakaoAccessToken)) {
-    // firebaseUID와 kakaoAccessToken이 모두 없을 때 : 에러
+    // fcmToken이 없거나 firebaseUID와 kakaoAccessToken이 모두 없을 때 : 에러
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
         const accessToken = jwtHandlers.sign({ id: kakaoUser.id, idFirebase: kakaoUser.idFirebase });
         const refreshToken = jwtHandlers.signRefresh();
         const nickname = kakaoUser.nickname;
-        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.LOGIN_SUCCESS, 
+        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { isAlreadyUser, firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
     } 
@@ -70,7 +70,7 @@ module.exports = async (req, res) => {
         const refreshToken = jwtHandlers.signRefresh();
         const nickname = appleUser.nickname;
         const firebaseAuthToken = "";
-        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.LOGIN_OK, 
+        return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { isAlreadyUser, firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
     }
