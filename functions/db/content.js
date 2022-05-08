@@ -207,7 +207,18 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
         [contentId, notificationTime]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const getContent = async (client, userId, title, url) => {
+    const { rows } = await client.query(
+        `
+        SELECT user_id, title, url FROM content
+        WHERE user_id = $1 AND title = $2 AND url = $3
+        `,
+        [userId, title, url]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
 module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
-    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification };
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent };
