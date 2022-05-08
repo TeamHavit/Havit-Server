@@ -93,6 +93,17 @@ const getCategory = async (client, categoryId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const getCategoryByName = async (client, userId, title) => {
+    const { rows } = await client.query(
+        `
+        SELECT user_id, title FROM category
+        WHERE user_id = $1 AND title = $2
+        `,
+        [userId, title]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
 const updateCategoryIndex = async (client, userId, contentId, orderIndex) => {
     const { rows } = await client.query(
         `
@@ -104,4 +115,4 @@ const updateCategoryIndex = async (client, userId, contentId, orderIndex) => {
     );
 };
 
-module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory, updateCategoryIndex };
+module.exports = { getAllCategories, addCategory, getCategoryNames, updateCategory, deleteCategory, getCategory, getCategoryByName, updateCategoryIndex };
