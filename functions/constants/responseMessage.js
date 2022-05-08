@@ -31,6 +31,7 @@ module.exports = {
     RENAME_CONTENT_SUCCESS: '콘텐츠 제목 변경 성공',
     UPDATE_CONTENT_CATEGORY_SUCCESS: '콘텐츠 카테고리 변경 성공',
     UPDATE_CONTENT_NOTIFICATION_SUCCESS: '콘텐츠 알림 변경 성공',
+    DUPLICATED_CONTENT: '중복된 콘텐츠',
 
     // 카테고리
     ADD_ONE_CATEGORY_SUCCESS: '카테고리 생성 완료',
@@ -41,6 +42,7 @@ module.exports = {
     DELETE_ONE_CATEGORY_SUCCESS: '카테고리 삭제 성공',
     NO_CATEGORY: '존재하지 않는 카테고리',
     UPDATE_CATEGORY_ORDER_SUCCESS: '카테고리 순서 변경 성공',
+    DUPLICATED_CATEGORY: '중복된 카테고리',
     
     // 추천 사이트
     READ_ALL_RECOMMENDATION_SUCCESS: '추천 사이트 조회 성공',
