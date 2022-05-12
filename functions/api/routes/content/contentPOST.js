@@ -34,11 +34,15 @@ module.exports = async (req, res) => {
 
   const scrapData = await ogs({ url : url });
   let description = scrapData.result.ogDescription;
-  const image = scrapData.result.ogImage.url;
+  let image = scrapData.result.ogImage.url;
 
   if (!description) {
     // description이 null일 경우, 빈 문자열로 변경
     description = "";
+  };
+  if (!image) {
+    // image url이 없는 경우, 더미 이미지 url로 변경
+    image = "https://havit-bucket.s3.ap-northeast-2.amazonaws.com/havit_content_dummy.png";
   }
 
   let client;
