@@ -8,6 +8,7 @@ const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../d
 const axios = require('axios');
 const ogs = require('open-graph-scraper');
 const dotenv = require('dotenv');
+const dummyImages = require('../../../constants/dummyImages');
 dotenv.config();
 
 /**
@@ -34,11 +35,15 @@ module.exports = async (req, res) => {
 
   const scrapData = await ogs({ url : url });
   let description = scrapData.result.ogDescription;
-  const image = scrapData.result.ogImage.url;
+  let image = scrapData.result.ogImage.url;
 
   if (!description) {
     // description이 null일 경우, 빈 문자열로 변경
     description = "";
+  };
+  if (!image) {
+    // image url이 없는 경우, 더미 이미지 url로 변경
+    image = dummyImages.content_dummy;
   }
 
   let client;
