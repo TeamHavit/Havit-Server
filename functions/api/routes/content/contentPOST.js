@@ -8,6 +8,7 @@ const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../d
 const axios = require('axios');
 const ogs = require('open-graph-scraper');
 const dotenv = require('dotenv');
+const dummyImages = require('../../../constants/dummyImages');
 dotenv.config();
 
 /**
@@ -42,7 +43,7 @@ module.exports = async (req, res) => {
   };
   if (!image) {
     // image url이 없는 경우, 더미 이미지 url로 변경
-    image = "https://havit-bucket.s3.ap-northeast-2.amazonaws.com/havit_content_dummy.png";
+    image = dummyImages.content_dummy;
   }
 
   let client;
