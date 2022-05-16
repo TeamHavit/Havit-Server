@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
         const refreshToken = jwtHandlers.signRefresh();
         const nickname = kakaoUser.nickname;
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
-          { isAlreadyUser, firebaseAuthToken, accessToken, refreshToken, nickname }));
+          { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
     } 
     else {
@@ -71,7 +71,7 @@ module.exports = async (req, res) => {
         const nickname = appleUser.nickname;
         const firebaseAuthToken = "";
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
-          { isAlreadyUser, firebaseAuthToken, accessToken, refreshToken, nickname }));
+          { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
     }
   } catch (error) {
