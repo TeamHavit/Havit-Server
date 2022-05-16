@@ -42,6 +42,7 @@ jobs:
           echo "${{ secrets.TOKEN_URI }}" >> .env
           echo "${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env
           echo "${{ secrets.CLIENT_CERT_URL }}" >> .env
+          echo "${{ secrets.PUSH_SERVER_URL }}" >> .env
           
       - name: Create service account file
         run: |
