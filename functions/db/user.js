@@ -72,4 +72,14 @@ const updateNickname = async (client, userId, newNickname) => {
     );
 };
 
-module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken, updateNickname };
+const deleteUser = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        DELETE FROM "user"
+        WHERE id = $1
+        `,
+        [userId]
+    )
+}
+
+module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken, updateNickname, deleteUser };
