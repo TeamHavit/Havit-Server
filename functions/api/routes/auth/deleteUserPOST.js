@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const deleteUser = await userDB.getUser(client, userId);
-    await getAuth().deleteUser(deleteUser.idFirebase); // Promise error 나오는데 try-catch 필요없는지
+    await getAuth().deleteUser(deleteUser.idFirebase);
     await userDB.deleteUser(client, userId);
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_USER));
 
