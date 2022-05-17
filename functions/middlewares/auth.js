@@ -43,7 +43,7 @@ const checkUser = async (req, res, next) => {
         // 유저 DB에서 해당 유저의 정보 조회
         const user = await userDB.getUser(client, userId);
 
-        if (!user) {
+        if (!user || user.isDeleted) {
             // 해당 유저가 존재하지 않을 때
             return res.status(statusCode.UNAUTHORIZED).send(util.fail(statusCode.UNAUTHORIZED, responseMessage.NO_USER));
         }
