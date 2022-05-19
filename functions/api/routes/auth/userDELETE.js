@@ -8,7 +8,7 @@ const { userDB } = require("../../../db");
 const { getAuth } = require('firebase-admin/auth');
 
 /**
- *  @route POST /auth/delete
+ *  @route DELETE /auth/user
  *  @desc 회원 탈퇴
  *  @access Public
  */
