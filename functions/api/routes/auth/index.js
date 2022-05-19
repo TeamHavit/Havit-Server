@@ -5,6 +5,6 @@ const { checkUser } = require('../../../middlewares/auth');
 router.post('/signin', require('./signinPOST'));
 router.post('/signup', require('./signupPOST'));
 router.post('/token', require('./reissueTokenPOST'));
-router.post('/delete', checkUser, require('./deleteUserPOST'));
+router.delete('/user', checkUser, require('./userDELETE'));
 
 module.exports = router;
