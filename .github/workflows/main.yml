@@ -16,6 +16,15 @@ jobs:
     
       - uses: actions/checkout@v2
       
+      - name: create .firebaserc
+        run: |
+         touch .firebaserc
+         echo '{' >> .firebaserc
+         echo ' "projects":  {' >> .firebaserc
+         echo '  "default": "havit-wesopt29"' >> .firebaserc
+         echo ' }' >> .firebaserc
+         echo '}' >> .firebaserc
+         
       - name: Setting Slack API
         run: |
          touch deployMessageToSlack.sh
