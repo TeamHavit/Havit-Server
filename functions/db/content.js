@@ -220,7 +220,7 @@ const getContent = async (client, userId, title, url) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
-const getContentNotificationIsScheduled = async (client, userId) => {
+const getScheduledContentNotification = async (client, userId) => {
     const { rows } = await client.query(
         `
         SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
@@ -232,7 +232,7 @@ const getContentNotificationIsScheduled = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-const getContentNotificationIsNotificated = async (client, userId) => {
+const getExpiredContentNotificaion = async (client, userId) => {
     const { rows } = await client.query(
         `
         SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
@@ -245,4 +245,4 @@ const getContentNotificationIsNotificated = async (client, userId) => {
 };
 
 module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
-    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getContentNotificationIsScheduled, getContentNotificationIsNotificated };
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getScheduledContentNotification, getExpiredContentNotificaion };
