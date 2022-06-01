@@ -15,16 +15,7 @@ jobs:
     steps:
     
       - uses: actions/checkout@v2
-      
-      - name: create .firebaserc
-        run: |
-         touch .firebaserc
-         echo '{' >> .firebaserc
-         echo ' "projects":  {' >> .firebaserc
-         echo '  "default": "havit-wesopt29"' >> .firebaserc
-         echo ' }' >> .firebaserc
-         echo '}' >> .firebaserc
-         
+       
       - name: Setting Slack API
         run: |
          touch deployMessageToSlack.sh
@@ -53,23 +44,30 @@ jobs:
           echo "CLIENT_CERT_URL=${{ secrets.CLIENT_CERT_URL }}" >> .env
           echo "PUSH_SERVER_URL=${{ secrets.PUSH_SERVER_URL }}" >> .env
           
-      - name: Create service account file
-        run: |
-          cd functions
-          touch havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo '{' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "type": ${{ secrets.TYPE }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "project_id": ${{ secrets.PROJECT_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "private_key": ${{ secrets.PRIVATE_KEY }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "private_key_id": ${{ secrets.PRIVATE_KEY_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_email": ${{ secrets.CLIENT_EMAIL }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_id": ${{ secrets.CLIENT_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "auth_uri": ${{ secrets.AUTH_URI }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "token_uri": ${{ secrets.TOKEN_URI }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "auth_provider_x509_cert_url": ${{ secrets.AUTH_PROVIDER_CERT_URL }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo ' "client_x509_cert_url": ${{ secrets.CLIENT_CERT_URL }} ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-          echo '}' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-      
+      # - name: Create service account file
+      #   run: |
+      #     cd functions
+      #     touch havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo '{' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "type": ${{ secrets.TYPE }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "project_id": ${{ secrets.PROJECT_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "private_key": ${{ secrets.PRIVATE_KEY }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "private_key_id": ${{ secrets.PRIVATE_KEY_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "client_email": ${{ secrets.CLIENT_EMAIL }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "client_id": ${{ secrets.CLIENT_ID }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "auth_uri": ${{ secrets.AUTH_URI }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "token_uri": ${{ secrets.TOKEN_URI }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "auth_provider_x509_cert_url": ${{ secrets.AUTH_PROVIDER_CERT_URL }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo ' "client_x509_cert_url": ${{ secrets.CLIENT_CERT_URL }} ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      #     echo '}' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+      - name: create account service json
+        uses: jsdaniell/create-json@1.1.2
+        id: create-sevice-account-json
+        with:
+          name: 'havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json'
+          json: '{"type": "${{ secrets.TYPE }}","auth_uri": "${{ secrets.AUTH_URI }}","auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_CERT_URL }}","private_key_id": "${{ secrets.PRIVATE_KEY_ID }}","project_id": "${{ secrets.PROJECT_ID }}","private_key": "${{ secrets.PRIVATE_KEY }}","token_uri": "${{ secrets.TOKEN_URI }}", "client_email": "${{ secrets.CLIENT_EMAIL }}","client_x509_cert_url": "${{ secrets.CLIENT_CERT_URL }}","client_id": "${{ secrets.CLIENT_ID }}"}'
+          dir: 'functions/'
+
       - name: Install npm pacakges
         run: |
           cd functions
