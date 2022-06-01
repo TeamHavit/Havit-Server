@@ -6,8 +6,11 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
 const axios = require('axios');
+const ogs = require('open-graph-scraper');
 const dotenv = require('dotenv');
+const dummyImages = require('../../../constants/dummyImages');
 dotenv.config();
+
 /**
  *  @route POST /content
  *  @desc 콘텐츠 생성
@@ -16,7 +19,7 @@ dotenv.config();
 
 module.exports = async (req, res) => {
 
-  const { title, description = '', image = '', url, isNotified, categoryIds } = req.body;
+  const { title, url, isNotified, categoryIds } = req.body; // 변경된 title은 클라이언트에게 전달 받음
   let { notificationTime } = req.body; // notificationTime 없는 경우, 클라이언트에서 빈 문자열로 제공
   const { userId } = req.user;
 
@@ -28,6 +31,19 @@ module.exports = async (req, res) => {
   if (notificationTime == "") {
     // notificationTime이 빈 문자열로 온 경우, null로 변경
     notificationTime = null;
+  }
+
+  const scrapData = await ogs({ url : url });
+  let description = scrapData.result.ogDescription;
+  let image = scrapData.result.ogImage.url;
+
+  if (!description) {
+    // description이 null일 경우, 빈 문자열로 변경
+    description = "";
+  };
+  if (!image) {
+    // image url이 없는 경우, 더미 이미지 url로 변경
+    image = dummyImages.content_dummy;
   }
 
   let client;
@@ -47,29 +63,36 @@ module.exports = async (req, res) => {
 
     if (flag) {
       // 유저가 해당 카테고리를 가지고 있을 때
-      const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
-      for (const categoryId of categoryIds) {
-        // 중복 카테고리 허용
-        const categoryContent = await categoryContentDB.addCategoryContent(client, categoryId, content.id);
-      }
-      const data = {
-        contentId: content.id
-      };
 
-      if (user.mongoUserId && content.isNotified) {
-        // 데모데이용 알림 생성 -> 릴리즈때 수정 필요
-        let date = new Date(content.notificationTime);
-        date = date.setHours(date.getHours()-9);
-        const notification = await axios.post(process.env.PUSH_SERVER_URL+"reminder", {
-            userId: user.mongoUserId, 
-            contentId: content.id,
-            time: date,
-            ogTitle: content.title,
-            ogImage: content.image,
-            url: content.url
-        });
+      // 콘텐츠 중복 생성 방지
+      const duplicatedContent = await contentDB.getContent(client, userId, title, url);
+      if (duplicatedContent) {
+      // userId, title, url이 같을 경우 중복 콘텐츠로 취급
+        res.status(statusCode.CONFLICT).send(util.fail(statusCode.CONFLICT, responseMessage.DUPLICATED_CONTENT));
       }
-      res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, data));
+      else {
+        const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
+        for (const categoryId of categoryIds) {
+          // 중복 카테고리 허용
+          await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+        };
+  
+        if (user.mongoUserId && content.isNotified) {
+          // 데모데이용 알림 생성 -> 릴리즈때 수정 필요
+          let date = new Date(content.notificationTime);
+          date = date.setHours(date.getHours()-9);
+          const notification = await axios.post(process.env.PUSH_SERVER_URL+"reminder", {
+              userId: user.mongoUserId, 
+              contentId: content.id,
+              time: date,
+              ogTitle: content.title,
+              ogImage: content.image,
+              url: content.url
+          });
+        };
+        res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, { contentId : content.id }));
+      };
+      
     } else {
       // 유저가 해당 카테고리를 가지고 있지 않을 때
       res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
@@ -85,5 +108,5 @@ module.exports = async (req, res) => {
     
   } finally {
     client.release();
-  }
+  };
 };

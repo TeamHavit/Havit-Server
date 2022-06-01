@@ -207,7 +207,42 @@ const updateContentNotification = async (client, contentId, notificationTime) =>
         [contentId, notificationTime]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const getContent = async (client, userId, title, url) => {
+    const { rows } = await client.query(
+        `
+        SELECT user_id, title, url FROM content
+        WHERE user_id = $1 AND title = $2 AND url = $3
+        `,
+        [userId, title, url]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
+const getContentNotificationIsScheduled = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
+        WHERE user_id = $1 AND is_deleted = FALSE AND is_notified = TRUE AND notification_time > NOW()
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentNotificationIsNotificated = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
+        WHERE user_id = $1 AND is_deleted = FALSE AND is_notified = TRUE AND notification_time <= NOW()
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
 module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
-    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification };
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getContentNotificationIsScheduled, getContentNotificationIsNotificated };
