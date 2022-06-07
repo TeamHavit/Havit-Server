@@ -6,8 +6,6 @@ const createPushServerUser = async (fcmToken) => {
 
     const response = await axios.post(url, { fcmToken });
 
-
-    console.log(response.data);
     return response.data.data._id;
 }
 
