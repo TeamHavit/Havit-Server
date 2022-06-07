@@ -7,6 +7,7 @@ const { userDB } = require("../../../db");
 const functions = require("firebase-functions");
 const slackAPI = require("../../../middlewares/slackAPI");
 const jwtHandlers = require("../../../lib/jwtHandlers");
+const { createPushServerUser } = require("../../../lib/pushServerHandlers");
 
 /**
  *  @route POST /auth/signup
@@ -32,18 +33,20 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
+    const mongoId = await createPushServerUser(fcmToken);
+
     if (!firebaseUID) {
       // firebaseUID가 없을 때 : 카카오 소셜 로그인
       const firebaseUserData = await kakao.createFirebaseToken(kakaoAccessToken);
       const { firebaseAuthToken, firebaseUserId } = firebaseUserData;
-      const kakaoUser = await userDB.addUser(client, firebaseUserId, nickname, email, age, gender);
+      const kakaoUser = await userDB.addUser(client, firebaseUserId, nickname, email, age, gender, mongoId);
       const accessToken = jwtHandlers.sign({ id: kakaoUser.id, idFirebase: kakaoUser.idFirebase });
       const refreshToken = jwtHandlers.signRefresh();
       return res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.SIGNUP_SUCCESS, { firebaseAuthToken, accessToken, refreshToken, nickname }));
     } 
     else {
       // kakaoAccessToken이 없을 때 (!kakaoAccessToken) : 애플 소셜 로그인
-      const appleUser = await userDB.addUser(client, firebaseUID, nickname, email, age, gender);
+      const appleUser = await userDB.addUser(client, firebaseUID, nickname, email, age, gender, mongoId);
       const accessToken = jwtHandlers.sign({ id: appleUser.id, idFirebase: appleUser.idFirebase });
       const refreshToken = jwtHandlers.signRefresh();
       const firebaseAuthToken = "";
