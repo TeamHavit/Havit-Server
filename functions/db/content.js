@@ -244,5 +244,17 @@ const getExpiredContentNotificaion = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
+const getContentById = async (client, contentId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, user_id
+        FROM content
+        WHERE id = $2 AND is_deleted = FALSE
+        `,
+        [contentId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
 module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
-    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getScheduledContentNotification, getExpiredContentNotificaion };
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getScheduledContentNotification, getExpiredContentNotificaion, getContentById };
