@@ -16,16 +16,16 @@ const customParseFormat = require('dayjs/plugin/customParseFormat')
  */
 
 module.exports = async (req, res) => {
-    const { userId } = req.user;
     const { contentId } = req.params;
-    
+    const { userId } = req.user;
+    console.log(contentId);
     let client;
 
     try {
         client = await db.connect(req);
 
         // 콘텐츠가 없거나, 해당 유저의 콘텐츠가 아닌 경우 제한
-        const content = await contentDB.getContentById(client, userId, contentId);
+        const content = await contentDB.getContentById(client, contentId);
         if(!content) {
             return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
         }
