@@ -4,6 +4,7 @@ const { checkUser } = require('../../../middlewares/auth');
 
 router.post('/', checkUser, require('./contentPOST'));
 router.get('/', checkUser, require('./contentListGET'));
+router.get('/:contentId/category', checkUser, require('./contentCategoryGET'));
 router.get('/search', checkUser, require('./contentSearchGET'));
 router.get('/recent', checkUser, require('./contentRecentListGET'));
 router.get('/unseen', checkUser, require('./contentUnseenListGET'));

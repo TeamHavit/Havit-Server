@@ -1,7 +1,8 @@
 module.exports = {
     NULL_VALUE: '필요한 값이 없습니다',
     OUT_OF_VALUE: '파라미터 값이 잘못되었습니다',
-  
+    FORBIDDEN: '허용되지 않은 접근입니다.',
+    
     // 인증
     SIGNIN_SUCCESS: '소셜 로그인 성공',
     SIGNUP_SUCCESS: '회원 가입 성공',
@@ -45,6 +46,7 @@ module.exports = {
     NO_CATEGORY: '존재하지 않는 카테고리',
     UPDATE_CATEGORY_ORDER_SUCCESS: '카테고리 순서 변경 성공',
     DUPLICATED_CATEGORY: '중복된 카테고리',
+    READ_CONTENT_CATEGORY_SUCCESS: '콘텐츠 소속 카테고리 조회 성공',
     
     // 추천 사이트
     READ_ALL_RECOMMENDATION_SUCCESS: '추천 사이트 조회 성공',
