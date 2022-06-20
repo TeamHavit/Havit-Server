@@ -249,7 +249,7 @@ const getContentById = async (client, contentId) => {
         `
         SELECT id, user_id
         FROM content
-        WHERE id = $2 AND is_deleted = FALSE
+        WHERE id = $1 AND is_deleted = FALSE
         `,
         [contentId]
     );
