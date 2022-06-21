@@ -111,7 +111,7 @@ const searchContent = async (client, userId, keyword) => {
         `
         SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.title like $2
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.title ilike $2
         ORDER BY created_at DESC
         `,
         [userId, searchKeyword]
@@ -220,5 +220,41 @@ const getContent = async (client, userId, title, url) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 }
 
+const getScheduledContentNotification = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
+        WHERE user_id = $1 AND is_deleted = FALSE AND is_notified = TRUE AND notification_time > NOW()
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getExpiredContentNotificaion = async (client, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, title, notification_time, url, image, description, created_at, is_seen FROM content 
+        WHERE user_id = $1 AND is_deleted = FALSE AND is_notified = TRUE AND notification_time <= NOW()
+        ORDER BY created_at DESC
+        `,
+        [userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getContentById = async (client, contentId) => {
+    const { rows } = await client.query(
+        `
+        SELECT id, user_id
+        FROM content
+        WHERE id = $1 AND is_deleted = FALSE
+        `,
+        [contentId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+}
+
 module.exports = { addContent, toggleContent, getContentsByFilter, getContentsByFilterAndNotified, getContentsByFilterAndSeen, searchContent, updateContentIsDeleted, 
-    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent };
+    getRecentContents, getUnseenContents, deleteContent, renameContent, updateContentNotification, getContent, getScheduledContentNotification, getExpiredContentNotificaion, getContentById };

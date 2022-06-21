@@ -58,6 +58,21 @@ const getCategoryContentByFilterAndSeen = async (client, userId, categoryId, opt
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
+const getCategoryContentByContentId = async (client, contentId, userId) => {
+    const { rows } = await client.query(
+        `
+        SELECT c.id, c.title, c.order_index, i.id as image_id, i.url as image_url
+        FROM category_content cc
+        JOIN category c on c.id = cc.category_id
+        JOIN category_image i on c.category_image_id = i.id
+        WHERE cc.content_id = $1 AND c.user_id = $2
+        ORDER BY c.order_index
+        `,
+        [contentId, userId]
+    );
+    return convertSnakeToCamel.keysToCamel(rows);
+}
+
 const addCategoryContent = async (client, categoryId, contentId) => {
     const { rows } = await client.query(
         `
@@ -104,7 +119,7 @@ const searchCategoryContent = async (client, userId, categoryId, keyword) => {
         FROM content co
         JOIN category_content cc on co.id = cc.content_id
         JOIN category ca on ca.id = cc.category_id
-        WHERE ca.id = $2 AND co.user_id = $1 AND co.is_deleted = FALSE AND co.title like $3
+        WHERE ca.id = $2 AND co.user_id = $1 AND co.is_deleted = FALSE AND co.title ilike $3
         ORDER BY co.created_at DESC
         `,
         [userId, categoryId, searchKeyword]
@@ -112,5 +127,5 @@ const searchCategoryContent = async (client, userId, categoryId, keyword) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-module.exports = { getAllCategoryContentByFilter, getCategoryContentByFilterAndNotified, getCategoryContentByFilterAndSeen, addCategoryContent, 
+module.exports = { getAllCategoryContentByFilter, getCategoryContentByFilterAndNotified, getCategoryContentByFilterAndSeen, getCategoryContentByContentId, addCategoryContent, 
     deleteCategoryContentByCategoryId, deleteCategoryContentByContentId, searchCategoryContent };
