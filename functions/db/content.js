@@ -111,7 +111,7 @@ const searchContent = async (client, userId, keyword) => {
         `
         SELECT c.id, c.title, c.description, c.image, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at
         FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.title like $2
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.title ilike $2
         ORDER BY created_at DESC
         `,
         [userId, searchKeyword]
