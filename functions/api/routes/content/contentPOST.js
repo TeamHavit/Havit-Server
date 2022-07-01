@@ -63,15 +63,7 @@ module.exports = async (req, res) => {
 
     if (flag) {
       // 유저가 해당 카테고리를 가지고 있을 때
-
-      // 콘텐츠 중복 생성 방지
-      const duplicatedContent = await contentDB.getContent(client, userId, title, url);
-      if (duplicatedContent) {
-      // userId, title, url이 같을 경우 중복 콘텐츠로 취급
-        res.status(statusCode.CONFLICT).send(util.fail(statusCode.CONFLICT, responseMessage.DUPLICATED_CONTENT));
-      }
-      else {
-        const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
+      const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
         for (const categoryId of categoryIds) {
           // 중복 카테고리 허용
           await categoryContentDB.addCategoryContent(client, categoryId, content.id);
@@ -91,7 +83,6 @@ module.exports = async (req, res) => {
           });
         };
         res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, { contentId : content.id }));
-      };
       
     } else {
       // 유저가 해당 카테고리를 가지고 있지 않을 때
