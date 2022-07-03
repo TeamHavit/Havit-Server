@@ -6,6 +6,7 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { userDB } = require("../../../db");
 const { getAuth } = require('firebase-admin/auth');
+const { randomString } = require('../../../lib/random');
 
 /**
  *  @route DELETE /auth/user
@@ -47,7 +48,9 @@ module.exports = async (req, res) => {
   }
 
   try {
-    await userDB.deleteUser(client, userId); // DB에서 해당 유저 삭제
+    let randomString_ = `:${randomString()}`;
+    console.log(randomString_);
+    await userDB.deleteUser(client, userId, randomString_); // DB에서 해당 유저 삭제
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_USER));
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
