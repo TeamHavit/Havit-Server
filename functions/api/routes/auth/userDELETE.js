@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
   } 
 
   try {
-    // await getAuth().deleteUser(deleteUser.idFirebase); // Firebase Auth에서 해당 유저 삭제
+    await getAuth().deleteUser(deleteUser.idFirebase); // Firebase Auth에서 해당 유저 삭제
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
@@ -48,9 +48,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const randomString = nanoid(10);
-    let randomString_ = `:${randomString}`;
-    await userDB.deleteUser(client, userId, randomString_); // DB에서 해당 유저 삭제
+    const randomString = `:${nanoid(10)}`;
+    await userDB.deleteUser(client, userId, randomString); // DB에서 해당 유저 삭제
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_USER));
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
