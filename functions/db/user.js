@@ -72,14 +72,14 @@ const updateNickname = async (client, userId, newNickname) => {
     );
 };
 
-const deleteUser = async (client, userId) => {
+const deleteUser = async (client, userId, randomString) => {
     const { rows } = await client.query(
         `
         UPDATE "user"
-        SET is_deleted = TRUE
+        SET is_deleted = TRUE, id_firebase = (id_firebase || $2)
         WHERE id = $1
         `,
-        [userId]
+        [userId, randomString]
     )
 }
 
