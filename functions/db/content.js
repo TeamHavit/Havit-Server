@@ -247,7 +247,7 @@ const getExpiredContentNotificaion = async (client, userId) => {
 const getContentById = async (client, contentId) => {
     const { rows } = await client.query(
         `
-        SELECT id, user_id
+        SELECT *
         FROM content
         WHERE id = $1 AND is_deleted = FALSE
         `,
