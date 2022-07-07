@@ -119,7 +119,7 @@ const searchCategoryContent = async (client, userId, categoryId, keyword) => {
         FROM content co
         JOIN category_content cc on co.id = cc.content_id
         JOIN category ca on ca.id = cc.category_id
-        WHERE ca.id = $2 AND co.user_id = $1 AND co.is_deleted = FALSE AND co.title like $3
+        WHERE ca.id = $2 AND co.user_id = $1 AND co.is_deleted = FALSE AND co.title ilike $3
         ORDER BY co.created_at DESC
         `,
         [userId, categoryId, searchKeyword]

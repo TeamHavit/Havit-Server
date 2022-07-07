@@ -13,6 +13,6 @@ router.delete('/:contentId', checkUser, require('./contentDELETE'));
 router.patch('/category', checkUser, require('./contentCategoryPATCH'));
 router.patch('/title/:contentId', checkUser, require('./contentRenamePATCH'));
 router.patch('/check', checkUser, require('./contentCheckPATCH'));
-router.patch('/notification/:contentId', checkUser, require('./contentNotificationPATCH'));
+router.patch('/:contentId/notification', checkUser, require('./contentNotificationPATCH'));
 
 module.exports = router;
