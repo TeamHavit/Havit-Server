@@ -8,7 +8,7 @@ const { contentDB, userDB } = require('../../../db');
 const { modifyNotificationTime, createNotification } = require('../../../lib/pushServerHandlers');
 
 /**
- *  @route PATCH /content/notification/:contentId
+ *  @route PATCH /content/:contentId/notification
  *  @desc 콘텐츠 알림 시각 수정
  *  @access Private
  */
