@@ -29,4 +29,14 @@ const modifyNotificationTime = async (contentId, time) => {
     return response.data;
 }
 
-module.exports = { createPushServerUser, createNotification, modifyNotificationTime }
+const modifyFcmToken = async (mongoUserId, fcmToken) => {
+    const url = `${baseURL}user/${mongoUserId}/refresh-token`;
+
+    const response = await axios.put(url, {
+        fcmToken
+    });
+
+    return response;
+}
+
+module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken }
