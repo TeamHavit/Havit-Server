@@ -5,7 +5,6 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { userDB } = require('../../../db');
-const { default: axios } = require('axios');
 const { modifyFcmToken } = require('../../../lib/pushServerHandlers');
 
 module.exports = async (req, res) => {
