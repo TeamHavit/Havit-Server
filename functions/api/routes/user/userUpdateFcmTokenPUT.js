@@ -6,6 +6,7 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { userDB } = require('../../../db');
 const { default: axios } = require('axios');
+const { modifyFcmToken } = require('../../../lib/pushServerHandlers');
 
 module.exports = async (req, res) => {
     const { fcmToken } = req.body;
@@ -26,12 +27,10 @@ module.exports = async (req, res) => {
             return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NOT_FOUND));
         }
 
-        const updatedToken = await axios.put(process.env.PUSH_SERVER_URL+`user/${user.mongoUserId}/refresh-token`, {
-            fcmToken
-        });
+        const response = await modifyFcmToken(user.mongoUserId, fcmToken);
 
-        if (updatedToken.status != 204) {
-            return res.status(updatedToken.statusCode).send(util.fail(updatedToken.statusCode, updatedToken.statusText));
+        if (response.status != 204) {
+            return res.status(response.statusCode).send(util.fail(response.statusCode, response.statusText));
         }
 
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.UPDATE_FCM_TOKEN_SUCCESS));
