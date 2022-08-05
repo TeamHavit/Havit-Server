@@ -34,8 +34,8 @@ module.exports = async (req, res) => {
   }
 
   const scrapData = await ogs({ url : url });
-  let description = scrapData.result.ogDescription;
-  let image = scrapData.result.ogImage.url;
+  let description = scrapData.result?.ogDescription;
+  let image = scrapData.result?.ogImage?.url;
 
   if (!description) {
     // description이 null일 경우, 빈 문자열로 변경
