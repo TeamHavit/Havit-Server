@@ -33,7 +33,13 @@ module.exports = async (req, res) => {
     notificationTime = null;
   }
 
-  const scrapData = await ogs({ url : url });
+  const scrapData = await ogs({
+    url, 
+    headers: {
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    } 
+  });
   let description = scrapData.result?.ogDescription;
   let image = scrapData.result?.ogImage?.url;
 
