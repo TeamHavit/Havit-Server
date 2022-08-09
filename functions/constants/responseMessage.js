@@ -33,6 +33,7 @@ module.exports = {
     RENAME_CONTENT_SUCCESS: '콘텐츠 제목 변경 성공',
     UPDATE_CONTENT_CATEGORY_SUCCESS: '콘텐츠 카테고리 변경 성공',
     UPDATE_CONTENT_NOTIFICATION_SUCCESS: '콘텐츠 알림 변경 성공',
+    DELETE_CONTENT_NOTIFICATION_SUCCESS: '콘텐츠 알림 삭제 성공',
     DUPLICATED_CONTENT: '중복된 콘텐츠',
     READ_CONTENT_NOTIFICATION_SUCCESS: '콘텐츠 알림 조회 성공',
 
