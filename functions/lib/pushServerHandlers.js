@@ -39,4 +39,12 @@ const modifyFcmToken = async (mongoUserId, fcmToken) => {
     return response;
 }
 
-module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken }
+const deleteNotification = async (contentId) => {
+    const url = `${baseURL}reminder/${contentId}`;
+
+    const response = await axios.delete(url);
+
+    return response
+}
+
+module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken, deleteNotification }
