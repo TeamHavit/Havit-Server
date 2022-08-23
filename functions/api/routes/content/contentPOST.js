@@ -33,9 +33,15 @@ module.exports = async (req, res) => {
     notificationTime = null;
   }
 
-  const scrapData = await ogs({ url : url });
-  let description = scrapData.result.ogDescription;
-  let image = scrapData.result.ogImage.url;
+  const scrapData = await ogs({
+    url, 
+    headers: {
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    } 
+  });
+  let description = scrapData.result?.ogDescription;
+  let image = scrapData.result?.ogImage?.url;
 
   if (!description) {
     // description이 null일 경우, 빈 문자열로 변경
