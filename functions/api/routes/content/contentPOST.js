@@ -6,7 +6,6 @@ const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
 const axios = require('axios');
-const ogs = require('open-graph-scraper');
 const dotenv = require('dotenv');
 const dummyImages = require('../../../constants/dummyImages');
 dotenv.config();
@@ -19,8 +18,8 @@ dotenv.config();
 
 module.exports = async (req, res) => {
 
-  const { title, url, isNotified, categoryIds } = req.body; // 변경된 title은 클라이언트에게 전달 받음
-  let { notificationTime } = req.body; // notificationTime 없는 경우, 클라이언트에서 빈 문자열로 제공
+  const { title, description, url, isNotified, categoryIds } = req.body;
+  let { image, notificationTime } = req.body;
   const { userId } = req.user;
 
   if (!title || !url || !categoryIds) {
@@ -28,28 +27,14 @@ module.exports = async (req, res) => {
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
-  if (notificationTime == "") {
-    // notificationTime이 빈 문자열로 온 경우, null로 변경
-    notificationTime = null;
-  }
-
-  const scrapData = await ogs({
-    url, 
-    headers: {
-      'user-agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
-    } 
-  });
-  let description = scrapData.result?.ogDescription;
-  let image = scrapData.result?.ogImage?.url;
-
-  if (!description) {
-    // description이 null일 경우, 빈 문자열로 변경
-    description = "";
-  };
   if (!image) {
     // image url이 없는 경우, 더미 이미지 url로 변경
     image = dummyImages.content_dummy;
+  }
+
+  if (notificationTime == "") {
+    // notificationTime이 빈 문자열로 온 경우, null로 변경
+    notificationTime = null;
   }
 
   let client;
