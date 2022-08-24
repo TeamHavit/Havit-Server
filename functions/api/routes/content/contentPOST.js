@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     image = dummyImages.content_dummy;
   }
 
-  if (notificationTime == "") {
+  if (!notificationTime) {
     // notificationTime이 빈 문자열로 온 경우, null로 변경
     notificationTime = null;
   }
