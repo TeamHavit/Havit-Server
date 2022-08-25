@@ -7,6 +7,7 @@ const { userDB } = require("../../../db");
 const functions = require("firebase-functions");
 const slackAPI = require("../../../middlewares/slackAPI");
 const jwtHandlers = require("../../../lib/jwtHandlers");
+const { modifyFcmToken } = require('../../../lib/pushServerHandlers');
 
 /**
  *  @route POST /auth/signin
@@ -51,6 +52,13 @@ module.exports = async (req, res) => {
         const accessToken = jwtHandlers.sign({ id: kakaoUser.id, idFirebase: kakaoUser.idFirebase });
         const refreshToken = jwtHandlers.signRefresh();
         const nickname = kakaoUser.nickname;
+
+        const response = await modifyFcmToken(kakaoUser.mongoUserId, fcmToken);
+
+        if (response.status != 204) {
+          return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
+        }
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
@@ -70,6 +78,13 @@ module.exports = async (req, res) => {
         const refreshToken = jwtHandlers.signRefresh();
         const nickname = appleUser.nickname;
         const firebaseAuthToken = "";
+
+        const response = await modifyFcmToken(appleUser.mongoUserId, fcmToken);
+
+        if (response.status != 204) {
+          return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
+        }
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
