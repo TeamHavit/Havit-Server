@@ -14,5 +14,6 @@ router.patch('/category', checkUser, require('./contentCategoryPATCH'));
 router.patch('/title/:contentId', checkUser, require('./contentRenamePATCH'));
 router.patch('/check', checkUser, require('./contentCheckPATCH'));
 router.patch('/:contentId/notification', checkUser, require('./contentNotificationPATCH'));
+router.delete('/:contentId/notification', checkUser, require('./contentNotificationDELETE'));
 
 module.exports = router;

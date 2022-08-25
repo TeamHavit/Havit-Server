@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
             return res.status(response.status).send(util.fail(response.status, responseMessage.PUSH_SERVER_ERROR));
         }
 
-        await contentDB.updateContentNotification(client, contentId, notificationTime);
+        await contentDB.updateContentNotification(client, contentId, notificationTime, true);
 
         res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.UPDATE_CONTENT_NOTIFICATION_SUCCESS));
     } catch (error) {
