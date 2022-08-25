@@ -80,7 +80,7 @@ const getContentsByFilterAndNotified = async (client, userId, option, filter) =>
         `
         SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
         FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option}
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option} AND c.notification_time > NOW()
         ORDER BY ${filter} DESC
         `,
         [userId]

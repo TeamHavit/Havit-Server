@@ -6,6 +6,9 @@ const slackAPI = require('../../../middlewares/slackAPI');
 const db = require('../../../db/db');
 const { contentDB, userDB } = require('../../../db');
 const { modifyNotificationTime, createNotification } = require('../../../lib/pushServerHandlers');
+const dayjs = require('dayjs');
+const timezone = require('dayjs/plugin/timezone');
+const utc = require('dayjs/plugin/utc');
 
 /**
  *  @route PATCH /content/:contentId/notification
@@ -25,6 +28,12 @@ module.exports = async (req, res) => {
     let client;
     let response; 
 
+    dayjs().format();
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+
+    dayjs.tz.setDefault('Asia/Seoul');
+
     try {
         client = await db.connect(req);
         
@@ -38,7 +47,7 @@ module.exports = async (req, res) => {
 
         const user = await userDB.getUser(client, userId);
 
-        if (content.notificationTime) {
+        if (content.notificationTime && content.notificationTime > dayjs().tz().$d) {
             response = await modifyNotificationTime(contentId, notificationTime);
         } else {
             const data = {
