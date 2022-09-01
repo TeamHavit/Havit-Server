@@ -23,16 +23,16 @@ const getUserByFirebaseId = async (client, firebaseUserId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const addUser = async (client, firebaseUserId, nickname, email, age, gender, mongoId) => {
+const addUser = async (client, firebaseUserId, nickname, email, age, gender, isOption, mongoId) => {
     const { rows } = await client.query(
         `
         INSERT INTO "user"
-        (id_firebase, nickname, email, age, gender, mongo_user_id)
+        (id_firebase, nickname, email, age, gender, is_option, mongo_user_id)
         VALUES
-        ($1, $2, $3, $4, $5, $6)
+        ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
         `,
-        [firebaseUserId, nickname, email, age, gender, mongoId]
+        [firebaseUserId, nickname, email, age, gender, isOption, mongoId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
