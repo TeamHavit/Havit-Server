@@ -30,8 +30,8 @@ const getCategoryContentByFilterAndNotified = async (client, userId, categoryId,
         SELECT c2.id, c2.title, c2.image, c2.description, c2.url, c2.is_seen, c2.is_notified, c2.notification_time, c2.created_at, c2.seen_at
         FROM category c
         JOIN category_content cc on c.id = cc.category_id
-        JOIN content c2 on cc.content_id = c2.id
-        WHERE c.id = $2 AND c2.user_id = $1 AND c2.is_deleted = FALSE AND c2.is_notified = ${option}
+        JOIN content c2 on cc.content_id = c2.id 
+        WHERE c.id = $2 AND c2.user_id = $1 AND c2.is_deleted = FALSE AND c2.is_notified = ${option} AND c2.notification_time > NOW()
         ORDER BY ${filter} DESC
         `,
         [userId, categoryId]

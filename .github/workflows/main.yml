@@ -60,13 +60,20 @@ jobs:
       #     echo ' "auth_provider_x509_cert_url": ${{ secrets.AUTH_PROVIDER_CERT_URL }}, ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
       #     echo ' "client_x509_cert_url": ${{ secrets.CLIENT_CERT_URL }} ' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
       #     echo '}' >> havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
-      - name: create account service json
+      # - name: create account service json
+      #   uses: jsdaniell/create-json@1.1.2
+      #   id: create-sevice-account-json
+      #   with:
+      #     name: 'havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json'
+      #     # json: '{"type": "${{ secrets.TYPE }}","auth_uri": "${{ secrets.AUTH_URI }}","auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_CERT_URL }}","private_key_id": "${{ secrets.PRIVATE_KEY_ID }}","project_id": "${{ secrets.PROJECT_ID }}","private_key": "${{ secrets.PRIVATE_KEY }}","token_uri": "${{ secrets.TOKEN_URI }}", "client_email": "${{ secrets.CLIENT_EMAIL }}","client_x509_cert_url": "${{ secrets.CLIENT_CERT_URL }}","client_id": "${{ secrets.CLIENT_ID }}"}'
+      #     json: '{"type": ${{ secrets.TYPE }},"auth_uri": ${{ secrets.AUTH_URI }},"auth_provider_x509_cert_url": ${{ secrets.AUTH_PROVIDER_CERT_URL }},"private_key_id": ${{ secrets.PRIVATE_KEY_ID }},"project_id": ${{ secrets.PROJECT_ID }},"private_key": ${{ secrets.PRIVATE_KEY }},"token_uri": ${{ secrets.TOKEN_URI }}, "client_email": ${{ secrets.CLIENT_EMAIL }},"client_x509_cert_url": ${{ secrets.CLIENT_CERT_URL }},"client_id": ${{ secrets.CLIENT_ID }} }'
+      #     dir: 'functions/'
+      - name: create-json
+        id: create-json
         uses: jsdaniell/create-json@1.1.2
-        id: create-sevice-account-json
         with:
-          name: 'havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json'
-          # json: '{"type": "${{ secrets.TYPE }}","auth_uri": "${{ secrets.AUTH_URI }}","auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_CERT_URL }}","private_key_id": "${{ secrets.PRIVATE_KEY_ID }}","project_id": "${{ secrets.PROJECT_ID }}","private_key": "${{ secrets.PRIVATE_KEY }}","token_uri": "${{ secrets.TOKEN_URI }}", "client_email": "${{ secrets.CLIENT_EMAIL }}","client_x509_cert_url": "${{ secrets.CLIENT_CERT_URL }}","client_id": "${{ secrets.CLIENT_ID }}"}'
-          json: '{"type": ${{ secrets.TYPE }},"auth_uri": ${{ secrets.AUTH_URI }},"auth_provider_x509_cert_url": ${{ secrets.AUTH_PROVIDER_CERT_URL }},"private_key_id": ${{ secrets.PRIVATE_KEY_ID }},"project_id": ${{ secrets.PROJECT_ID }},"private_key": ${{ secrets.PRIVATE_KEY }},"token_uri": ${{ secrets.TOKEN_URI }}, "client_email": ${{ secrets.CLIENT_EMAIL }},"client_x509_cert_url": ${{ secrets.CLIENT_CERT_URL }},"client_id": ${{ secrets.CLIENT_ID }}}'
+          name: "havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json"
+          json: ${{ secrets.FIREBASE_JSON }}
           dir: 'functions/'
 
       - name: Install npm pacakges

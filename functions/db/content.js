@@ -80,7 +80,7 @@ const getContentsByFilterAndNotified = async (client, userId, option, filter) =>
         `
         SELECT c.id, c.title, c.image, c.description, c.url, c.is_seen, c.is_notified, c.notification_time, c.created_at, c.seen_at
         FROM content c
-        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option}
+        WHERE c.user_id = $1 AND c.is_deleted = FALSE AND c.is_notified = ${option} AND c.notification_time > NOW()
         ORDER BY ${filter} DESC
         `,
         [userId]
@@ -196,15 +196,15 @@ const renameContent = async (client, contentId, newTitle) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const updateContentNotification = async (client, contentId, notificationTime) => {
+const updateContentNotification = async (client, contentId, notificationTime, isNotified) => {
     const { rows } = await client.query(
         `
         UPDATE content
-        SET notification_time = $2, edited_at = now(), is_notified = TRUE
+        SET notification_time = $2, edited_at = now(), is_notified = $3
         WHERE id = $1 AND is_deleted = FALSE
         RETURNING *
         `,
-        [contentId, notificationTime]
+        [contentId, notificationTime, isNotified]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
@@ -247,7 +247,7 @@ const getExpiredContentNotificaion = async (client, userId) => {
 const getContentById = async (client, contentId) => {
     const { rows } = await client.query(
         `
-        SELECT id, user_id
+        SELECT *
         FROM content
         WHERE id = $1 AND is_deleted = FALSE
         `,
