@@ -47,4 +47,15 @@ const deleteNotification = async (contentId) => {
     return response
 }
 
-module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken, deleteNotification }
+const modifyContentTitle = async (contentId, ogTitle) => {
+    const url = `${baseURL}reminder/title`;
+
+    const response = await axios.patch(url, {
+        contentId,
+        ogTitle
+    });
+
+    return response;
+}
+
+module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken, deleteNotification, modifyContentTitle }
