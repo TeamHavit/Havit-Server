@@ -39,16 +39,16 @@ module.exports = async (req, res) => {
       // firebaseUID가 없을 때 : 카카오 소셜 로그인
       const firebaseUserData = await kakao.createFirebaseToken(kakaoAccessToken);
       const { firebaseAuthToken, firebaseUserId } = firebaseUserData;
-      const kakaoUser = await userDB.addUser(client, firebaseUserId, nickname, email, age, gender, isOption, mongoId);
-      const accessToken = jwtHandlers.sign({ id: kakaoUser.id, idFirebase: kakaoUser.idFirebase });
       const refreshToken = jwtHandlers.signRefresh();
+      const kakaoUser = await userDB.addUser(client, firebaseUserId, nickname, email, age, gender, isOption, mongoId, refreshToken);
+      const accessToken = jwtHandlers.sign({ id: kakaoUser.id, idFirebase: kakaoUser.idFirebase });
       return res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.SIGNUP_SUCCESS, { firebaseAuthToken, accessToken, refreshToken, nickname }));
     } 
     else {
       // kakaoAccessToken이 없을 때 (!kakaoAccessToken) : 애플 소셜 로그인
-      const appleUser = await userDB.addUser(client, firebaseUID, nickname, email, age, gender, isOption, mongoId);
+       const refreshToken = jwtHandlers.signRefresh();
+      const appleUser = await userDB.addUser(client, firebaseUID, nickname, email, age, gender, isOption, mongoId, refreshToken);
       const accessToken = jwtHandlers.sign({ id: appleUser.id, idFirebase: appleUser.idFirebase });
-      const refreshToken = jwtHandlers.signRefresh();
       const firebaseAuthToken = "";
       return res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.SIGNUP_SUCCESS, { firebaseAuthToken, accessToken, refreshToken, nickname }));
     }
