@@ -5,6 +5,8 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { noticeDB } = require('../../../db');
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 module.exports = async (req, res) => {
   
@@ -14,6 +16,13 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const notices = await noticeDB.getNotices(client);
+    
+    dayjs().format()
+    dayjs.extend(customParseFormat)
+
+    notices.map(obj => {
+      obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD");
+    })
     
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_NOTICES_SUCCESS, notices));
     
