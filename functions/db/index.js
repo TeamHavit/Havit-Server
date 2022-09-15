@@ -3,5 +3,6 @@ module.exports = {
     contentDB: require('./content'),
     categoryContentDB: require('./categoryContent'),
     recommendationDB: require('./recommendation'),
-    userDB: require('./user')
+    userDB: require('./user'),
+    noticeDB: require('./notice'),
 };
