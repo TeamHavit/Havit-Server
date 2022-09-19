@@ -20,11 +20,12 @@ module.exports = async (req, res) => {
     dayjs().format()
     dayjs.extend(customParseFormat)
 
-    notices.map(obj => {
-      obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD");
-    })
+    const result = await Promise.all(notices.map(async (notice) => {
+      notice.createdAt = await dayjs(`${notice.createdAt}`).format("YYYY-MM-DD");
+      return notice;
+    }));
     
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_NOTICES_SUCCESS, notices));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_NOTICES_SUCCESS, result));
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
