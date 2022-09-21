@@ -5,6 +5,8 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { noticeDB } = require('../../../db');
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 module.exports = async (req, res) => {
   
@@ -15,7 +17,15 @@ module.exports = async (req, res) => {
 
     const notices = await noticeDB.getNotices(client);
     
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_NOTICES_SUCCESS, notices));
+    dayjs().format()
+    dayjs.extend(customParseFormat)
+
+    const result = await Promise.all(notices.map(notice => {
+      notice.createdAt = dayjs(`${notice.createdAt}`).format("YYYY-MM-DD");
+      return notice;
+    }));
+    
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_NOTICES_SUCCESS, result));
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
