@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     dayjs().format()
     dayjs.extend(customParseFormat)
 
-    const result = await Promise.all(notices.map(async (notice) => {
+    const result = await Promise.all(notices.map(notice => {
       notice.createdAt = dayjs(`${notice.createdAt}`).format("YYYY-MM-DD");
       return notice;
     }));
