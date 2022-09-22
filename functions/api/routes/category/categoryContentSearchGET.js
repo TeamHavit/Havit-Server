@@ -34,19 +34,20 @@ module.exports = async (req, res) => {
     dayjs().format()
     dayjs.extend(customParseFormat)
 
-    contents.map(obj => {
+    const result = await Promise.all(contents.map(content => {
       // 시간 데이터 dayjs로 format 수정
-      obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm"); // createdAt 수정
-      if (obj.notificationTime) {
+      content.createdAt = dayjs(`${content.createdAt}`).format("YYYY-MM-DD HH:mm"); // createdAt 수정
+      if (content.notificationTime) {
         // notificationTime이 존재할 경우, format 수정
-        obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
+        content.notificationTime = dayjs(`${content.notificationTime}`).format("YYYY-MM-DD HH:mm");
       } else {
         // notificationTime이 존재하지 않는 경우, null을 빈 문자열로 변경
-        obj.notificationTime = "";
+        content.notificationTime = "";
       }
-    });
+      return content;
+    }));
 
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KEYWORD_SEARCH_CATEGORY_CONTENT_SUCCESS, contents));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.KEYWORD_SEARCH_CATEGORY_CONTENT_SUCCESS, result));
     
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
