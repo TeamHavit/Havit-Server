@@ -49,24 +49,28 @@ module.exports = async (req, res) => {
                 return content.isSeen === false;
             });
         }
-        contents.map(obj => {
+
+        const result = await Promise.all(contents.map(content => {
             /**
              * 클라이언트가 사용할 createdAt, notificationTime, seenAt 은 day js로 format 수정
              * 시간이 null이면 빈 문자열로 수정
              */
-            obj.createdAt = dayjs(`${obj.createdAt}`).format("YYYY-MM-DD HH:mm");
-            if (obj.notificationTime) {
-                obj.notificationTime = dayjs(`${obj.notificationTime}`).format("YYYY-MM-DD HH:mm");
+            content.createdAt = dayjs(`${content.createdAt}`).format("YYYY-MM-DD HH:mm");
+            if (content.notificationTime) {
+                content.notificationTime = dayjs(`${content.notificationTime}`).format("YYYY-MM-DD HH:mm");
             } else {
-                obj.notificationTime = "";
+                content.notificationTime = "";
             }
-            if (obj.seenAt) {
-                obj.seenAt = dayjs(`${obj.seenAt}`).format("YYYY-MM-DD HH:mm");
+            if (content.seenAt) {
+                content.seenAt = dayjs(`${content.seenAt}`).format("YYYY-MM-DD HH:mm");
             } else {
-                obj.seenAt = "";
+                content.seenAt = "";
             }
-        });
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_CONTENT_SUCCESS, contents));
+            return content;
+        }));
+
+        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_CATEGORY_CONTENT_SUCCESS, result));
+
     } catch (error) {
         console.log(error);
         functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
