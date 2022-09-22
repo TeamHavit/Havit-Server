@@ -6,8 +6,6 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB } = require('../../../db');
-const dayjs = require('dayjs');
-const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 /**
  *  @route GET /content/category/:contentId

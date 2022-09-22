@@ -8,6 +8,12 @@ const { noticeDB } = require('../../../db');
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 
+/**
+ *  @route GET /notice
+ *  @desc 공지사항 조회
+ *  @access Public
+ */
+
 module.exports = async (req, res) => {
   
   let client;
