@@ -56,6 +56,7 @@ module.exports = async (req, res) => {
                 ogTitle: content.title,
                 ogImage: content.image,
                 url: content.url,
+                isSeen: content.isSeen,
                 contentId
             };
             response = await createNotification(data);

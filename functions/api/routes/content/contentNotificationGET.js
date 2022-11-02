@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
         if (option === 'before') {
             contents = await contentDB.getScheduledContentNotification(client, userId);
         } else if(option === 'after') {
-            contents = await contentDB.getExpiredContentNotificaion(client, userId);
+            contents = await contentDB.getExpiredContentNotification(client, userId);
         } else {
             return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
         }
