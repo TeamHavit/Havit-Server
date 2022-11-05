@@ -7,9 +7,9 @@ dotenv.config();
 
 // 슬랙 Webhook에서 발급받은 endpoint를 .env 파일에서 끌어옴
 // endpoint 자체는 깃허브에 올라가면 안 되기 때문!
-const DEV_WEB_HOOK_ERROR_MONITORING = process.env.DEV_WEB_HOOK_ERROR_MONITORING;
+const WEB_HOOK_ERROR_MONITORING = process.env.WEB_HOOK_ERROR_MONITORING;
 
-const sendMessageToSlack = (message, apiEndPoint = DEV_WEB_HOOK_ERROR_MONITORING) => {
+const sendMessageToSlack = (message, apiEndPoint = WEB_HOOK_ERROR_MONITORING) => {
     // 슬랙 Webhook을 이용해 슬랙에 메시지를 보내는 코드
     try {
         axios
@@ -29,5 +29,5 @@ const sendMessageToSlack = (message, apiEndPoint = DEV_WEB_HOOK_ERROR_MONITORING
 // 이 파일에서 정의한 변수 / 함수를 export 해서, 다른 곳에서 사용할 수 있게 해주는 코드
 module.exports = {
     sendMessageToSlack,
-    DEV_WEB_HOOK_ERROR_MONITORING,
+    WEB_HOOK_ERROR_MONITORING,
 };
