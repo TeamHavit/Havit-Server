@@ -15,7 +15,6 @@ const { contentDB, categoryContentDB } = require('../../../db');
 module.exports = async (req, res) => {
 
   const { contentId } = req.params;
-  const { userId } = req.user;
   
   if (!contentId) {
     // 삭제할 콘텐츠 id가 없을 때
