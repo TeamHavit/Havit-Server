@@ -170,15 +170,15 @@ const getUnseenContents = async (client, userId) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-const deleteContent = async (client, contentId) => {
+const deleteContent = async (client, contentId, userId) => {
     const { rows } = await client.query(
         `
         UPDATE content
         SET is_deleted = TRUE, is_notified = FALSE, notification_time = null
-        WHERE id = $1
+        WHERE id = $1 AND user_id = $2
         RETURNING *
         `,
-        [contentId]
+        [contentId, userId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };

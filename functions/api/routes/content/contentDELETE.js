@@ -15,6 +15,7 @@ const { contentDB, categoryContentDB } = require('../../../db');
 module.exports = async (req, res) => {
 
   const { contentId } = req.params;
+  const { userId } = req.user;
   
   if (!contentId) {
     // 삭제할 콘텐츠 id가 없을 때
@@ -26,7 +27,7 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const content = await contentDB.deleteContent(client, contentId);
+    const content = await contentDB.deleteContent(client, contentId, userId);
 
     if (!content) {
       // 대상 콘텐츠가 없는 경우, 콘텐츠 삭제 실패
