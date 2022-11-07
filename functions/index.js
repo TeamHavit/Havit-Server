@@ -6,13 +6,11 @@ const dotenv = require('dotenv');
 let path;
 let serviceAccount;
 switch (process.env.NODE_ENV) {
-  case "prod":
+  case "production":
     path = `${__dirname}/.env.prod`;
-    serviceAccount = prodServiceAccount;
     break;
-  case "dev":
+  case "development":
     path = `${__dirname}/.env.dev`;
-    serviceAccount = devServiceAccount;
     break;
   default:
     path = `${__dirname}/.env.dev`;
@@ -22,11 +20,15 @@ dotenv.config({ path: path });
 let firebase;
 
 if (admin.apps.length === 0) {
-  firebase = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-  } else {
-    firebase = admin.app();
+  if (process.env.NODE_ENV === 'production') {
+    firebase = admin.initializeApp({
+    credential: admin.credential.cert(prodServiceAccount),
+  })} else {
+    firebase = admin.initializeApp({
+    credential: admin.credential.cert(devServiceAccount),
+  })}
+} else {
+  firebase = admin.app();
 }
 
 module.exports = {
