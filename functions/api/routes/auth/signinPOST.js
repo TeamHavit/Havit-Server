@@ -59,6 +59,8 @@ module.exports = async (req, res) => {
           return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
         }
 
+        await userDB.updateRefreshToken(client, kakaoUser.id, refreshToken);
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
@@ -85,6 +87,8 @@ module.exports = async (req, res) => {
           return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
         }
 
+        await userDB.updateRefreshToken(client, appleUser.id, refreshToken);
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
@@ -93,7 +97,7 @@ module.exports = async (req, res) => {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
     const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : "req.user 없음"} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.DEV_WEB_HOOK_ERROR_MONITORING);
+    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
 
     res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR,responseMessage.INTERNAL_SERVER_ERROR));
   } finally {

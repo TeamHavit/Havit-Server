@@ -1,13 +1,14 @@
 const functions = require('firebase-functions');
 const slackAPI = require('../../../middlewares/slackAPI');
 const util = require('../../../lib/util');
+const { createNotification } = require('../../../lib/pushServerHandlers');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const dummyImages = require('../../../constants/dummyImages');
+
 dotenv.config();
 
 /**
@@ -61,18 +62,23 @@ module.exports = async (req, res) => {
         };
   
         if (user.mongoUserId && content.isNotified) {
-          // 데모데이용 알림 생성 -> 릴리즈때 수정 필요
-          let date = new Date(content.notificationTime);
-          date = date.setHours(date.getHours()-9);
-          const notification = await axios.post(process.env.PUSH_SERVER_URL+"reminder", {
-              userId: user.mongoUserId, 
-              contentId: content.id,
-              time: date,
-              ogTitle: content.title,
-              ogImage: content.image,
-              url: content.url
-          });
-        };
+          const notificationData = {
+            userId: user.mongoUserId,
+            contentId: content.id,
+            ogTitle: content.title,
+            ogImage: content.image,
+            url: content.url, 
+            time: notificationTime,
+            isSeen: false,
+          };
+          
+          const response = await createNotification(notificationData);
+
+          if (response.status !== 201) {
+            return res.status(response.status).send(util.fail(response.status, responseMessage.PUSH_SERVER_ERROR));
+          }
+        }
+
         res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, { contentId : content.id }));
       
     } else {
@@ -84,7 +90,7 @@ module.exports = async (req, res) => {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
     const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.DEV_WEB_HOOK_ERROR_MONITORING);
+    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
     
     res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR));
     
