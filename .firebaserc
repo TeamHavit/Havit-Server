@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "havit-wesopt29"
-  }
+    "development": "havit-wesopt29",
+    "production": "havit-production"
+  },
+  "targets": {}
 }
