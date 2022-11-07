@@ -28,7 +28,7 @@ const requestMe = async (kakaoAccessToken) => {
 const updateOrCreateUser = async (userId, email, displayName, photoURL) => {
   const updateParams = {
     provider: 'KAKAO',
-    email: email,
+    email,
   };
   if (displayName) {
     updateParams['displayName'] = displayName;
