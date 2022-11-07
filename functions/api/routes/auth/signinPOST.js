@@ -59,6 +59,8 @@ module.exports = async (req, res) => {
           return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
         }
 
+        await userDB.updateRefreshToken(client, kakaoUser.id, refreshToken);
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
@@ -84,6 +86,8 @@ module.exports = async (req, res) => {
         if (response.status != 204) {
           return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
         }
+
+        await userDB.updateRefreshToken(client, appleUser.id, refreshToken);
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
