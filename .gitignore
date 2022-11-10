@@ -63,10 +63,11 @@ node_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env.*
 
 # Firebase service account
 havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json
+havit-production-firebase-adminsdk-bypl1-d081cc62e4.json
 
 # Deploy Message To Slack
 deployMessageToSlack.sh

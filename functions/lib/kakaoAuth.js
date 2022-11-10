@@ -29,7 +29,6 @@ const updateOrCreateUser = async (userId, email, displayName, photoURL) => {
   const updateParams = {
     provider: 'KAKAO',
     email,
-    displayName,
   };
   if (displayName) {
     updateParams['displayName'] = displayName;
@@ -44,9 +43,6 @@ const updateOrCreateUser = async (userId, email, displayName, photoURL) => {
   .catch((error) => {
     if (error.code === 'auth/user-not-found') {
       updateParams['uid'] = userId;
-      if (email) {
-        updateParams['email'] = email;
-      }
       return firebaseAdmin.auth().createUser(updateParams); // 유저 존재하지 않는 경우, 생성
     }
     throw error;
