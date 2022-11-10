@@ -42,7 +42,7 @@ jobs:
           echo "TOKEN_URI=${{ secrets.TOKEN_URI }}" >> .env
           echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env
           echo "CLIENT_CERT_URL=${{ secrets.PROD_CLIENT_CERT_URL }}" >> .env
-          echo "PUSH_SERVER_URL=${{ secrets.PUSH_SERVER_URL }}" >> .env
+          echo "PUSH_SERVER_URL=${{ secrets.PROD_PUSH_SERVER_URL }}" >> .env
           echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env
           echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env
           echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env
