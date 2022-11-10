@@ -70,14 +70,14 @@ const updateCategory = async (client, categoryId, title, imageId) => {
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const deleteCategory = async (client, categoryId) => {
+const deleteCategory = async (client, categoryId, userId) => {
     const { rows } = await client.query(
         `
         UPDATE category
         SET is_deleted = true, edited_at = now()
-        WHERE id = $1
+        WHERE id = $1 AND user_id = $2
         `,
-        [categoryId]
+        [categoryId, userId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };

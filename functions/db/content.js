@@ -119,7 +119,7 @@ const searchContent = async (client, userId, keyword) => {
     return convertSnakeToCamel.keysToCamel(rows);
 };
 
-const updateContentIsDeleted = async (client, categoryId) => {
+const updateContentIsDeleted = async (client, categoryId, userId) => {
     const { rows } = await client.query(
         `
         UPDATE content
@@ -136,9 +136,9 @@ const updateContentIsDeleted = async (client, categoryId) => {
                 WHERE cc.content_id = sub_content_id.content_id ) AS ca_content
             GROUP BY ca_content.content_id
             HAVING COUNT(ca_content.content_id) > 0 ) AS count_content
-        WHERE count_content.category_count <= 1 AND content.id = count_content.content_id
+        WHERE count_content.category_count <= 1 AND content.id = count_content.content_id AND user_id = $2
         `,
-        [categoryId]
+        [categoryId, userId]
     );
     return convertSnakeToCamel.keysToCamel(rows[0]);
 };
