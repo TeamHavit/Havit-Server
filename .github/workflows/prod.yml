@@ -85,5 +85,5 @@ jobs:
             author_name: Github Actions Dev Prod Server
             fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
           env:
-            SLACK_WEBHOOK_URL: ${{ secrets.PROD_WEB_HOOK_ERROR_MONITORING }} # required
+            SLACK_WEBHOOK_URL: ${{ secrets.PROD_SLACK_BUILD_WEBHOOK_URL }} # required
           if: always() # Pick up events even if the job fails or is canceled.
