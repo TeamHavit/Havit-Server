@@ -77,3 +77,13 @@ jobs:
           npm run dev
         env: 
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Github Actions Dev App Server
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
