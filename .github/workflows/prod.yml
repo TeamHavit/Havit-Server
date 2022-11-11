@@ -25,27 +25,27 @@ jobs:
       - name: create env file
         run: |
           cd functions
-          touch .env
-          echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.PROD_WEB_HOOK_ERROR_MONITORING }}" >> .env
-          echo "DB_USER=${{ secrets.PROD_DB_USER }}" >> .env
-          echo "DB_HOST=${{ secrets.PROD_DB_HOST }}" >> .env
-          echo "DB_DB=${{ secrets.DB_DB }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" >> .env
-          echo "JWT_SECRET=${{ secrets.PROD_JWT_SECRET }}" >> .env
-          echo "TYPE=${{ secrets.TYPE }}" >> .env
-          echo "PROJECT_ID=${{ secrets.PROD_PROJECT_ID }}" >> .env
-          echo "PRIVATE_KEY=${{ secrets.PROD_PRIVATE_KEY }}" >> .env
-          echo "PRIVATE_KEY_ID=${{ secrets.PROD_PRIVATE_KEY_ID }}" >> .env
-          echo "CLIENT_EMAIL=${{ secrets.PROD_CLIENT_EMAIL }}" >> .env
-          echo "CLIENT_ID=${{ secrets.PROD_CLIENT_ID }}" >> .env
-          echo "AUTH_URI=${{ secrets.AUTH_URI }}" >> .env
-          echo "TOKEN_URI=${{ secrets.TOKEN_URI }}" >> .env
-          echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env
-          echo "CLIENT_CERT_URL=${{ secrets.PROD_CLIENT_CERT_URL }}" >> .env
-          echo "PUSH_SERVER_URL=${{ secrets.PROD_PUSH_SERVER_URL }}" >> .env
-          echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env
-          echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env
-          echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env
+          touch .env.prod
+          echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.PROD_WEB_HOOK_ERROR_MONITORING }}" >> .env.prod
+          echo "DB_USER=${{ secrets.PROD_DB_USER }}" >> .env.prod
+          echo "DB_HOST=${{ secrets.PROD_DB_HOST }}" >> .env.prod
+          echo "DB_DB=${{ secrets.DB_DB }}" >> .env.prod
+          echo "DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" >> .env.prod
+          echo "JWT_SECRET=${{ secrets.PROD_JWT_SECRET }}" >> .env.prod
+          echo "TYPE=${{ secrets.TYPE }}" >> .env.prod
+          echo "PROJECT_ID=${{ secrets.PROD_PROJECT_ID }}" >> .env.prod
+          echo "PRIVATE_KEY=${{ secrets.PROD_PRIVATE_KEY }}" >> .env.prod
+          echo "PRIVATE_KEY_ID=${{ secrets.PROD_PRIVATE_KEY_ID }}" >> .env.prod
+          echo "CLIENT_EMAIL=${{ secrets.PROD_CLIENT_EMAIL }}" >> .env.prod
+          echo "CLIENT_ID=${{ secrets.PROD_CLIENT_ID }}" >> .env.prod
+          echo "AUTH_URI=${{ secrets.AUTH_URI }}" >> .env.prod
+          echo "TOKEN_URI=${{ secrets.TOKEN_URI }}" >> .env.prod
+          echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env.prod
+          echo "CLIENT_CERT_URL=${{ secrets.PROD_CLIENT_CERT_URL }}" >> .env.prod
+          echo "PUSH_SERVER_URL=${{ secrets.PROD_PUSH_SERVER_URL }}" >> .env.prod
+          echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env.prod
+          echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.prod
+          echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.prod
  
       - name: create-json
         id: create-json
