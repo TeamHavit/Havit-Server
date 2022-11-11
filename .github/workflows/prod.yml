@@ -52,8 +52,16 @@ jobs:
         uses: jsdaniell/create-json@1.1.2
         with:
           name: "havit-production-firebase-adminsdk-bypl1-d081cc62e4"
-          json: ${{ secrets.PROD_FIREBASE_JSON }}
+          json: ${{ secrets.FIREBASE_JSON }}
           dir: 'functions/'
+
+      - name: create-json
+        id: create-prod-json
+        uses: jsdaniell/create-json@v1.1.2
+        with:
+          name: "havit-production-firebase-adminsdk-bypl1-d081cc62e4.json"
+          json: ${{ secrets.PROD_FIREBASE_JSON }}
+          dir: 'functions/
 
       - name: Install npm pacakges
         run: |
