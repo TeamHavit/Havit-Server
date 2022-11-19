@@ -4,7 +4,8 @@ const prodServiceAccount = require('./havit-production-firebase-adminsdk-bypl1-d
 const dotenv = require('dotenv');
 
 let path;
-switch (process.env.NODE_ENV) {
+const havitEnv = process.env.PROJECT_ID === 'havit-production' ? 'production' : 'development';
+switch (havitEnv) {
   case "production":
     path = `${__dirname}/.env.prod`;
     break;

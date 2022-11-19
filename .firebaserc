@@ -1,7 +1,7 @@
 {
   "projects": {
-    "development": "havit-wesopt29",
-    "production": "havit-production"
+    "dev": "havit-wesopt29",
+    "prod": "havit-production"
   },
   "targets": {}
 }
