@@ -8,7 +8,7 @@
   "hosting": {
     "rewrites": [
       {
-        "source": "api/**",
+        "source": "**",
         "function": "api",
         "region": "asia-northeast3"
       }
