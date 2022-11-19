@@ -25,35 +25,43 @@ jobs:
       - name: create env file
         run: |
           cd functions
-          touch .env
-          echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_DB=${{ secrets.DB_DB }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "TYPE=${{ secrets.TYPE }}" >> .env
-          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> .env
-          echo "PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env
-          echo "PRIVATE_KEY_ID=${{ secrets.PRIVATE_KEY_ID }}" >> .env
-          echo "CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}" >> .env
-          echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
-          echo "AUTH_URI=${{ secrets.AUTH_URI }}" >> .env
-          echo "TOKEN_URI=${{ secrets.TOKEN_URI }}" >> .env
-          echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env
-          echo "CLIENT_CERT_URL=${{ secrets.CLIENT_CERT_URL }}" >> .env
-          echo "PUSH_SERVER_URL=${{ secrets.PUSH_SERVER_URL }}" >> .env
-          echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env
-          echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env
-          echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env
+          touch .env.dev
+          echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }}" >> .env.dev
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env.dev
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.dev
+          echo "DB_DB=${{ secrets.DB_DB }}" >> .env.dev
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.dev
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.dev
+          echo "TYPE=${{ secrets.TYPE }}" >> .env.dev
+          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> .env.dev
+          echo "PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.dev
+          echo "PRIVATE_KEY_ID=${{ secrets.PRIVATE_KEY_ID }}" >> .env.dev
+          echo "CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}" >> .env.dev
+          echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env.dev
+          echo "AUTH_URI=${{ secrets.AUTH_URI }}" >> .env.dev
+          echo "TOKEN_URI=${{ secrets.TOKEN_URI }}" >> .env.dev
+          echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env.dev
+          echo "CLIENT_CERT_URL=${{ secrets.CLIENT_CERT_URL }}" >> .env.dev
+          echo "PUSH_SERVER_URL=${{ secrets.PUSH_SERVER_URL }}" >> .env.dev
+          echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env.dev
+          echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.dev
+          echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.dev
  
       - name: create-json
-        id: create-json
+        id: create-dev-json
         uses: jsdaniell/create-json@1.1.2
         with:
           name: "havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json"
           json: ${{ secrets.FIREBASE_JSON }}
           dir: 'functions/'
+
+      - name: create-json
+        id: create-prod-json
+        uses: jsdaniell/create-json@v1.1.2
+        with:
+          name: "havit-production-firebase-adminsdk-bypl1-d081cc62e4.json"
+          json: ${{ secrets.PROD_FIREBASE_JSON }}
+          dir: 'functions/'    
 
       - name: Install npm pacakges
         run: |
@@ -69,3 +77,13 @@ jobs:
           npm run dev
         env: 
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Github Actions Dev App Server
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_SLACK_BUILD_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.

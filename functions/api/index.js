@@ -3,12 +3,8 @@ const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
 const hpp = require("hpp");
 const helmet = require("helmet");
-
-// 보안 상 깃허브에 올리면 안 되는 정보를 .env라는 파일로 관리하기 위해 사용하는 모듈
-dotenv.config();
 
 // initializing
 const app = express();
