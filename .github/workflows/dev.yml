@@ -26,6 +26,7 @@ jobs:
         run: |
           cd functions
           touch .env.dev
+          echo "NODE_ENV=development" >> .env.dev
           echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.DEV_WEB_HOOK_ERROR_MONITORING }}" >> .env.dev
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env.dev
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.dev

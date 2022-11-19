@@ -26,6 +26,7 @@ jobs:
         run: |
           cd functions
           touch .env.prod
+          echo "NODE_ENV=production" >> .env.prod
           echo "WEB_HOOK_ERROR_MONITORING=${{ secrets.PROD_WEB_HOOK_ERROR_MONITORING }}" >> .env.prod
           echo "DB_USER=${{ secrets.PROD_DB_USER }}" >> .env.prod
           echo "DB_HOST=${{ secrets.PROD_DB_HOST }}" >> .env.prod
