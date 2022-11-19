@@ -52,7 +52,7 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "havit-production-firebase-adminsdk-bypl1-d081cc62e4"
+          name: "havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json"
           json: ${{ secrets.FIREBASE_JSON }}
           dir: 'functions/'
 
