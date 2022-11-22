@@ -61,4 +61,7 @@ module.exports = {
 
     // 공지사항
     READ_NOTICES_SUCCESS: '공지사항 조회 성공',
+
+    // 서버 상태 체크
+    HEALTH_CHECK_SUCCESS: '서버 상태 정상'
   };
