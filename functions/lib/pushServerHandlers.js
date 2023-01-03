@@ -58,12 +58,4 @@ const modifyContentTitle = async (contentId, ogTitle) => {
     return response;
 }
 
-const deletePushUser = async (mongoUserId) => {
-    const url = `${baseURL}user/${mongoUserId}`;
-
-    const response = await axios.delete(url);
-
-    return response;
-} 
-
-module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken, deleteNotification, modifyContentTitle, deletePushUser }
+module.exports = { createPushServerUser, createNotification, modifyNotificationTime, modifyFcmToken, deleteNotification, modifyContentTitle }
