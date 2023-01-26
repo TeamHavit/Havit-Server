@@ -61,6 +61,17 @@ const updateRefreshToken = async (client, userId, newRefreshToken) => {
     );
 };
 
+const updateAppleRefreshToken = async (client, userId, appleRefreshToken) => {
+    const { rows } = await client.query(
+        `
+        UPDATE "user"
+        SET apple_refresh_token = $2
+        WHERE id = $1
+        `,
+        [userId, appleRefreshToken]
+    );
+};
+
 const updateNickname = async (client, userId, newNickname) => {
     const { rows } = await client.query(
         `
@@ -83,4 +94,4 @@ const deleteUser = async (client, userId, randomString) => {
     )
 }
 
-module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken, updateNickname, deleteUser };
+module.exports = { getUser, getUserByFirebaseId, addUser, updateUserByLogin, updateRefreshToken, updateAppleRefreshToken, updateNickname, deleteUser };
