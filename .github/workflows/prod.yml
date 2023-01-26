@@ -48,11 +48,11 @@ jobs:
           echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.prod
           echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.prod
             
-      - name: create .p8 file
+       - name: create .p8 file
         run: |
           cd functions
-          touch ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
-          echo ${{ secrets.APPLE_PRIVATE_KEY }} > ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
+          cat ${{ secrets.APPLE_PRIVATE_KEY_FILE }} | base64
+          echo ${{ secrets.APPLE_PRIVATE_KEY }} | base64 -d > ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
  
       - name: create-json
         id: create-json
