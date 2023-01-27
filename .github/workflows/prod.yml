@@ -55,7 +55,7 @@ jobs:
       - name: create .p8 file
         run: |
           cd functions
-          cat ${{ secrets.APPLE_PRIVATE_KEY_FILE }} 
+          touch ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
           echo "${{ secrets.APPLE_PRIVATE_KEY }}" > ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
  
       - name: create-json
