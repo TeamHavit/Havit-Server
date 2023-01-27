@@ -6,6 +6,9 @@ const fs = require('fs');
 const { resolve } = require('path');
 const qs = require('qs');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const appleBaseURL = "https://appleid.apple.com";
 
 const privateKey = fs.readFileSync(resolve(__dirname, `../${process.env.APPLE_PRIVATE_KEY_FILE}`), 'utf8');
