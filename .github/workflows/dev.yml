@@ -44,20 +44,10 @@ jobs:
           echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env.dev
           echo "CLIENT_CERT_URL=${{ secrets.CLIENT_CERT_URL }}" >> .env.dev
           echo "PUSH_SERVER_URL=${{ secrets.PUSH_SERVER_URL }}" >> .env.dev
-          echo "APPLE_CLIENT_ID=${{ secrets.APPLE_CLIENT_ID}}" >> .env.dev
-          echo "APPLE_KEY_ID=${{ secrets.APPLE_KEY_ID }}" >> .env.dev
-          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> .env.dev
-          echo "APPLE_PRIVATE_KEY_FILE=${{ secrets.APPLE_PRIVATE_KEY_FILE }}" >> .env.dev
           echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env.dev
           echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.dev
           echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.dev
-      
-      - name: create .p8 file
-        run: |
-          cd functions
-          touch ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
-          echo "${{ secrets.APPLE_PRIVATE_KEY }}" > ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
-
+ 
       - name: create-json
         id: create-dev-json
         uses: jsdaniell/create-json@1.1.2

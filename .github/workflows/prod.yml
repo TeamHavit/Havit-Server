@@ -44,14 +44,10 @@ jobs:
           echo "AUTH_PROVIDER_CERT_URL=${{ secrets.AUTH_PROVIDER_CERT_URL }}" >> .env.prod
           echo "CLIENT_CERT_URL=${{ secrets.PROD_CLIENT_CERT_URL }}" >> .env.prod
           echo "PUSH_SERVER_URL=${{ secrets.PROD_PUSH_SERVER_URL }}" >> .env.prod
-          echo "APPLE_CLIENT_ID=${{ secrets.APPLE_CLIENT_ID}}" >> .env.prod
-          echo "APPLE_KEY_ID=${{ secrets.APPLE_KEY_ID }}" >> .env.prod
-          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> .env.prod
-          echo "APPLE_PRIVATE_KEY_FILE=${{ secrets.APPLE_PRIVATE_KEY_FILE }}" >> .env.prod
           echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env.prod
           echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.prod
           echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.prod
-            
+
       - name: create .p8 file
         run: |
           cd functions

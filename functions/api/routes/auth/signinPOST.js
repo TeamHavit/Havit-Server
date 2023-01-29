@@ -8,7 +8,6 @@ const functions = require("firebase-functions");
 const slackAPI = require("../../../middlewares/slackAPI");
 const jwtHandlers = require("../../../lib/jwtHandlers");
 const { modifyFcmToken } = require('../../../lib/pushServerHandlers');
-const { getAppleRefreshToken } = require("../../../lib/appleAuth");
 
 /**
  *  @route POST /auth/signin
@@ -17,8 +16,8 @@ const { getAppleRefreshToken } = require("../../../lib/appleAuth");
  */
 
 module.exports = async (req, res) => {
-  const { fcmToken, kakaoAccessToken, firebaseUID, appleCode } = req.body;
-  
+  const { fcmToken, kakaoAccessToken, firebaseUID } = req.body;
+
   if (!fcmToken || (!firebaseUID && !kakaoAccessToken)) {
     // fcmToken이 없거나 firebaseUID와 kakaoAccessToken이 모두 없을 때 : 에러
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
@@ -27,11 +26,6 @@ module.exports = async (req, res) => {
   if (firebaseUID && kakaoAccessToken) {
     // firebaseUID와 kakaoAccessToken이 모두 있을 때 : 에러
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
-  }
-
-  if (firebaseUID && !appleCode) {
-    // firebaseUID 는 있으나 appleCode 가 없을 때 : 에러
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
   let client;
@@ -87,10 +81,6 @@ module.exports = async (req, res) => {
         const nickname = appleUser.nickname;
         const firebaseAuthToken = "";
 
-        // apple refresh token 발급
-        const appleRefreshToken = await getAppleRefreshToken(appleCode);
-        await userDB.updateAppleRefreshToken(client, appleUser.id, appleRefreshToken);
-
         const response = await modifyFcmToken(appleUser.mongoUserId, fcmToken);
 
         if (response.status != 204) {
@@ -98,7 +88,7 @@ module.exports = async (req, res) => {
         }
 
         await userDB.updateRefreshToken(client, appleUser.id, refreshToken);
-        
+
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
           { firebaseAuthToken, accessToken, refreshToken, nickname }));
       };
