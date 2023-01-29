@@ -59,11 +59,7 @@ const getAppleRefreshToken = async (appleCode) => {
  * @param {String} appleRefreshToken
  */
 const revokeAppleToken = async (appleRefreshToken) => {
-<<<<<<< HEAD
-    const clientSecret = jwt.sign(payload, privateKey, {
-=======
     const clientSecret = jwt.sign(payload, getPrivateKey(), {
->>>>>>> parent of 2847491 (Merge branch 'hotfix/20230129-1')
         algorithm: 'ES256',
         header
     });
