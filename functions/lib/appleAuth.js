@@ -2,13 +2,15 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken'); 
 const functions = require("firebase-functions");
 const slackAPI = require("../middlewares/slackAPI");
-const fs = require('fs');
+const fs = require('fs').promises;
 const { resolve } = require('path');
 const qs = require('qs');
 
 const appleBaseURL = "https://appleid.apple.com";
 
-const privateKey = fs.readFileSync(resolve(__dirname, `../${process.env.APPLE_PRIVATE_KEY_FILE}`), 'utf8');
+const getPrivateKey = async () => {
+    return (await fs.readFile(resolve(__dirname, `../${process.env.APPLE_PRIVATE_KEY_FILE}`), 'utf8')).toString();
+}
 
 const header = {
     kid: process.env.APPLE_KEY_ID,
@@ -27,7 +29,7 @@ const payload = {
  *  @param {String} appleCode
  */
 const getAppleRefreshToken = async (appleCode) => {
-    const clientSecret = jwt.sign(payload, privateKey, {
+    const clientSecret = jwt.sign(payload, await getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
@@ -56,7 +58,7 @@ const getAppleRefreshToken = async (appleCode) => {
  * @param {String} appleRefreshToken
  */
 const revokeAppleToken = async (appleRefreshToken) => {
-    const clientSecret = jwt.sign(payload, privateKey, {
+    const clientSecret = jwt.sign(payload, await getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
