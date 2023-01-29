@@ -56,7 +56,7 @@ jobs:
         run: |
           cd functions
           touch ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
-          echo ${{ secrets.APPLE_PRIVATE_KEY }} >> ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
+          echo "${{ secrets.APPLE_PRIVATE_KEY }}" >> ${{ secrets.APPLE_PRIVATE_KEY_FILE }}
 
       - name: create-json
         id: create-dev-json
