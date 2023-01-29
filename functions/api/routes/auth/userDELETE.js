@@ -8,7 +8,6 @@ const { userDB } = require("../../../db");
 const { getAuth } = require('firebase-admin/auth');
 const { nanoid } = require("nanoid");
 const { deletePushUser } = require('../../../lib/pushServerHandlers');
-const { revokeAppleToken } = require('../../../lib/appleAuth');
 
 /**
  *  @route DELETE /auth/user
@@ -26,10 +25,6 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     deleteUser = await userDB.getUser(client, userId); // DB에서 해당 유저 정보 받아 옴    
-
-    if (deleteUser.appleRefreshToken) {
-      await revokeAppleToken(deleteUser.appleRefreshToken); // 애플 유저라면 애플 계정 연동 해지
-    }
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);

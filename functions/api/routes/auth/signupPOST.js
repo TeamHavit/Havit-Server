@@ -8,7 +8,6 @@ const functions = require("firebase-functions");
 const slackAPI = require("../../../middlewares/slackAPI");
 const jwtHandlers = require("../../../lib/jwtHandlers");
 const { createPushServerUser } = require("../../../lib/pushServerHandlers");
-const { getAppleRefreshToken } = require("../../../lib/appleAuth");
 
 /**
  *  @route POST /auth/signup
@@ -17,7 +16,7 @@ const { getAppleRefreshToken } = require("../../../lib/appleAuth");
  */
 
 module.exports = async (req, res) => {
-  const { fcmToken, kakaoAccessToken, firebaseUID, appleCode, nickname, email, age, gender, isOption } = req.body;
+  const { fcmToken, kakaoAccessToken, firebaseUID, nickname, email, age, gender, isOption } = req.body;
 
   if (!fcmToken || (!firebaseUID && !kakaoAccessToken)) {
     // fcmToken이 없거나 firebaseUID와 kakaoAccessToken이 모두 없을 때 : 에러
@@ -28,11 +27,6 @@ module.exports = async (req, res) => {
     // firebaseUID와 kakaoAccessToken이 모두 있을 때 : 에러
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
   };
-
-  if (firebaseUID && !appleCode) {
-    // firebaseUID 는 있으나 appleCode 가 없을 때 : 에러
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
-  }
 
   let client;
 
@@ -56,11 +50,6 @@ module.exports = async (req, res) => {
       const appleUser = await userDB.addUser(client, firebaseUID, nickname, email, age, gender, isOption, mongoId, refreshToken);
       const accessToken = jwtHandlers.sign({ id: appleUser.id, idFirebase: appleUser.idFirebase });
       const firebaseAuthToken = "";
-
-      // apple refresh token 발급
-      const appleRefreshToken = await getAppleRefreshToken(appleCode);
-      await userDB.updateAppleRefreshToken(client, appleUser.id, appleRefreshToken);
-
       return res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.SIGNUP_SUCCESS, { firebaseAuthToken, accessToken, refreshToken, nickname }));
     }
   } catch (error) {
