@@ -6,13 +6,10 @@ const fs = require('fs').promises;
 const { resolve } = require('path');
 const qs = require('qs');
 
-const dotenv = require('dotenv');
-dotenv.config();
-
 const appleBaseURL = "https://appleid.apple.com";
 
 const getPrivateKey = async () => {
-    return await fs.readFile(resolve(__dirname, `../${process.env.APPLE_PRIVATE_KEY_FILE}`), 'utf8');
+    return (await fs.readFile(resolve(__dirname, `../${process.env.APPLE_PRIVATE_KEY_FILE}`), 'utf8')).toString();
 }
 
 const header = {
@@ -32,7 +29,7 @@ const payload = {
  *  @param {String} appleCode
  */
 const getAppleRefreshToken = async (appleCode) => {
-    const clientSecret = jwt.sign(payload, (await getPrivateKey()).toString, {
+    const clientSecret = jwt.sign(payload, await getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
@@ -61,7 +58,7 @@ const getAppleRefreshToken = async (appleCode) => {
  * @param {String} appleRefreshToken
  */
 const revokeAppleToken = async (appleRefreshToken) => {
-    const clientSecret = jwt.sign(payload, (await getPrivateKey()).toString, {
+    const clientSecret = jwt.sign(payload, await getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
