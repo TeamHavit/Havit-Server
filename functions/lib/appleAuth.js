@@ -32,7 +32,7 @@ const payload = {
  *  @param {String} appleCode
  */
 const getAppleRefreshToken = async (appleCode) => {
-    const clientSecret = jwt.sign(payload, (await getPrivateKey()).toString, {
+    const clientSecret = jwt.sign(payload, getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
@@ -61,7 +61,7 @@ const getAppleRefreshToken = async (appleCode) => {
  * @param {String} appleRefreshToken
  */
 const revokeAppleToken = async (appleRefreshToken) => {
-    const clientSecret = jwt.sign(payload, (await getPrivateKey()).toString, {
+    const clientSecret = jwt.sign(payload, getPrivateKey(), {
         algorithm: 'ES256',
         header
     });
