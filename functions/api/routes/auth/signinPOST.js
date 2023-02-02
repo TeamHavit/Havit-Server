@@ -19,18 +19,23 @@ const { getAppleRefreshToken } = require("../../../lib/appleAuth");
 module.exports = async (req, res) => {
   const { fcmToken, kakaoAccessToken, firebaseUID, appleCode } = req.body;
   
+  const badRequestMessage = '[ERROR] POST /auth/signin - Bad Request';
+
   if (!fcmToken || (!firebaseUID && !kakaoAccessToken)) {
     // fcmToken이 없거나 firebaseUID와 kakaoAccessToken이 모두 없을 때 : 에러
+    slackAPI.sendMessageToSlack(badRequestMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
   if (firebaseUID && kakaoAccessToken) {
     // firebaseUID와 kakaoAccessToken이 모두 있을 때 : 에러
+    slackAPI.sendMessageToSlack(badRequestMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
   }
 
   if (firebaseUID && !appleCode) {
     // firebaseUID 는 있으나 appleCode 가 없을 때 : 에러
+    slackAPI.sendMessageToSlack(badRequestMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
   }
 
