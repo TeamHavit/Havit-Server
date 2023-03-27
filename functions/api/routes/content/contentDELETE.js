@@ -5,6 +5,10 @@ const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
 const { contentDB, categoryContentDB } = require('../../../db');
+const { deleteNotification } = require('../../../lib/pushServerHandlers');
+const dayjs = require('dayjs');
+const timezone = require('dayjs/plugin/timezone');
+const utc = require('dayjs/plugin/utc');
 
 /**
  *  @route DELETE /content/:contentId
@@ -23,18 +27,37 @@ module.exports = async (req, res) => {
   }
   
   let client;
+
+  dayjs().format();
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  dayjs.tz.setDefault('Asia/Seoul');
   
   try {
     client = await db.connect(req);
 
-    const content = await contentDB.deleteContent(client, contentId, userId);
+    const content = await contentDB.getContentById(client, contentId);
+    if (content.userId !== userId) {
+      return res.status(statusCode.FORBIDDEN).send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
+    }
 
-    if (!content) {
+    const deletedContent = await contentDB.deleteContent(client, contentId, userId);
+    if (!deletedContent) {
       // 대상 콘텐츠가 없는 경우, 콘텐츠 삭제 실패
       return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
     }
 
-    const categoryContent = await categoryContentDB.deleteCategoryContentByContentId(client, contentId);
+    if (content.isNotified && content.notificationTime > dayjs().tz().$d) {
+      // 알림 예정 일 때 푸시서버에서도 삭제
+      const response = await deleteNotification(contentId);
+
+      if (response.status !== 200) {
+        return res.status(res.status).send(util.fail(response.status, responseMessage.PUSH_SERVER_ERROR));
+      }
+    }
+
+    await categoryContentDB.deleteCategoryContentByContentId(client, contentId);
 
     res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_CONTENT_SUCCESS));
     
@@ -45,7 +68,6 @@ module.exports = async (req, res) => {
     slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
     
     res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR));
-    
   } finally {
     client.release();
   }
