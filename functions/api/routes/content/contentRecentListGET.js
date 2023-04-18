@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     await Promise.all( // 각 콘텐츠가 소속된 카테고리 병렬 탐색
       contents.map(async (content) => {
         let categories = await categoryContentDB.getCategoryContentByContentId(client, content.id, userId);
-        content.firstCategory = categories[0].title;
+        content.firstCategory = categories[0]?.title;
         content.extraCategoryCount = categories.length - 1;
         return;
       })
