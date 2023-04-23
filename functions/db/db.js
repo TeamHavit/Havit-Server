@@ -30,8 +30,8 @@ console.log(`[🔥DB] ${process.env.NODE_ENV}`);
 // 커넥션 풀을 생성해줍니다.
 const pool = new Pool({
   ...dbConfig,
-  connectionTimeoutMillis: 60 * 1000,
-  idleTimeoutMillis: 60 * 1000,
+  connectionTimeoutMillis: 10 * 1000,
+  idleTimeoutMillis: 10 * 1000,
 });
 
 // 위에서 생성한 커넥션 풀에서 커넥션을 빌려오는 함수를 정의합니다.
