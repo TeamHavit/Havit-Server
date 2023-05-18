@@ -16,6 +16,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@sentry/node": "^7.52.1",
     "axios": "^0.24.0",
     "busboy": "^0.3.1",
     "cookie-parser": "^1.4.6",
