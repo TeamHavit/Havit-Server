@@ -5,9 +5,36 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const hpp = require("hpp");
 const helmet = require("helmet");
+const Sentry = require('@sentry/node');
+const errorHandler = require('../middlewares/errorHandler');
 
 // initializing
 const app = express();
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: `${process.env.NODE_ENV}_app`,
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Sentry.Integrations.Express({ app }),
+    // Automatically instrument Node.js libraries and frameworks
+    ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: process.env.SENTRY_TRACES_SAMPLE_RATE,
+});
+
+// RequestHandler creates a separate execution context, so that all
+// transactions/spans/breadcrumbs are isolated across requests
+app.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler());
+
 
 // Cross-Origin Resource Sharing을 열어주는 미들웨어
 // https://even-moon.github.io/2020/05/21/about-cors/ 에서 자세한 정보 확인
@@ -27,6 +54,8 @@ app.use(cookieParser());
 
 // 라우팅: routes 폴더로 정리
 app.use("/", require("./routes"));
+app.use(Sentry.Handlers.errorHandler());
+app.use(errorHandler);
 
 // route 폴더에 우리가 지정할 경로가 아닌 다른 경로로 요청이 올 경우
 // 잘못된 경로로 요청이 들어왔다는 메세지를 클라이언트에 보냄
@@ -52,6 +81,6 @@ module.exports = functions
         console.log("\n\n", "[api]", `[${req.method.toUpperCase()}]`, req.originalUrl, req.body);
 
         // 맨 위에 선언된 express app 객체를 리턴
-        // 요것이 functiobns/index.js 안의 api: require("./api")에 들어가는 것.
+        // 요것이 functions/index.js 안의 api: require("./api")에 들어가는 것.
         return app(req, res);
     });
