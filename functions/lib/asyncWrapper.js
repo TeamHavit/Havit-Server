@@ -4,6 +4,10 @@ module.exports = (fn) => {
       await fn(req, res, next);
     } catch (error) {
       next(error);
+    } finally {
+      if (req.dbConnection) {
+        req.dbConnection.release();
+      }
     }
   };
 };
