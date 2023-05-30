@@ -23,7 +23,7 @@ module.exports = asyncWrapper(async (req, res) => {
     || (firebaseUID && !appleCode)) { // firebaseUID는 있으나 appleCode 가 없을 때
       const badRequestError = new Error();
       badRequestError.statusCode = statusCode.BAD_REQUEST;
-      badRequestError.responseMessage = responseMessage.NULL_VALUE;
+      badRequestError.responseMessage = (firebaseUID && kakaoAccessToken)? responseMessage.OUT_OF_VALUE : responseMessage.NULL_VALUE;
       throw badRequestError;
   }
 
