@@ -1,10 +1,9 @@
-const functions = require('firebase-functions');
 const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
-const slackAPI = require('../../../middlewares/slackAPI');
 const db = require('../../../db/db');
 const { categoryDB, categoryContentDB, contentDB } = require('../../../db');
+const asyncWrapper = require('../../../lib/asyncWrapper');
 
 /**
  *  @route DELETE /category/:categoryId
@@ -12,28 +11,17 @@ const { categoryDB, categoryContentDB, contentDB } = require('../../../db');
  *  @access Private
  */
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res) => {
     const { categoryId } = req.params;
     const { userId } = req.user;
 
-    let client;
+    const dbConnection = await db.connect(req);
+    req.dbConnection = dbConnection;
+    await Promise.all([
+        categoryDB.deleteCategory(dbConnection, categoryId, userId), // 해당 카테고리 soft delete
+        contentDB.updateContentIsDeleted(dbConnection, categoryId, userId), // 카테고리 개수가 1개 (해당 카테고리뿐)인 콘텐츠 soft delete
+        categoryContentDB.deleteCategoryContentByCategoryId(dbConnection, categoryId) // category_content 테이블 내 해당 카테고리 삭제
+    ])
 
-    try {
-        client = await db.connect(req);
-
-        await categoryDB.deleteCategory(client, categoryId, userId); // 해당 카테고리 soft delete
-        await contentDB.updateContentIsDeleted(client, categoryId, userId); // 카테고리 개수가 1개 (해당 카테고리뿐)인 콘텐츠 soft delete
-        await categoryContentDB.deleteCategoryContentByCategoryId(client, categoryId); // category_content 테이블 내 해당 카테고리 삭제
-
-        res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_ONE_CATEGORY_SUCCESS));
-    } catch (error) {
-        console.log(error);
-        functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
-        const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-        slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
-
-        res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR));
-    } finally {
-        client.release();
-    }
-};
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_ONE_CATEGORY_SUCCESS));
+});
