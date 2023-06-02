@@ -1,5 +1,3 @@
-const functions = require('firebase-functions');
-const slackAPI = require('../../../middlewares/slackAPI');
 const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
@@ -9,6 +7,8 @@ const { getAuth } = require('firebase-admin/auth');
 const { nanoid } = require("nanoid");
 const { deletePushUser } = require('../../../lib/pushServerHandlers');
 const { revokeAppleToken } = require('../../../lib/appleAuth');
+const asyncWrapper = require('../../../lib/asyncWrapper');
+
 
 /**
  *  @route DELETE /auth/user
@@ -16,68 +16,38 @@ const { revokeAppleToken } = require('../../../lib/appleAuth');
  *  @access Public
  */
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res) => {
 
   const { userId } = req.user;
-  let client;
-  let deleteUser;
-  
-  try {
-    client = await db.connect(req);
-
-    deleteUser = await userDB.getUser(client, userId); // DB에서 해당 유저 정보 받아 옴    
-
-    if (deleteUser.appleRefreshToken) {
-      await revokeAppleToken(deleteUser.appleRefreshToken); // 애플 유저라면 애플 계정 연동 해지
-    }
-  } catch (error) {
-    functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
-    console.log(error);
-    
-    const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
-    
-    client.release();
-    
-    return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR)); // DB 관련 에러 : 500 INTERNAL SERVER ERROR
-  } 
+  const dbConnection = await db.connect(req);
+  let deleteUser = await userDB.getUser(dbConnection, userId); // DB에서 해당 유저 정보 받아 옴
+  if (deleteUser.appleRefreshToken) {
+    await revokeAppleToken(deleteUser.appleRefreshToken); // 애플 유저라면 애플 계정 연동 해지
+  }
 
   try {
+    // 500 INTERNAL SERVER ERROR가 아닌 경우에만 error에 부가 정보 삽입
     await getAuth().deleteUser(deleteUser.idFirebase); // Firebase Auth에서 해당 유저 삭제
   } catch (error) {
-    functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
-    console.log(error);
-    
-    const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
-    
-    client.release();
-    
     if (error.errorInfo.code === 'auth/user-not-found') {
-      return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_USER)); // Firebase Auth에 해당 유저 존재하지 않을 경우 : 404 NOT FOUND
-    } else {
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR)); // 기타 Firebase Auth 에러 : 500 INTERNAL SERVER ERROR
+      // Firebase Auth에 해당 유저 존재하지 않을 경우 : 404 NOT FOUND
+      error.statusCode = statusCode.NOT_FOUND;
+      error.responseMessage = responseMessage.NO_USER;
     }
+    throw error;
   }
 
-  try {
-    const randomString = `:${nanoid(10)}`;
-    await userDB.deleteUser(client, userId, randomString); // DB에서 해당 유저 삭제
+  const randomString = `:${nanoid(10)}`;
+  await userDB.deleteUser(dbConnection, userId, randomString); // DB에서 해당 유저 삭제
 
-    const response = await deletePushUser(deleteUser.mongoUserId);
-    if (response.status != 204) {
-      return res.status(response.statusCode).send(util.fail(response.statusCode, response.statusText));
-    }
+  const response = await deletePushUser(deleteUser.mongoUserId);
+  if (response.status != 204) {
+    // 푸시 서버 에러 발생 시 푸시 서버 에러임을 명시
+    const pushServerError = new Error();
+    pushServerError.statusCode = response.statusCode;
+    pushServerError.responseMessage = response.statusText;
+    throw pushServerError;
+  }
 
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_USER));
-  } catch (error) {
-    functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
-    console.log(error);
-    const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR)); // DB 관련 에러 : 500 INTERNAL SERVER ERROR 
-  }
-  finally {
-    client.release();
-  }
-};
+  res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.DELETE_USER));
+});
