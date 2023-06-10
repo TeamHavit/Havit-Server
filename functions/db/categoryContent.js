@@ -2,7 +2,7 @@ const _ = require('lodash');
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 
 const getAllCategoryContentByFilter = async (client, userId, categoryId, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
         filter = "created_at"; 
     }
@@ -21,7 +21,7 @@ const getAllCategoryContentByFilter = async (client, userId, categoryId, filter)
 };
 
 const getCategoryContentByFilterAndNotified = async (client, userId, categoryId, option, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 createdAt 기준으로 정렬한다.
         filter = "created_at";
     }
@@ -40,7 +40,7 @@ const getCategoryContentByFilterAndNotified = async (client, userId, categoryId,
 };
 
 const getCategoryContentByFilterAndSeen = async (client, userId, categoryId, option, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 createdAt 기준으로 정렬한다.
         filter = "created_at";
     }

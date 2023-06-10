@@ -33,7 +33,7 @@ module.exports = asyncWrapper(async (req, res) => {
   const user = await userDB.getUser(dbConnection, userId);
 
   // DB user 테이블의 Refresh Token과 클라이언트에게 받아 온 Refresh Token 비교
-  if (refreshToken == user.refreshToken) {
+  if (refreshToken === user.refreshToken) {
     // Refresh Token 일치 : Aceess Token, Refresh Token 재발급, DB 업데이트
     const newAccessToken = jwtHandlers.sign(user);
     const newRefreshToken = jwtHandlers.signRefresh();

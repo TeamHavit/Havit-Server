@@ -25,10 +25,10 @@ module.exports = asyncWrapper(async (req, res) => {
     dayjs().format();
     dayjs.extend(customParseFormat);
 
-    if (option == "all") {
+    if (option === "all") {
         // 전체 조회
         contents = await categoryContentDB.getAllCategoryContentByFilter(dbConnection, userId, categoryId, filter);
-    } else if (option == "notified") {
+    } else if (option === "notified") {
         // 알림 설정된 콘텐츠만 조회
         contents = await categoryContentDB.getCategoryContentByFilterAndNotified(dbConnection, userId, categoryId, true, filter)
 
@@ -36,11 +36,11 @@ module.exports = asyncWrapper(async (req, res) => {
         // is_seen에 따라 조회
         contents = await categoryContentDB.getCategoryContentByFilterAndSeen(dbConnection, userId, categoryId, option, filter);
     }
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // DESC를 이용했으므로 다시 reverse
         contents = contents.reverse();
     }
-    if (filter == "seen_at") {
+    if (filter === "seen_at") {
         // 최근 조회 순 기준인 경우, 조회하지 않은 콘텐츠 제외
         _.remove(contents, function(content) {
             return content.isSeen === false;

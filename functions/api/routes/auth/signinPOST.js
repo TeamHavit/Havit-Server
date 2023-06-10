@@ -51,7 +51,7 @@ module.exports = asyncWrapper(async (req, res) => {
 
       const response = await modifyFcmToken(kakaoUser.mongoUserId, fcmToken);
 
-      if (response.status != 204) {
+      if (response.status !== 204) {
         return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
       }
 
@@ -83,7 +83,7 @@ module.exports = asyncWrapper(async (req, res) => {
 
       const response = await modifyFcmToken(appleUser.mongoUserId, fcmToken);
 
-      if (response.status != 204) {
+      if (response.status !== 204) {
         return res.status(response.statusCode).send(util.fail(response.statusCode, responseMessage.PUSH_SERVER_ERROR));
       }
 

@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 
         const response = await modifyFcmToken(user.mongoUserId, fcmToken);
 
-        if (response.status != 204) {
+        if (response.status !== 204) {
             return res.status(response.statusCode).send(util.fail(response.statusCode, response.statusText));
         }
 

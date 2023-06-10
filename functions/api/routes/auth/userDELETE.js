@@ -41,7 +41,7 @@ module.exports = asyncWrapper(async (req, res) => {
   await userDB.deleteUser(dbConnection, userId, randomString); // DB에서 해당 유저 삭제
 
   const response = await deletePushUser(deleteUser.mongoUserId);
-  if (response.status != 204) {
+  if (response.status !== 204) {
     // 푸시 서버 에러 발생 시 푸시 서버 에러임을 명시
     const pushServerError = new Error();
     pushServerError.statusCode = response.statusCode;
