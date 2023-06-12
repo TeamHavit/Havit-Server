@@ -240,7 +240,7 @@ iOS의 Share Extension, Android의 Intent Filter를 사용하여 홈 화면으�
   ```
  3. Bracket 사용 시 내부에 주석을 작성한다.
   ```javascript
-    if (a == 5) {
+    if (a === 5) {
 	  // 주석
     }
   ```
@@ -264,14 +264,14 @@ iOS의 Share Extension, Android의 Intent Filter를 사용하여 홈 화면으�
   
  ``` javascript 
  // 괄호 사용 한칸 띄우고 사용한다.
-  if (left == true) {
+  if (left === true) {
      return;
   }
  ```
   3. Bracket 양쪽 사이를 띄어서 사용한다.
  ``` javascript 
  // 띄어쓰기
-  if (a == 5) { // 양쪽 사이로 띄어쓰기
+  if (a === 5) { // 양쪽 사이로 띄어쓰기
      return;  
   }
  ```

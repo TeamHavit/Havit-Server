@@ -51,6 +51,8 @@ jobs:
           echo "JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}" >> .env.dev
           echo "JWT_ACCESS_EXPIRE=${{ secrets.JWT_ACCESS_EXPIRE }}" >> .env.dev
           echo "JWT_REFRESH_EXPIRE=${{ secrets.JWT_REFRESH_EXPIRE }} " >> .env.dev
+          echo "SENTRY_DSN=${{ secrets.DEV_SENTRY_DSN }} " >> .env.dev
+          echo "SENTRY_TRACES_SAMPLE_RATE=${{ secrets.DEV_SENTRY_TRACES_SAMPLE_RATE }} " >> .env.dev
       
       - name: create .p8 file
         run: |

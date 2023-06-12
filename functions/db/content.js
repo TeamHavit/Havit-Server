@@ -55,7 +55,7 @@ const toggleContent = async (client, contentId) => {
 };
 
 const getContentsByFilter = async (client, userId, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
         filter = "created_at"; 
     }
@@ -72,7 +72,7 @@ const getContentsByFilter = async (client, userId, filter) => {
 };
 
 const getContentsByFilterAndNotified = async (client, userId, option, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 created_at 기준으로 정렬한다.
         filter = "created_at";
     }
@@ -89,7 +89,7 @@ const getContentsByFilterAndNotified = async (client, userId, option, filter) =>
 };
 
 const getContentsByFilterAndSeen = async (client, userId, option, filter) => {
-    if (filter == "reverse") {
+    if (filter === "reverse") {
         // API 로직에서 reverse 할 것이므로 createdAt 기준으로 정렬한다.
         filter = "created_at";
     }
