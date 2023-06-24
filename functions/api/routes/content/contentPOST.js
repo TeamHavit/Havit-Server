@@ -1,5 +1,3 @@
-const functions = require('firebase-functions');
-const slackAPI = require('../../../middlewares/slackAPI');
 const util = require('../../../lib/util');
 const { createNotification } = require('../../../lib/pushServerHandlers');
 const statusCode = require('../../../constants/statusCode');
@@ -8,6 +6,7 @@ const db = require('../../../db/db');
 const { contentDB, categoryDB, categoryContentDB, userDB } = require('../../../db');
 const dotenv = require('dotenv');
 const dummyImages = require('../../../constants/dummyImages');
+const asyncWrapper = require('../../../lib/asyncWrapper');
 
 dotenv.config();
 
@@ -17,7 +16,7 @@ dotenv.config();
  *  @access Private
  */
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res) => {
 
   const { title, description, url, isNotified, categoryIds } = req.body;
   let { image, notificationTime } = req.body;
@@ -38,63 +37,50 @@ module.exports = async (req, res) => {
     notificationTime = null;
   }
 
-  let client;
-  
-  try {
-    client = await db.connect(req);
-    const user = await userDB.getUser(client, userId);
-    let flag = true; // flag 변수 결과에 따라 categoryContent를 추가할 지, 에러를 보낼 지 결정
-    for (const categoryId of categoryIds) {
-      // 카테고리 배열의 id 중 하나라도 유저의 카테고리가 아닐 경우, categoryContent를 추가하지 않고 에러 전송
-      const category = await categoryDB.getCategory(client, categoryId);
-      if (!category || category.userId !== userId) {
-        // 카테고리가 아예 존재하지 않거나, 해당 유저의 카테고리가 아닌 경우
-        flag = false;
-      }
-    }
+  const dbConnection = await db.connect(req);
+  req.dbConnection = dbConnection;
 
-    if (flag) {
-      // 유저가 해당 카테고리를 가지고 있을 때
-      const content = await contentDB.addContent(client, userId, title, description, image, url, isNotified, notificationTime);
-        for (const categoryId of categoryIds) {
-          // 중복 카테고리 허용
-          await categoryContentDB.addCategoryContent(client, categoryId, content.id);
+  const user = await userDB.getUser(dbConnection, userId);
+  let flag = true; // flag 변수 결과에 따라 categoryContent를 추가할 지, 에러를 보낼 지 결정
+  for (const categoryId of categoryIds) {
+    // 카테고리 배열의 id 중 하나라도 유저의 카테고리가 아닐 경우, categoryContent를 추가하지 않고 에러 전송
+    const category = await categoryDB.getCategory(dbConnection, categoryId);
+    if (!category || category.userId !== userId) {
+      // 카테고리가 아예 존재하지 않거나, 해당 유저의 카테고리가 아닌 경우
+      flag = false;
+    }
+  }
+
+  if (flag) {
+    // 유저가 해당 카테고리를 가지고 있을 때
+    const content = await contentDB.addContent(dbConnection, userId, title, description, image, url, isNotified, notificationTime);
+      for (const categoryId of categoryIds) {
+        // 중복 카테고리 허용
+        await categoryContentDB.addCategoryContent(dbConnection, categoryId, content.id);
+      };
+
+      if (user.mongoUserId && content.isNotified) {
+        const notificationData = {
+          userId: user.mongoUserId,
+          contentId: content.id,
+          ogTitle: content.title,
+          ogImage: content.image,
+          url: content.url, 
+          time: notificationTime,
+          isSeen: false,
         };
-  
-        if (user.mongoUserId && content.isNotified) {
-          const notificationData = {
-            userId: user.mongoUserId,
-            contentId: content.id,
-            ogTitle: content.title,
-            ogImage: content.image,
-            url: content.url, 
-            time: notificationTime,
-            isSeen: false,
-          };
-          
-          const response = await createNotification(notificationData);
+        
+        const response = await createNotification(notificationData);
 
-          if (response.status !== 201) {
-            return res.status(response.status).send(util.fail(response.status, responseMessage.PUSH_SERVER_ERROR));
-          }
+        if (response.status !== 201) {
+          return res.status(response.status).send(util.fail(response.status, responseMessage.PUSH_SERVER_ERROR));
         }
+      }
 
-        res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, { contentId : content.id }));
-      
-    } else {
-      // 유저가 해당 카테고리를 가지고 있지 않을 때
-      res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
-    }
-
-  } catch (error) {
-    functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
-    console.log(error);
-    const slackMessage = `[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl} ${req.user ? `uid:${req.user.userId}` : 'req.user 없음'} ${JSON.stringify(error)}`;
-    slackAPI.sendMessageToSlack(slackMessage, slackAPI.WEB_HOOK_ERROR_MONITORING);
+      res.status(statusCode.CREATED).send(util.success(statusCode.CREATED, responseMessage.ADD_ONE_CONTENT_SUCCESS, { contentId : content.id }));
     
-    res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.INTERNAL_SERVER_ERROR));
-    
-  } finally {
-    client.release();
-  };
-};
+  } else {
+    // 유저가 해당 카테고리를 가지고 있지 않을 때
+    res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
+  }
+});
