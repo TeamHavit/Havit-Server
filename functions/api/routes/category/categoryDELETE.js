@@ -17,6 +17,15 @@ module.exports = asyncWrapper(async (req, res) => {
 
     const dbConnection = await db.connect(req);
     req.dbConnection = dbConnection;
+
+    const category = await categoryDB.getCategory(dbConnection, categoryId);
+    if (!category) {
+        return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
+    }
+    if (category.userId !== userId) {
+    return res.status(statusCode.FORBIDDEN).send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
+    }
+
     await Promise.all([
         categoryDB.deleteCategory(dbConnection, categoryId, userId), // 해당 카테고리 soft delete
         contentDB.updateContentIsDeleted(dbConnection, categoryId, userId), // 카테고리 개수가 1개 (해당 카테고리뿐)인 콘텐츠 soft delete
