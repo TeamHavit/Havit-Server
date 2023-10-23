@@ -35,15 +35,14 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs.tz.setDefault('Asia/Seoul');
 
   const content = await contentDB.getContentById(dbConnection, contentId);
+  if (!content) {
+    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
+  }
   if (content.userId !== userId) {
     return res.status(statusCode.FORBIDDEN).send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
   }
 
-  const deletedContent = await contentDB.deleteContent(dbConnection, contentId, userId);
-  if (!deletedContent) {
-    // 대상 콘텐츠가 없는 경우, 콘텐츠 삭제 실패
-    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
-  }
+  await contentDB.deleteContent(dbConnection, contentId, userId);
 
   if (content.isNotified && content.notificationTime > dayjs().tz().$d) {
     // 알림 예정 일 때 푸시서버에서도 삭제
