@@ -23,7 +23,7 @@ module.exports = asyncWrapper(async (req, res) => {
         return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
     }
     if (category.userId !== userId) {
-    return res.status(statusCode.FORBIDDEN).send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
+        return res.status(statusCode.FORBIDDEN).send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
     }
 
     await Promise.all([
