@@ -1,5 +1,8 @@
 # Havit-Server  
 ### 기억하고 싶은 모든 콘텐츠를 내 손 안에, HAVIT
+
+[Playstore 에서 다운 받기](https://play.google.com/store/apps/details?id=org.sopt.havit&hl=ko&pli=1)
+[Appstore 에서 다운 받기](https://apps.apple.com/kr/app/havit-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B9%99-%EC%95%B1-%ED%95%B4%EB%B9%97/id1607518014)
 https://user-images.githubusercontent.com/55099365/150919289-52d35f31-c658-433a-8ffa-d84c8e6e85d8.mp4
 
 ![해빗표지2](https://user-images.githubusercontent.com/20807197/150502331-7122ba4e-5544-496b-baac-0cee2a21edc5.png)
