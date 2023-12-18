@@ -71,3 +71,6 @@ havit-production-firebase-adminsdk-bypl1-d081cc62e4.json
 
 # Deploy Message To Slack
 deployMessageToSlack.sh
+
+# AWS cert
+havit-server-key.cer
