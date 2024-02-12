@@ -58,7 +58,7 @@ module.exports = asyncWrapper(async (req, res) => {
       await userDB.updateRefreshToken(dbConnection, kakaoUser.id, refreshToken);
 
       return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
-        { firebaseAuthToken, accessToken, refreshToken, nickname }));
+        { firebaseAuthToken, accessToken, refreshToken, id: kakaoUser.id, nickname }));
     };
   } 
   else {
@@ -90,7 +90,7 @@ module.exports = asyncWrapper(async (req, res) => {
       await userDB.updateRefreshToken(dbConnection, appleUser.id, refreshToken);
       
       return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGNIN_SUCCESS, 
-        { firebaseAuthToken, accessToken, refreshToken, nickname }));
+        { firebaseAuthToken, accessToken, refreshToken, id: appleUser.id, nickname }));
     };
   }
 });
