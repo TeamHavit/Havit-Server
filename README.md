@@ -1,8 +1,9 @@
 # Havit-Server  
 ### 기억하고 싶은 모든 콘텐츠를 내 손 안에, HAVIT
 
-[Playstore 에서 다운 받기](https://play.google.com/store/apps/details?id=org.sopt.havit&hl=ko&pli=1)
-[Appstore 에서 다운 받기](https://apps.apple.com/kr/app/havit-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B9%99-%EC%95%B1-%ED%95%B4%EB%B9%97/id1607518014)
+[Playstore 에서 다운 받기](https://play.google.com/store/apps/details?id=org.sopt.havit&hl=ko&pli=1)   
+[Appstore 에서 다운 받기](https://apps.apple.com/kr/app/havit-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B9%99-%EC%95%B1-%ED%95%B4%EB%B9%97/id1607518014)   
+
 https://user-images.githubusercontent.com/55099365/150919289-52d35f31-c658-433a-8ffa-d84c8e6e85d8.mp4
 
 ![해빗표지2](https://user-images.githubusercontent.com/20807197/150502331-7122ba4e-5544-496b-baac-0cee2a21edc5.png)
@@ -30,14 +31,8 @@ iOS의 Share Extension, Android의 Intent Filter를 사용하여 홈 화면으�
 ### 📋 IA   
 ![image](https://user-images.githubusercontent.com/20807197/148189262-1dec5ee4-e543-4822-b930-e796ef405863.png)
 
-### 💡 API 명세서
-[API 명세서](https://skitter-sloth-be4.notion.site/API-b7425add8a044c68b5aa86eaef17c571)
-
-### 📑 ERD
-<img src="https://user-images.githubusercontent.com/20807197/150504403-e81c79ed-8b13-4c07-b69d-e379f21a2358.png" width="600px" height="600px" />
-
 ### ⚙️ Server Architecture
-<img width="1920" alt="해빗앱서버아키텍쳐" src="https://user-images.githubusercontent.com/20807197/150191075-585f5c5e-a147-4be7-96bc-38e2e2c6e4a8.png">
+<img width="1920" alt="해빗앱서버아키텍쳐" src="https://github.com/TeamHavit/Havit-Server/assets/20807197/c3230d02-2dc0-4f61-9c06-8c8f07f29611">
 
 
 ### 🛠 Development Environment   
