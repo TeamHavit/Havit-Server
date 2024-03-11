@@ -93,6 +93,7 @@ jobs:
         run: |
           cd functions
           echo "${{ github.workspace }}"
+          ls -al
           export GOOGLE_APPLICATION_CREDENTIALS="${{ github.workspace }}/functions/havit-wesopt29-firebase-adminsdk-mgljp-478046b091.json"
           firebase use dev
           npm run dev
