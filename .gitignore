@@ -76,4 +76,6 @@ deployMessageToSlack.sh
 havit-server-key.cer
 
 AuthKey_*
+
+# Swagger
 swagger-output.json
