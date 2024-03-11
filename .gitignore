@@ -74,3 +74,8 @@ deployMessageToSlack.sh
 
 # AWS cert
 havit-server-key.cer
+
+AuthKey_*
+
+# Swagger
+swagger-output.json

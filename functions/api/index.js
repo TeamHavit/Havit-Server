@@ -7,6 +7,8 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 const Sentry = require('@sentry/node');
 const errorHandler = require('../middlewares/errorHandler');
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("../constants/swagger/swagger-output.json");
 
 // initializing
 const app = express();
@@ -41,6 +43,11 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+
+if (process.env.NODE_ENV === "development") {
+    app.use("/swagger", swaggerUi.serve);
+    app.get("/swagger", swaggerUi.setup(swaggerFile));
+}
 
 // 라우팅: routes 폴더로 정리
 app.use("/", require("./routes"));
