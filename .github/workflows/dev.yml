@@ -80,10 +80,10 @@ jobs:
       - name: Install npm pacakges
         run: |
           cd functions
+          npm ci
           npm install -g firebase-tools
           npm install --save-dev cross-env
-          npm install --save-dev swagger-ui-express
-          npm ci
+          npm install swagger-ui-express
       
       - name: Create swagger output file
         run: |
