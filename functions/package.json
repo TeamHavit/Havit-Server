@@ -6,7 +6,7 @@
     "serve": "cross-env NODE_ENV=development firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "dev": "cross-env NODE_ENV=development firebase deploy --debug --only functions,hosting",
+    "dev": "cross-env NODE_ENV=development firebase deploy --only functions,hosting",
     "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
     "logs": "firebase functions:log",
     "test": "mocha",
