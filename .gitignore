@@ -79,3 +79,6 @@ AuthKey_*
 
 # Swagger
 swagger-output.json
+
+#VSCode
+.vscode
