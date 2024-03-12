@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.use(
-    '/content', require('./content') 
+    '/content', require('./content')
     /** 
      * #swagger.tags = ['content'] 
      * #swagger.responses[500] = {
@@ -15,7 +15,7 @@ router.use(
                }           
            }
        }   
-   */ 
+   */
 );
 router.use(
     '/category', require('./category')
@@ -96,12 +96,29 @@ router.use(
            }
        }   
    */
-    
+
 );
 router.use(
     '/health', require('./health')
     /** 
      * #swagger.tags = ['health'] 
+     * #swagger.responses[500] = {
+           description: "Internal Server Error",
+           content: {
+               "application/json": {
+                   schema:{
+                       $ref: "#/components/schemas/internalServerErrorSchema"
+                   }
+               }           
+           }
+       }   
+   */
+);
+
+router.use(
+    '/community', require('./community')
+    /** 
+     * #swagger.tags = ['community'] 
      * #swagger.responses[500] = {
            description: "Internal Server Error",
            content: {
