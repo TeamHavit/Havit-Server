@@ -83,4 +83,25 @@ router.get(
     */
 );
 
+router.post(
+  '/report',
+  checkUser,
+  require('./communityReportPOST'),
+  /**
+   * #swagger.summary = "커뮤니티 게시글 신고"
+   * #swagger.responses[200] = {
+        description: "커뮤니티 게시글 신고 성공",
+        content: {
+            "application/json": {
+                schema:{
+                    $ref: "#/components/schemas/responseCommunityReportSchema"
+                }
+            }
+        }
+    }
+    * #swagger.responses[400]
+    * #swagger.responses[404]
+    */
+);
+
 module.exports = router;

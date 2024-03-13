@@ -72,8 +72,15 @@ const responseCommunityPostsListSchema = {
   ],
 };
 
+const responseCommunityReportSchema = {
+  $status: 200,
+  $success: true,
+  $message: '커뮤니티 게시글 신고 성공',
+};
+
 module.exports = {
   responseCommunityCategorySchema,
   responseCommunityPostsDetailSchema,
   responseCommunityPostsListSchema,
+  responseCommunityReportSchema,
 };
