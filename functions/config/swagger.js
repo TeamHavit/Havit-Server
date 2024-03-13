@@ -1,5 +1,5 @@
 const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' });
-const { commonErrorSchema, noticeSchema } = require('../constants/swagger/schemas');
+const { commonErrorSchema, noticeSchema, communitySchema } = require('../constants/swagger/schemas');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env.dev' });
 
@@ -32,6 +32,7 @@ const options = {
         schemas: {
             ...commonErrorSchema,
             ...noticeSchema,
+            ...communitySchema,
         }
     }
 };
