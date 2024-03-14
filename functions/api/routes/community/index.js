@@ -44,7 +44,7 @@ router.get(
 router.get(
   '/posts',
   checkUser,
-  require('./communityPostListGet'),
+  require('./communityPostListGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 전체 조회"
      * #swagger.responses[200] = {
