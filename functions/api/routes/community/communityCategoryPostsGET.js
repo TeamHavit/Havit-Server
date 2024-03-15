@@ -5,5 +5,5 @@
  */
 
 module.exports = async (req, res) => {
-  const { page } = req.query;
+  const { page, limit } = req.query;
 };

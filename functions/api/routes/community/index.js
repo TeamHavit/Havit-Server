@@ -21,6 +21,39 @@ router.get(
 );
 
 router.get(
+  '/category/:communityCategoryId',
+  checkUser,
+  require('./communityCategoryPostsGET'),
+  /**
+     * #swagger.summary = "커뮤니티 게시글 카테고리별 조회"
+     * #swagger.parameters['page'] = {
+            in: 'query',
+            description: '페이지 번호',
+            type: 'number',
+            required: true
+        }
+    * #swagger.parameters['limit'] = {
+            in: 'query',
+            description: '페이지 당 게시글 수',
+            type: 'number',
+            required: true
+        }
+    * #swagger.responses[200] = {
+            description: "커뮤니티 게시글 카테고리별 조회 성공",
+            content: {
+                "application/json": {
+                    schema:{
+                        $ref: "#/components/schemas/responseCommunityPostsSchema"
+                    }
+                }
+            }
+        }
+    * #swagger.responses[400]
+    * #swagger.responses[404]
+    */
+);
+
+router.get(
   '/posts/:communityPostId',
   checkUser,
   require('./communityPostGET'),
@@ -44,32 +77,23 @@ router.get(
 router.get(
   '/posts',
   checkUser,
-  require('./communityPostListGET'),
+  require('./communityPostsGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 전체 조회"
-     * #swagger.responses[200] = {
-            description: "커뮤니티 게시글 전체 조회 성공",
-            content: {
-                "application/json": {
-                    schema:{
-                        $ref: "#/components/schemas/responseCommunityPostsSchema"
-                    }
-                }
-            }
+     * #swagger.parameters['page'] = {
+            in: 'query',
+            description: '페이지 번호',
+            type: 'number',
+            required: true
         }
-     * #swagger.responses[400]
-     * #swagger.responses[404]
-    */
-);
-
-router.get(
-  '/posts/category/:communityCategoryId',
-  checkUser,
-  require('./communityPostCategoryGET'),
-  /**
-     * #swagger.summary = "커뮤니티 게시글 카테고리별 조회"
-     * #swagger.responses[200] = {
-            description: "커뮤니티 게시글 카테고리별 조회 성공",
+    * #swagger.parameters['limit'] = {
+            in: 'query',
+            description: '페이지 당 게시글 수',
+            type: 'number',
+            required: true
+        }
+    * #swagger.responses[200] = {
+            description: "커뮤니티 게시글 전체 조회 성공",
             content: {
                 "application/json": {
                     schema:{
@@ -99,7 +123,7 @@ router.post(
             }
         }
     }
-   * #swagger.responses[200] = {
+   * #swagger.responses[201] = {
         description: "커뮤니티 게시글 신고 성공",
         content: {
             "application/json": {
