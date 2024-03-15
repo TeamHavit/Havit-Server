@@ -1,6 +1,6 @@
 /**
- *  @route GET /community/posts/category/:communityCategoryId
- *  @desc 커뮤니티 게시글 카테고리별 조회
+ *  @route GET /community/category/:communityCategoryId
+ *  @desc 커뮤니티 카테고리별 게시글 조회
  *  @access Private
  */
 

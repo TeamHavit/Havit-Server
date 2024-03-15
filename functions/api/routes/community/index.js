@@ -25,7 +25,7 @@ router.get(
   checkUser,
   require('./communityCategoryPostsGET'),
   /**
-     * #swagger.summary = "커뮤니티 게시글 카테고리별 조회"
+     * #swagger.summary = "커뮤니티 카테고리별 게시글 조회"
      * #swagger.parameters['page'] = {
             in: 'query',
             description: '페이지 번호',
@@ -59,6 +59,12 @@ router.get(
   require('./communityPostGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 상세 조회"
+     * #swagger.parameters['communityPostId'] = {
+            in: 'path',
+            description: '커뮤니티 게시글 아이디',
+            type: 'number',
+            required: true
+        }
      * #swagger.responses[200] = {
             description: "커뮤니티 게시글 상세 조회 성공",
             content: {
