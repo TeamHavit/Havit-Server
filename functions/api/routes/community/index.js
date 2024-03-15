@@ -52,7 +52,7 @@ router.get(
             content: {
                 "application/json": {
                     schema:{
-                        $ref: "#/components/schemas/responseCommunityPostsListSchema"
+                        $ref: "#/components/schemas/responseCommunityPostsSchema"
                     }
                 }
             }
@@ -73,7 +73,7 @@ router.get(
             content: {
                 "application/json": {
                     schema:{
-                        $ref: "#/components/schemas/responseCommunityPostsListSchema"
+                        $ref: "#/components/schemas/responseCommunityPostsSchema"
                     }
                 }
             }
@@ -89,6 +89,16 @@ router.post(
   require('./communityReportPOST'),
   /**
    * #swagger.summary = "커뮤니티 게시글 신고"
+   * #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema:{
+                    $ref: "#/components/schemas/requestCommunityReportSchema"
+                }
+            }
+        }
+    }
    * #swagger.responses[200] = {
         description: "커뮤니티 게시글 신고 성공",
         content: {
@@ -100,7 +110,6 @@ router.post(
         }
     }
     * #swagger.responses[400]
-    * #swagger.responses[404]
     */
 );
 

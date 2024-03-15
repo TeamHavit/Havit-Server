@@ -28,7 +28,7 @@ const responseCommunityPostsDetailSchema = {
   },
 };
 
-const responseCommunityPostsListSchema = {
+const responseCommunityPostsSchema = {
   $status: 200,
   $success: true,
   $message: '커뮤니티 게시글 전체 조회 성공',
@@ -78,9 +78,14 @@ const responseCommunityReportSchema = {
   $message: '커뮤니티 게시글 신고 성공',
 };
 
+const requestCommunityReportSchema = {
+  $communityPostId: 1,
+};
+
 module.exports = {
   responseCommunityCategorySchema,
   responseCommunityPostsDetailSchema,
-  responseCommunityPostsListSchema,
+  responseCommunityPostsSchema,
   responseCommunityReportSchema,
+  requestCommunityReportSchema,
 };
