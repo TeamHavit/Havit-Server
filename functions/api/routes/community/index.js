@@ -114,6 +114,36 @@ router.get(
 );
 
 router.post(
+  '/posts',
+  checkUser,
+  require('./communityPostsPOST'),
+  /**
+   * #swagger.summary = "커뮤니티 글 작성"
+   * #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema:{
+                    $ref: "#/components/schemas/requestCreateCommunityPostSchema"
+                }
+            }
+        }
+    }
+   * #swagger.responses[201] = {
+        description: "커뮤니티 게시글 작성 성공",
+        content: {
+            "application/json": {
+                schema:{
+                    $ref: "#/components/schemas/responseCreateCommunityPostSchema"
+                }
+            }
+        }
+    }
+   * #swagger.responses[400]
+   */
+);
+
+router.post(
   '/report',
   checkUser,
   require('./communityReportPOST'),
