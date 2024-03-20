@@ -75,8 +75,24 @@ const responseCommunityPostsSchema = {
   },
 };
 
+const responseCreateCommunityPostSchema = {
+  $status: 201,
+  $success: true,
+  $message: '커뮤니티 게시글 작성 성공',
+};
+
+const requestCreateCommunityPostSchema = {
+  $communityCategoryIds: [1, 2, 3],
+  $title: '게시글 제목',
+  $body: '게시글 본문',
+  $contentUrl: '공유하는 콘텐츠 링크',
+  $contentTitle: '공유하는 콘텐츠 제목(og:title)',
+  contentDescription: '공유하는 콘텐츠 description(og:description)',
+  thumbnailUrl: '공유하는 콘텐츠 thumbnail(og:image)',
+};
+
 const responseCommunityReportSchema = {
-  $status: 200,
+  $status: 201,
   $success: true,
   $message: '커뮤니티 게시글 신고 성공',
 };
@@ -89,6 +105,8 @@ module.exports = {
   responseCommunityCategorySchema,
   responseCommunityPostsDetailSchema,
   responseCommunityPostsSchema,
+  responseCreateCommunityPostSchema,
+  requestCreateCommunityPostSchema,
   responseCommunityReportSchema,
   requestCommunityReportSchema,
 };
