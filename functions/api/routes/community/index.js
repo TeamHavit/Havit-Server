@@ -116,7 +116,7 @@ router.get(
 router.post(
   '/posts',
   checkUser,
-  require('./communityPostsPOST'),
+  require('./communityPostPOST'),
   /**
    * #swagger.summary = "커뮤니티 글 작성"
    * #swagger.requestBody = {
