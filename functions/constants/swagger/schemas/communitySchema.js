@@ -71,7 +71,10 @@ const responseCommunityPostsSchema = {
         $createdAt: '2024-02-03',
       },
     ],
+    $currentPage: 1,
+    $totalPageCount: 1,
     $totalItemCount: 3,
+    $isLastPage: true,
   },
 };
 
