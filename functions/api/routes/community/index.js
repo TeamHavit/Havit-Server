@@ -3,7 +3,7 @@ const router = express.Router();
 const { checkUser } = require('../../../middlewares/auth');
 
 router.get(
-  '/category',
+  '/categories',
   require('./communityCategoryGET'),
   /**
      * #swagger.summary = "커뮤니티 카테고리 전체 조회"
@@ -21,7 +21,7 @@ router.get(
 );
 
 router.get(
-  '/category/:communityCategoryId',
+  '/categories/:communityCategoryId',
   checkUser,
   require('./communityCategoryPostsGET'),
   /**
