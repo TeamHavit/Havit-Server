@@ -11,7 +11,7 @@ const getCommunityPostDetail = async (client, communityPostId) => {
     [communityPostId],
   );
 
-  return convertSnakeToCamel.keysToCamel(rows);
+  return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
 module.exports = { getCommunityPostDetail };

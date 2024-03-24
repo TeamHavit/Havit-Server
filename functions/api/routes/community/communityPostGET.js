@@ -27,15 +27,15 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs.extend(customParseFormat);
 
   const communityPost = await communityDB.getCommunityPostDetail(dbConnection, communityPostId);
-  if (!communityPost?.length) {
+  if (!communityPost) {
     return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_COMMUNITY_POST));
   }
 
-  communityPost[0].createdAt = dayjs(`${communityPost[0].createdAt}`).format('YYYY-MM-DD');
+  communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY-MM-DD');
 
   res.status(statusCode.OK).send(
     util.success(statusCode.OK, responseMessage.READ_COMMUNITY_POST_SUCCESS, {
-      ...communityPost[0],
+      ...communityPost,
       profileImage: dummyImages.user_profile_dummy,
     }),
   );
