@@ -144,7 +144,7 @@ router.post(
 );
 
 router.post(
-  '/report',
+  '/reports',
   checkUser,
   require('./communityReportPOST'),
   /**
