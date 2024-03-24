@@ -1,9 +1,35 @@
+const util = require('../../../lib/util');
+const statusCode = require('../../../constants/statusCode');
+const responseMessage = require('../../../constants/responseMessage');
+const dummyImages = require('../../../constants/dummyImages');
+const db = require('../../../db/db');
+const { communityDB } = require('../../../db');
+const asyncWrapper = require('../../../lib/asyncWrapper');
+
 /**
  *  @route GET /community/posts/:communityPostId
  *  @desc 커뮤니티 게시글 상세 조회
  *  @access Private
  */
 
-module.exports = async (req, res) => {
+module.exports = asyncWrapper(async (req, res) => {
+  const { communityPostId } = req.params;
+  if (!communityPostId) {
+    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
+  }
 
-};
+  const dbConnection = await db.connect(req);
+  req.dbConnection = dbConnection;
+
+  const communityPost = await communityDB.getCommunityPostDetail(dbConnection, communityPostId);
+  if (!communityPost?.length) {
+    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_COMMUNITY_POST));
+  }
+
+  res.status(statusCode.OK).send(
+    util.success(statusCode.OK, responseMessage.READ_COMMUNITY_POST_SUCCESS, {
+      ...communityPost[0],
+      profileImage: dummyImages.user_profile_dummy,
+    }),
+  );
+});
