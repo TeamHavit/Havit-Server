@@ -4,7 +4,7 @@ const { checkUser } = require('../../../middlewares/auth');
 
 router.get(
   '/categories',
-  require('./communityCategoryGET'),
+  require('./communityCategoriesGET'),
   /**
      * #swagger.summary = "커뮤니티 카테고리 전체 조회"
      * #swagger.responses[200] = {
