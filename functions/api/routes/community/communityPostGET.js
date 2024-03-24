@@ -31,7 +31,7 @@ module.exports = asyncWrapper(async (req, res) => {
     return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_COMMUNITY_POST));
   }
 
-  communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY-MM-DD');
+  communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY. MM. DD');
 
   res.status(statusCode.OK).send(
     util.success(statusCode.OK, responseMessage.READ_COMMUNITY_POST_SUCCESS, {
