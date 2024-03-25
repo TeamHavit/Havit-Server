@@ -3,8 +3,8 @@ const router = express.Router();
 const { checkUser } = require('../../../middlewares/auth');
 
 router.get(
-  '/category',
-  require('./communityCategoryGET'),
+  '/categories',
+  require('./communityCategoriesGET'),
   /**
      * #swagger.summary = "커뮤니티 카테고리 전체 조회"
      * #swagger.responses[200] = {
@@ -21,7 +21,7 @@ router.get(
 );
 
 router.get(
-  '/category/:communityCategoryId',
+  '/categories/:communityCategoryId',
   checkUser,
   require('./communityCategoryPostsGET'),
   /**
@@ -144,7 +144,7 @@ router.post(
 );
 
 router.post(
-  '/report',
+  '/reports',
   checkUser,
   require('./communityReportPOST'),
   /**

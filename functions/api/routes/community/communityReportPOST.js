@@ -1,5 +1,5 @@
 /**
- *  @route POST /community/report
+ *  @route POST /community/reports
  *  @desc 커뮤니티 게시글 신고
  *  @access Private
  */
