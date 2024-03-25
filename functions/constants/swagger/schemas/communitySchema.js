@@ -24,7 +24,7 @@ const responseCommunityPostsDetailSchema = {
     $contentTitle: '콘텐츠 링크 제목',
     $contentDescription: '콘텐츠 링크 설명',
     $thumbnailUrl: 'https://content-thumbnail-image-url',
-    $createdAt: '2024-02-01',
+    $createdAt: '2024. 02. 01',
   },
 };
 
@@ -44,7 +44,7 @@ const responseCommunityPostsSchema = {
         $contentTitle: '콘텐츠 링크 제목1',
         $contentDescription: '콘텐츠 링크 설명1',
         $thumbnailUrl: 'https://content-thumbnail-image-url1',
-        $createdAt: '2024-02-01',
+        $createdAt: '2024. 02. 01',
       },
       {
         $id: 2,
@@ -56,7 +56,7 @@ const responseCommunityPostsSchema = {
         $contentTitle: '콘텐츠 링크 제목2',
         $contentDescription: '콘텐츠 링크 설명2',
         $thumbnailUrl: 'https://content-thumbnail-image-url2',
-        $createdAt: '2024-02-02',
+        $createdAt: '2024. 02. 02',
       },
       {
         $id: 3,
@@ -68,7 +68,7 @@ const responseCommunityPostsSchema = {
         $contentTitle: '콘텐츠 링크 제목3',
         $contentDescription: '콘텐츠 링크 설명3',
         $thumbnailUrl: 'https://content-thumbnail-image-url3',
-        $createdAt: '2024-02-03',
+        $createdAt: '2024. 02. 03',
       },
     ],
     $totalItemCount: 3,
