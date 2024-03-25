@@ -24,7 +24,7 @@ const responseCommunityPostsDetailSchema = {
     $contentTitle: '콘텐츠 링크 제목',
     $contentDescription: '콘텐츠 링크 설명',
     $thumbnailUrl: 'https://content-thumbnail-image-url',
-    $createdAt: '2024-02-01',
+    $createdAt: '2024. 02. 01',
   },
 };
 
