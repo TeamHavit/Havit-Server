@@ -66,6 +66,7 @@ module.exports = {
   READ_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 상세 조회 성공',
   READ_COMMUNITY_POSTS_SUCCESS: '커뮤니티 게시글 전체 조회 성공',
   NO_COMMUNITY_POST: '존재하지 않는 커뮤니티 게시글',
+  NO_PAGE: '존재하지 않는 페이지',
 
   // 서버 상태 체크
   HEALTH_CHECK_SUCCESS: '서버 상태 정상',

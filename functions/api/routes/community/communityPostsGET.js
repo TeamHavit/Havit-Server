@@ -31,7 +31,7 @@ module.exports = asyncWrapper(async (req, res) => {
   const totalPageCount = Math.ceil(totalItemCount / limit);
   const isLastPage = totalPageCount === page;
   if (page > totalPageCount) {
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
+    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_PAGE));
   }
 
   const communityPosts = await communityDB.getCommunityPosts(dbConnection, limit, page);
