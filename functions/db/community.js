@@ -33,7 +33,7 @@ const getCommunityPosts = async (client, limit, page) => {
 const getCommunityPostsCount = async (client) => {
   const { rows } = await client.query(
     `
-    SELECT COUNT(*) as count
+    SELECT COUNT(*)::int 
     FROM community_post
     WHERE is_deleted = FALSE
     `,
