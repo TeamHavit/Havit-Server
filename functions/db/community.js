@@ -21,7 +21,7 @@ const getCommunityPosts = async (client, limit, page) => {
     FROM community_post cp
     JOIN "user" u on cp.user_id = u.id
     WHERE cp.is_deleted = FALSE
-    ORDER BY cp.created_at DESC
+    ORDER BY cp.created_at DESC, cp.id DESC
     LIMIT $1 OFFSET $2
     `,
     [limit, (page - 1) * limit],
