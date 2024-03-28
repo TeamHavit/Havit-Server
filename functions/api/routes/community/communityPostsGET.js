@@ -37,7 +37,7 @@ module.exports = asyncWrapper(async (req, res) => {
 
   const totalItemCount = parseInt(await communityDB.getCommunityPostsCount(dbConnection), 10); // 총 게시글 수
   const totalPageCount = Math.ceil(totalItemCount / limit); // 총 페이지 수
-  const currentPage = parseInt(page, 10); // 현재 페이지
+  const currentPage = +page; // 현재 페이지
   const isLastPage = totalPageCount === currentPage; // 마지막 페이지인지 여부
   // 요청한 페이지가 존재하지 않는 경우
   if (page > totalPageCount) {
