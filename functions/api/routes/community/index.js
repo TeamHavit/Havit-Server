@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { checkUser } = require('../../../middlewares/auth');
+const { validate } = require('../../../middlewares/validation');
+const { communityValidator } = require('../../../constants/validator');
 
 router.get(
   '/categories',
@@ -116,6 +118,7 @@ router.get(
 router.post(
   '/posts',
   checkUser,
+  [...communityValidator.createCommunityPostValidator, validate],
   require('./communityPostPOST'),
   /**
    * #swagger.summary = "커뮤니티 글 작성"
