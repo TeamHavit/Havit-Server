@@ -18,6 +18,6 @@ module.exports = asyncWrapper(async (req, res) => {
   const communityCategories = await communityDB.getCommunityCategories(dbConnection);
 
   res.status(statusCode.OK).send(
-    util.success(statusCode.OK, responseMessage.READ_COMMUNITY_CATEGORY_SUCCESS, communityCategories),
+    util.success(statusCode.OK, responseMessage.READ_COMMUNITY_CATEGORIES_SUCCESS, communityCategories),
   );
 });
