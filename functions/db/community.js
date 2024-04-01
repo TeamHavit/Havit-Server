@@ -26,6 +26,17 @@ const getCommunityPosts = async (client, limit, page) => {
     `,
     [limit, (page - 1) * limit],
   );
+  return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const getCommunityCategories = async (client) => {
+  const { rows } = await client.query(
+    `
+    SELECT cc.id, cc.name
+    FROM community_category cc
+    WHERE cc.is_deleted = FALSE
+    `,
+  );
 
   return convertSnakeToCamel.keysToCamel(rows);
 };
@@ -42,4 +53,9 @@ const getCommunityPostsCount = async (client) => {
   return rows[0].count;
 };
 
-module.exports = { getCommunityPostDetail, getCommunityPosts, getCommunityPostsCount };
+module.exports = {
+  getCommunityPostDetail,
+  getCommunityPosts,
+  getCommunityPostsCount,
+  getCommunityCategories,
+};
