@@ -14,4 +14,16 @@ const getCommunityPostDetail = async (client, communityPostId) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getCommunityPostDetail };
+const getCommunityCategories = async (client) => {
+  const { rows } = await client.query(
+    `
+    SELECT cc.id, cc.name
+    FROM community_category cc
+    WHERE cc.is_deleted = FALSE
+    `,
+  );
+
+  return convertSnakeToCamel.keysToCamel(rows);
+};
+
+module.exports = { getCommunityPostDetail, getCommunityCategories };
