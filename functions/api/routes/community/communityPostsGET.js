@@ -15,6 +15,7 @@ const dummyImages = require('../../../constants/dummyImages');
  */
 
 module.exports = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
   const { page, limit } = req.query;
   // page, limit이 없는 경우
   if (!page || !limit) {
@@ -46,7 +47,7 @@ module.exports = asyncWrapper(async (req, res) => {
       .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_PAGE));
   }
 
-  const communityPosts = await communityDB.getCommunityPosts(dbConnection, limit, page);
+  const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, page);
   // 각 게시글의 createdAt 형식 변경 및 프로필 이미지 추가
   const result = await Promise.all(
     communityPosts.map((communityPost) => {
