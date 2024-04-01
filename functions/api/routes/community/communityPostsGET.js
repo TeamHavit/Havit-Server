@@ -36,7 +36,7 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs().format();
   dayjs.extend(customParseFormat);
 
-  const totalItemCount = await communityDB.getCommunityPostsCount(dbConnection); // 총 게시글 수
+  const totalItemCount = await communityDB.getCommunityPostsCount(dbConnection, userId); // 총 게시글 수
   const totalPageCount = Math.ceil(totalItemCount / limit); // 총 페이지 수
   const currentPage = +page; // 현재 페이지
   const isLastPage = totalPageCount === currentPage; // 마지막 페이지인지 여부

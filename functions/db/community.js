@@ -42,13 +42,15 @@ const getCommunityCategories = async (client) => {
   return convertSnakeToCamel.keysToCamel(rows);
 };
 
-const getCommunityPostsCount = async (client) => {
+const getCommunityPostsCount = async (client, userId) => {
   const { rows } = await client.query(
     `
-    SELECT COUNT(*)::int 
-    FROM community_post
-    WHERE is_deleted = FALSE
+    SELECT COUNT(*)::int
+    FROM community_post cp
+    LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1
+    WHERE cp.is_deleted = FALSE AND cpru.id IS NULL
     `,
+    [userId],
   );
 
   return rows[0].count;
