@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { checkUser } = require('../../../middlewares/auth');
 const { validate } = require('../../../middlewares/validation');
-const { communityValidator } = require('../../../constants/validator');
+const { communityValidator } = require('../../../middlewares/validator');
 
 router.get(
   '/categories',
