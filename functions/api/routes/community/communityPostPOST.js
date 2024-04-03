@@ -26,11 +26,11 @@ module.exports = asyncWrapper(async (req, res) => {
   const dbConnection = await db.connect(req);
   req.dbConnection = dbConnection;
 
-  const notExistCategoryIds = await communityDB.verifyExistCategories(
+  const notExistingCategoryIds = await communityDB.verifyExistCategories(
     dbConnection,
     communityCategoryIds,
   );
-  if (notExistCategoryIds) {
+  if (notExistingCategoryIds) {
     return res
       .status(statusCode.BAD_REQUEST)
       .send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_COMMUNITY_CATEGORY));
