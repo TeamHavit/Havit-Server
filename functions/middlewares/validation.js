@@ -8,7 +8,7 @@ const validate = (req, res, next) => {
     return next();
   }
 
-  const validatorErrorMessage = errors.array()[1] ? errors.array()[1].msg : errors.array()[0].msg;
+  const validatorErrorMessage = errors.array()[1]?.msg ?? errors.array()[0].msg;
 
   const detailError = {
     statusCode: statusCode.BAD_REQUEST,
