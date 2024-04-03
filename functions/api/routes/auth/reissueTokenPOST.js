@@ -8,7 +8,7 @@ const { TOKEN_INVALID, TOKEN_EXPIRED } = require('../../../constants/jwt');
 const asyncWrapper = require('../../../lib/asyncWrapper');
 
 /**
- *  @route POST /auth/reissue
+ *  @route POST /auth/token
  *  @desc 토큰 재발급
  *  @access Public
  */

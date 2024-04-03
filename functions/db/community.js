@@ -63,9 +63,22 @@ const verifyExistCategories = async (client, communityCategoryIds) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const getCommunityCategories = async (client) => {
+  const { rows } = await client.query(
+    `
+    SELECT cc.id, cc.name
+    FROM community_category cc
+    WHERE cc.is_deleted = FALSE
+    `,
+  );
+
+  return convertSnakeToCamel.keysToCamel(rows);
+};
+
 module.exports = {
   getCommunityPostDetail,
   addCommunityPost,
   addCommunityCategoryPost,
   verifyExistCategories,
+  getCommunityCategories,
 };
