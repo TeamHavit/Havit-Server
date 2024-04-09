@@ -65,6 +65,8 @@ module.exports = {
   // 커뮤니티
   READ_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 상세 조회 성공',
   NO_COMMUNITY_POST: '존재하지 않는 커뮤니티 게시글',
+  ADD_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 작성 성공',
+  NO_COMMUNITY_CATEGORY: '존재하지 않는 커뮤니티 카테고리',
   READ_COMMUNITY_CATEGORIES_SUCCESS: '커뮤니티 카테고리 조회 성공',
 
   // 서버 상태 체크
