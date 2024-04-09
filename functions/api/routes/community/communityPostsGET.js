@@ -17,18 +17,6 @@ const dummyImages = require('../../../constants/dummyImages');
 module.exports = asyncWrapper(async (req, res) => {
   const { userId } = req.user;
   const { page, limit } = req.query;
-  // page, limit이 없는 경우
-  if (!page || !limit) {
-    return res
-      .status(statusCode.BAD_REQUEST)
-      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
-  }
-  // page, limit이 양수가 아닌 경우
-  if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
-    return res
-      .status(statusCode.BAD_REQUEST)
-      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE));
-  }
 
   const dbConnection = await db.connect(req);
   req.dbConnection = dbConnection;
