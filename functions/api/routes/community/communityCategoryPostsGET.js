@@ -39,11 +39,30 @@ module.exports = asyncWrapper(async (req, res) => {
       .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_PAGE));
   }
 
+  const offset = (page - 1) * limit;
   const communityCategoryPosts = await communityDB.getCommunityCategoryPostsByCommunityCategoryId(
     dbConnection,
     userId,
     communityCategoryId,
-    page,
     limit,
+    offset,
+  );
+  // 각 게시글의 createdAt 형식 변경 및 프로필 이미지 추가
+  const result = await Promise.all(
+    communityCategoryPosts.map((communityPost) => {
+      communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY. MM. DD');
+      communityPost.profileImage = dummyImages.user_profile_dummy;
+      return communityPost;
+    }),
+  );
+
+  res.status(statusCode.OK).send(
+    util.success(statusCode.OK, responseMessage.READ_COMMUNITY_CATEGORY_POSTS_SUCCESS, {
+      posts: result,
+      currentPage,
+      totalPageCount,
+      totalItemCount,
+      isLastPage,
+    }),
   );
 });

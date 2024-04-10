@@ -35,7 +35,8 @@ module.exports = asyncWrapper(async (req, res) => {
       .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_PAGE));
   }
 
-  const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, page);
+  const offset = (page - 1) * limit;
+  const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, offset);
   // 각 게시글의 createdAt 형식 변경 및 프로필 이미지 추가
   const result = await Promise.all(
     communityPosts.map((communityPost) => {

@@ -14,7 +14,7 @@ const getCommunityPostDetail = async (client, communityPostId) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const getCommunityPosts = async (client, userId, limit, page) => {
+const getCommunityPosts = async (client, userId, limit, offset) => {
   const { rows } = await client.query(
     `
     SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
@@ -25,7 +25,7 @@ const getCommunityPosts = async (client, userId, limit, page) => {
     ORDER BY cp.created_at DESC, cp.id DESC
     LIMIT $2 OFFSET $3
     `,
-    [userId, limit, (page - 1) * limit],
+    [userId, limit, offset],
   );
   return convertSnakeToCamel.keysToCamel(rows);
 };
@@ -105,6 +105,45 @@ const getCommunityPostsCount = async (client, userId) => {
   return rows[0].count;
 };
 
+const getCommunityCategoryPostsCount = async (client, userId, communityCategoryId) => {
+  const { rows } = await client.query(
+    `
+    SELECT COUNT(*)::int
+    FROM community_post cp
+    JOIN community_category_post ccp ON cp.id = ccp.community_post_id
+    LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1
+    WHERE cp.is_deleted = FALSE AND ccp.community_category_id = $2 AND cpru.id IS NULL
+    `,
+    [userId, communityCategoryId],
+  );
+
+  return rows[0].count;
+};
+
+const getCommunityCategoryPostsByCommunityCategoryId = async (
+  client,
+  userId,
+  communityCategoryId,
+  limit,
+  offset,
+) => {
+  const { rows } = await client.query(
+    `
+    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
+    FROM community_post cp
+    JOIN "user" u ON cp.user_id = u.id
+    JOIN community_category_post ccp ON cp.id = ccp.community_post_id
+    LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1
+    WHERE cp.is_deleted = FALSE AND ccp.community_category_id = $2 AND cpru.id IS NULL
+    ORDER BY cp.created_at DESC, cp.id DESC
+    LIMIT $3 OFFSET $4
+    `,
+    [userId, communityCategoryId, limit, offset],
+  );
+
+  return convertSnakeToCamel.keysToCamel(rows);
+};
+
 module.exports = {
   getCommunityPostDetail,
   getCommunityPosts,
@@ -113,4 +152,6 @@ module.exports = {
   verifyExistCategories,
   getCommunityCategories,
   getCommunityPostsCount,
+  getCommunityCategoryPostsCount,
+  getCommunityCategoryPostsByCommunityCategoryId,
 };
