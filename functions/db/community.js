@@ -14,6 +14,71 @@ const getCommunityPostDetail = async (client, communityPostId) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
+const getCommunityPosts = async (client, userId, limit, page) => {
+  const { rows } = await client.query(
+    `
+    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
+    FROM community_post cp
+    JOIN "user" u ON cp.user_id = u.id
+    LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1
+    WHERE cp.is_deleted = FALSE AND cpru.id IS NULL
+    ORDER BY cp.created_at DESC, cp.id DESC
+    LIMIT $2 OFFSET $3
+    `,
+    [userId, limit, (page - 1) * limit],
+  );
+  return convertSnakeToCamel.keysToCamel(rows);
+};
+
+const addCommunityPost = async (
+  client,
+  userId,
+  title,
+  body,
+  contentUrl,
+  contentTitle,
+  contentDescription,
+  thumbnailUrl,
+) => {
+  const { rows } = await client.query(
+    `
+    INSERT INTO community_post
+    (user_id, title, body, content_url, content_title, content_description, thumbnail_url)
+    VALUES
+    ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *
+    `,
+    [userId, title, body, contentUrl, contentTitle, contentDescription, thumbnailUrl],
+  );
+  return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const addCommunityCategoryPost = async (client, communityCategoryId, communityPostId) => {
+  const { rows } = await client.query(
+    `
+    INSERT INTO community_category_post
+    (community_category_id, community_post_id)
+    VALUES
+    ($1, $2)
+    `,
+    [communityCategoryId, communityPostId],
+  );
+};
+
+const verifyExistCategories = async (client, communityCategoryIds) => {
+  const { rows } = await client.query(
+    `
+      SELECT element
+      FROM unnest($1::int[]) AS element
+      LEFT JOIN community_category ON community_category.id = element
+      WHERE community_category.id IS NULL;
+    `,
+    [communityCategoryIds],
+  );
+
+  return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
 const getCommunityCategories = async (client) => {
   const { rows } = await client.query(
     `
@@ -26,4 +91,26 @@ const getCommunityCategories = async (client) => {
   return convertSnakeToCamel.keysToCamel(rows);
 };
 
-module.exports = { getCommunityPostDetail, getCommunityCategories };
+const getCommunityPostsCount = async (client, userId) => {
+  const { rows } = await client.query(
+    `
+    SELECT COUNT(*)::int
+    FROM community_post cp
+    LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1
+    WHERE cp.is_deleted = FALSE AND cpru.id IS NULL
+    `,
+    [userId],
+  );
+
+  return rows[0].count;
+};
+
+module.exports = {
+  getCommunityPostDetail,
+  getCommunityPosts,
+  addCommunityPost,
+  addCommunityCategoryPost,
+  verifyExistCategories,
+  getCommunityCategories,
+  getCommunityPostsCount,
+};

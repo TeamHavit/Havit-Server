@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { checkUser } = require('../../../middlewares/auth');
+const { validate } = require('../../../middlewares/validation');
+const { communityValidator } = require('../../../middlewares/validator');
 
 router.get(
   '/categories',
@@ -83,6 +85,7 @@ router.get(
 router.get(
   '/posts',
   checkUser,
+  [...communityValidator.getCommunityPostsValidator, validate],
   require('./communityPostsGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 전체 조회"
@@ -116,6 +119,7 @@ router.get(
 router.post(
   '/posts',
   checkUser,
+  [...communityValidator.createCommunityPostValidator, validate],
   require('./communityPostPOST'),
   /**
    * #swagger.summary = "커뮤니티 글 작성"
