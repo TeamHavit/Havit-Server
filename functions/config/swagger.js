@@ -4,37 +4,37 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.env.dev' });
 
 const options = {
-    info: {
-        title: 'HAVIT API Docs',
-        description: 'HAVIT APP server API 문서입니다',
+  info: {
+    title: 'HAVIT API Docs',
+    description: 'HAVIT APP server API 문서입니다',
+  },
+  host: 'http://localhost:5001',
+  servers: [
+    {
+      url: 'http://localhost:5001/havit-wesopt29/asia-northeast3/api',
+      description: '로컬 개발환경 host',
     },
-    host: "http://localhost:5001",
-    servers: [
-        {
-            url: 'http://localhost:5001/havit-production/asia-northeast3/api',
-            description: '로컬 개발환경 host',
-        },
-        {
-            url: process.env.DEV_HOST,
-            description: '개발환경 host',
-        },
-    ],
-    schemes: ['http'],
-    securityDefinitions: {
-        bearerAuth: {
-            type: 'http',
-            name: 'x-auth-token',
-            in: 'header',
-            bearerFormat: 'JWT',
-        },
+    {
+      url: process.env.DEV_HOST,
+      description: '개발환경 host',
     },
-    components: {
-        schemas: {
-            ...commonErrorSchema,
-            ...noticeSchema,
-            ...communitySchema,
-        }
-    }
+  ],
+  schemes: ['http'],
+  securityDefinitions: {
+    bearerAuth: {
+      type: 'http',
+      name: 'x-auth-token',
+      in: 'header',
+      bearerFormat: 'JWT',
+    },
+  },
+  components: {
+    schemas: {
+      ...commonErrorSchema,
+      ...noticeSchema,
+      ...communitySchema,
+    },
+  },
 };
 
 const outputFile = '../constants/swagger/swagger-output.json';

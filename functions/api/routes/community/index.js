@@ -85,6 +85,7 @@ router.get(
 router.get(
   '/posts',
   checkUser,
+  [...communityValidator.getCommunityPostsValidator, validate],
   require('./communityPostsGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 전체 조회"
