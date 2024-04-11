@@ -24,6 +24,17 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs().format();
   dayjs.extend(customParseFormat);
 
+  // category id가 존재하지 않는 경우
+  const isExistingCategory = await communityDB.isExistingCategory(
+    dbConnection,
+    communityCategoryId,
+  );
+  if (!isExistingCategory) {
+    return res
+      .status(statusCode.NOT_FOUND)
+      .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CATEGORY));
+  }
+
   const totalItemCount = await communityDB.getCommunityCategoryPostsCount(
     dbConnection,
     userId,
