@@ -157,6 +157,30 @@ const getCommunityCategoryPostsById = async (
   return convertSnakeToCamel.keysToCamel(rows);
 };
 
+const reportCommunityPost = async (client, userId, communityPostId) => {
+  const { rows: existingCommunityPosts } = await client.query(
+    `
+    UPDATE community_post
+    SET reported_count = reported_count + 1
+    WHERE id = $1
+    RETURNING *
+    `,
+    [communityPostId]
+  );
+  if (!existingCommunityPosts[0]) return existingCommunityPosts[0];
+  const { rows: communityPostReports } = await client.query(
+    `
+    INSERT INTO community_post_report_user
+      (report_user_id, community_post_id)
+    VALUES
+      ($1, $2)
+    RETURNING *
+    `,
+    [userId, communityPostId]
+  );
+  return convertSnakeToCamel.keysToCamel(communityPostReports[0]);
+}
+
 module.exports = {
   getCommunityPostDetail,
   getCommunityPosts,
@@ -168,4 +192,5 @@ module.exports = {
   getCommunityPostsCount,
   getCommunityCategoryPostsCount,
   getCommunityCategoryPostsById,
+  reportCommunityPost
 };
