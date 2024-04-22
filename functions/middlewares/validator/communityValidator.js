@@ -1,4 +1,4 @@
-const { body, query } = require('express-validator');
+const { body, query, param } = require('express-validator');
 
 const createCommunityPostValidator = [
   body('communityCategoryIds')
@@ -16,7 +16,17 @@ const getCommunityPostsValidator = [
   query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
 ];
 
+const getCommunityCategoryPostsValidator = [
+  query('page').notEmpty().isInt({ min: 1 }).withMessage('Invalid page field'),
+  query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
+  param('communityCategoryId')
+    .notEmpty()
+    .isInt({ min: 1 })
+    .withMessage('Invalid communityCategoryId field'),
+];
+
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
+  getCommunityCategoryPostsValidator,
 };

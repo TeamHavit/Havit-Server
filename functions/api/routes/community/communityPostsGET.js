@@ -25,9 +25,9 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs.extend(customParseFormat);
 
   const totalItemCount = await communityDB.getCommunityPostsCount(dbConnection, userId); // 총 게시글 수
-  const totalPageCount = Math.ceil(totalItemCount / limit); // 총 페이지 수
-  const currentPage = +page; // 현재 페이지
-  const isLastPage = totalPageCount === currentPage; // 마지막 페이지인지 여부
+  const totalPageCount = Math.ceil(totalItemCount / limit);
+  const currentPage = +page;
+
   // 요청한 페이지가 존재하지 않는 경우
   if (page > totalPageCount) {
     return res
@@ -35,7 +35,8 @@ module.exports = asyncWrapper(async (req, res) => {
       .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_PAGE));
   }
 
-  const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, page);
+  const offset = (page - 1) * limit;
+  const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, offset);
   // 각 게시글의 createdAt 형식 변경 및 프로필 이미지 추가
   const result = await Promise.all(
     communityPosts.map((communityPost) => {
@@ -51,7 +52,7 @@ module.exports = asyncWrapper(async (req, res) => {
       currentPage,
       totalPageCount,
       totalItemCount,
-      isLastPage,
+      isLastPage: currentPage === totalPageCount,
     }),
   );
 });
