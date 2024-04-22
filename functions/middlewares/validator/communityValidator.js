@@ -16,7 +16,7 @@ const getCommunityPostsValidator = [
   query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
 ];
 
-const getCategoryCommunityPostsValidator = [
+const getCommunityCategoryPostsValidator = [
   query('page').notEmpty().isInt({ min: 1 }).withMessage('Invalid page field'),
   query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
   param('communityCategoryId')
@@ -28,5 +28,5 @@ const getCategoryCommunityPostsValidator = [
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
-  getCategoryCommunityPostsValidator,
+  getCommunityCategoryPostsValidator,
 };

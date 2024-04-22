@@ -51,7 +51,7 @@ module.exports = asyncWrapper(async (req, res) => {
   }
 
   const offset = (page - 1) * limit;
-  const communityCategoryPosts = await communityDB.getCommunityCategoryPostsByCommunityCategoryId(
+  const communityCategoryPosts = await communityDB.getCommunityCategoryPostsById(
     dbConnection,
     userId,
     communityCategoryId,

@@ -25,7 +25,7 @@ router.get(
 router.get(
   '/categories/:communityCategoryId',
   checkUser,
-  [...communityValidator.getCategoryCommunityPostsValidator, validate],
+  [...communityValidator.getCommunityCategoryPostsValidator, validate],
   require('./communityCategoryPostsGET'),
   /**
      * #swagger.summary = "커뮤니티 카테고리별 게시글 조회"

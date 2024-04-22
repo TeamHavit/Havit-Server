@@ -133,7 +133,7 @@ const getCommunityCategoryPostsCount = async (client, userId, communityCategoryI
   return rows[0].count;
 };
 
-const getCommunityCategoryPostsByCommunityCategoryId = async (
+const getCommunityCategoryPostsById = async (
   client,
   userId,
   communityCategoryId,
@@ -167,5 +167,5 @@ module.exports = {
   getCommunityCategories,
   getCommunityPostsCount,
   getCommunityCategoryPostsCount,
-  getCommunityCategoryPostsByCommunityCategoryId,
+  getCommunityCategoryPostsById,
 };
