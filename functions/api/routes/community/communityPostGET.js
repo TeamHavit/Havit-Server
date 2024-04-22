@@ -29,7 +29,7 @@ module.exports = asyncWrapper(async (req, res) => {
   if (isReportedPost) {
     return res
       .status(statusCode.BAD_REQUEST)
-      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.REPORTED_COMMUNITY_POST_ERROR));
+      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.ALREADY_REPORTED_POST));
   }
 
   dayjs().format();
