@@ -70,6 +70,7 @@ module.exports = {
   NO_COMMUNITY_CATEGORY: '존재하지 않는 커뮤니티 카테고리',
   NO_PAGE: '존재하지 않는 페이지',
   READ_COMMUNITY_CATEGORIES_SUCCESS: '커뮤니티 카테고리 조회 성공',
+  ALREADY_REPORTED_POST: '이미 신고한 게시글',
   READ_COMMUNITY_CATEGORY_POSTS_SUCCESS: '커뮤니티 카테고리별 게시글 조회 성공',
   REPORT_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 신고 성공',
 

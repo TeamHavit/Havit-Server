@@ -59,6 +59,7 @@ router.get(
 router.get(
   '/posts/:communityPostId',
   checkUser,
+  [...communityValidator.getCommunityPostValidator, validate],
   require('./communityPostGET'),
   /**
      * #swagger.summary = "커뮤니티 게시글 상세 조회"

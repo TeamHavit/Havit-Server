@@ -15,20 +15,31 @@ const asyncWrapper = require('../../../lib/asyncWrapper');
  */
 
 module.exports = asyncWrapper(async (req, res) => {
+  const { userId } = req.user;
   const { communityPostId } = req.params;
-  if (!communityPostId) {
-    return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NULL_VALUE));
-  }
 
   const dbConnection = await db.connect(req);
   req.dbConnection = dbConnection;
+
+  const isReportedPost = await communityDB.getReportedPostByUser(
+    dbConnection,
+    userId,
+    communityPostId,
+  );
+  if (isReportedPost) {
+    return res
+      .status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.ALREADY_REPORTED_POST));
+  }
 
   dayjs().format();
   dayjs.extend(customParseFormat);
 
   const communityPost = await communityDB.getCommunityPostDetail(dbConnection, communityPostId);
   if (!communityPost) {
-    return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_COMMUNITY_POST));
+    return res
+      .status(statusCode.NOT_FOUND)
+      .send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_COMMUNITY_POST));
   }
 
   communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY. MM. DD');

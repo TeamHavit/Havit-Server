@@ -118,6 +118,19 @@ const getCommunityPostsCount = async (client, userId) => {
   return rows[0].count;
 };
 
+const getReportedPostByUser = async (client, userId, communityPostId) => {
+  const { rows } = await client.query(
+    `
+    SELECT 1 
+    FROM community_post_report_user cpru
+    WHERE cpru.report_user_id = $1 AND cpru.community_post_id = $2
+    `,
+    [userId, communityPostId],
+  );
+
+  return rows[0];
+};
+
 const getCommunityCategoryPostsCount = async (client, userId, communityCategoryId) => {
   const { rows } = await client.query(
     `
@@ -190,7 +203,8 @@ module.exports = {
   isExistingCategory,
   getCommunityCategories,
   getCommunityPostsCount,
+  getReportedPostByUser,
   getCommunityCategoryPostsCount,
   getCommunityCategoryPostsById,
-  reportCommunityPost
+  reportCommunityPost,
 };

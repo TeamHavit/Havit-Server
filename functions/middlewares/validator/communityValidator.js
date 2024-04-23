@@ -16,6 +16,13 @@ const getCommunityPostsValidator = [
   query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
 ];
 
+const getCommunityPostValidator = [
+  param('communityPostId')
+    .notEmpty()
+    .isInt({ min: 1 })
+    .withMessage('Invalid communityPostId field'),
+];
+
 const getCommunityCategoryPostsValidator = [
   query('page').notEmpty().isInt({ min: 1 }).withMessage('Invalid page field'),
   query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
@@ -32,6 +39,7 @@ const reportCommunityPostValidator = [
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
+  getCommunityPostValidator,
   getCommunityCategoryPostsValidator,
   reportCommunityPostValidator
 };
