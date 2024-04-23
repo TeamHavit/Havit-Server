@@ -23,8 +23,23 @@ const getCommunityPostValidator = [
     .withMessage('Invalid communityPostId field'),
 ];
 
+const getCommunityCategoryPostsValidator = [
+  query('page').notEmpty().isInt({ min: 1 }).withMessage('Invalid page field'),
+  query('limit').notEmpty().isInt({ min: 1 }).withMessage('Invalid limit field'),
+  param('communityCategoryId')
+    .notEmpty()
+    .isInt({ min: 1 })
+    .withMessage('Invalid communityCategoryId field'),
+];
+
+const reportCommunityPostValidator = [
+  body('communityPostId').isInt({ min: 1 }).notEmpty().withMessage('Invalid communityPostId')
+]
+
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
   getCommunityPostValidator,
+  getCommunityCategoryPostsValidator,
+  reportCommunityPostValidator
 };
