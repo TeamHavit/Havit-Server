@@ -151,6 +151,7 @@ router.post(
 router.post(
   '/reports',
   checkUser,
+  [...communityValidator.reportCommunityPostValidator, validate],
   require('./communityReportPOST'),
   /**
    * #swagger.summary = "커뮤니티 게시글 신고"

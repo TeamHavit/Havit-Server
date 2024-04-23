@@ -25,8 +25,13 @@ const getCommunityCategoryPostsValidator = [
     .withMessage('Invalid communityCategoryId field'),
 ];
 
+const reportCommunityPostValidator = [
+  body('communityPostId').isInt({ min: 1 }).notEmpty().withMessage('Invalid communityPostId')
+]
+
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
   getCommunityCategoryPostsValidator,
+  reportCommunityPostValidator
 };
