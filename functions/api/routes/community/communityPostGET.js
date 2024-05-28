@@ -43,6 +43,7 @@ module.exports = asyncWrapper(async (req, res) => {
   }
 
   communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY. MM. DD');
+  communityPost.thumbnailUrl = communityPost.thumbnailUrl || dummyImages.content_dummy;
 
   res.status(statusCode.OK).send(
     util.success(statusCode.OK, responseMessage.READ_COMMUNITY_POST_SUCCESS, {

@@ -37,11 +37,13 @@ module.exports = asyncWrapper(async (req, res) => {
 
   const offset = (page - 1) * limit;
   const communityPosts = await communityDB.getCommunityPosts(dbConnection, userId, limit, offset);
-  // 각 게시글의 createdAt 형식 변경 및 프로필 이미지 추가
+
+  // 각 게시글의 createdAt 형식 변경, 프로필 이미지 추가, 썸네일 이미지 null일 경우 대체 이미지 추가
   const result = await Promise.all(
     communityPosts.map((communityPost) => {
       communityPost.createdAt = dayjs(`${communityPost.createdAt}`).format('YYYY. MM. DD');
       communityPost.profileImage = dummyImages.user_profile_dummy;
+      communityPost.thumbnailUrl = communityPost.thumbnailUrl || dummyImages.content_dummy;
       return communityPost;
     }),
   );
