@@ -205,12 +205,24 @@ const getCommunityPostById = async (client, communityPostId) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-const deleteCommunityPost = async (client, communityPostId) => {
+const deleteCommunityPostById = async (client, communityPostId) => {
   const { rows } = await client.query(
     `
     UPDATE community_post
     SET is_deleted = TRUE
     WHERE id = $1
+    `,
+    [communityPostId],
+  );
+  return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const deleteCommunityCategoryPostByPostId = async (client, communityPostId) => {
+  const { rows } = await client.query(
+    `
+    UPDATE community_category_post
+    SET is_deleted = TRUE
+    WHERE community_post_id = $1
     `,
     [communityPostId],
   );
@@ -231,5 +243,6 @@ module.exports = {
   getCommunityCategoryPostsById,
   reportCommunityPost,
   getCommunityPostById,
-  deleteCommunityPost,
+  deleteCommunityPostById,
+  deleteCommunityCategoryPostByPostId,
 };

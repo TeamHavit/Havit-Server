@@ -30,7 +30,8 @@ module.exports = asyncWrapper(async (req, res) => {
       .send(util.fail(statusCode.FORBIDDEN, responseMessage.FORBIDDEN));
   }
 
-  await communityDB.deleteCommunityPost(dbConnection, communityPostId);
+  await communityDB.deleteCommunityPostById(dbConnection, communityPostId);
+  await communityDB.deleteCommunityCategoryPostByPostId(dbConnection, communityPostId);
 
   res
     .status(statusCode.OK)
