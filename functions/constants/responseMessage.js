@@ -73,6 +73,7 @@ module.exports = {
   ALREADY_REPORTED_POST: '이미 신고한 게시글',
   READ_COMMUNITY_CATEGORY_POSTS_SUCCESS: '커뮤니티 카테고리별 게시글 조회 성공',
   REPORT_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 신고 성공',
+  DELETE_COMMUNITY_POST_SUCCESS: '커뮤니티 게시글 삭제 성공',
 
   // 서버 상태 체크
   HEALTH_CHECK_SUCCESS: '서버 상태 정상',

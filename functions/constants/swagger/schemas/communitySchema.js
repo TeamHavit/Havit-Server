@@ -104,6 +104,12 @@ const requestCommunityReportSchema = {
   $communityPostId: 1,
 };
 
+const responseDeleteCommunityPostSchema = {
+  $status: 200,
+  $success: true,
+  $message: '커뮤니티 게시글 삭제 성공',
+};
+
 module.exports = {
   responseCommunityCategorySchema,
   responseCommunityPostsDetailSchema,
@@ -112,4 +118,5 @@ module.exports = {
   requestCreateCommunityPostSchema,
   responseCommunityReportSchema,
   requestCommunityReportSchema,
+  responseDeleteCommunityPostSchema,
 };

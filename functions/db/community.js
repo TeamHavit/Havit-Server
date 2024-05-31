@@ -178,7 +178,7 @@ const reportCommunityPost = async (client, userId, communityPostId) => {
     WHERE id = $1
     RETURNING *
     `,
-    [communityPostId]
+    [communityPostId],
   );
   if (!existingCommunityPosts[0]) return existingCommunityPosts[0];
   const { rows: communityPostReports } = await client.query(
@@ -189,10 +189,33 @@ const reportCommunityPost = async (client, userId, communityPostId) => {
       ($1, $2)
     RETURNING *
     `,
-    [userId, communityPostId]
+    [userId, communityPostId],
   );
   return convertSnakeToCamel.keysToCamel(communityPostReports[0]);
-}
+};
+
+const getCommunityPostById = async (client, communityPostId) => {
+  const { rows } = await client.query(
+    `SELECT *
+    FROM community_post
+    WHERE id = $1 AND is_deleted = FALSE
+    `,
+    [communityPostId],
+  );
+  return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const deleteCommunityPost = async (client, communityPostId) => {
+  const { rows } = await client.query(
+    `
+    UPDATE community_post
+    SET is_deleted = TRUE
+    WHERE id = $1
+    `,
+    [communityPostId],
+  );
+  return convertSnakeToCamel.keysToCamel(rows[0]);
+};
 
 module.exports = {
   getCommunityPostDetail,
@@ -207,4 +230,6 @@ module.exports = {
   getCommunityCategoryPostsCount,
   getCommunityCategoryPostsById,
   reportCommunityPost,
+  getCommunityPostById,
+  deleteCommunityPost,
 };

@@ -33,13 +33,21 @@ const getCommunityCategoryPostsValidator = [
 ];
 
 const reportCommunityPostValidator = [
-  body('communityPostId').isInt({ min: 1 }).notEmpty().withMessage('Invalid communityPostId')
-]
+  body('communityPostId').notEmpty().isInt({ min: 1 }).withMessage('Invalid communityPostId field'),
+];
+
+const deleteCommunityPostValidator = [
+  param('communityPostId')
+    .notEmpty()
+    .isInt({ min: 1 })
+    .withMessage('Invalid communityPostId field'),
+];
 
 module.exports = {
   createCommunityPostValidator,
   getCommunityPostsValidator,
   getCommunityPostValidator,
   getCommunityCategoryPostsValidator,
-  reportCommunityPostValidator
+  reportCommunityPostValidator,
+  deleteCommunityPostValidator,
 };
