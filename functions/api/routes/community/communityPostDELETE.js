@@ -34,6 +34,6 @@ module.exports = asyncWrapper(async (req, res) => {
   await communityDB.deleteCommunityCategoryPostByPostId(dbConnection, communityPostId);
 
   res
-    .status(statusCode.OK)
-    .send(util.success(statusCode.OK, responseMessage.DELETE_COMMUNITY_POST_SUCCESS));
+    .status(statusCode.NO_CONTENT)
+    .send(util.success(statusCode.NO_CONTENT, responseMessage.DELETE_COMMUNITY_POST_SUCCESS));
 });

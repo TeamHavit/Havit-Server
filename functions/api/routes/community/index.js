@@ -194,7 +194,7 @@ router.delete(
             type: 'number',
             required: true
         }
-     * #swagger.responses[200] = {
+     * #swagger.responses[204] = {
             description: "커뮤니티 게시글 삭제 성공",
             content: {
                 "application/json": {
@@ -202,7 +202,7 @@ router.delete(
                         $ref: "#/components/schemas/responseDeleteCommunityPostSchema"
                     }
                 }
-            }
+            } 
         }
      * #swagger.responses[400]
      * #swagger.responses[403]

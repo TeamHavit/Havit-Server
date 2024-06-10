@@ -105,7 +105,7 @@ const requestCommunityReportSchema = {
 };
 
 const responseDeleteCommunityPostSchema = {
-  $status: 200,
+  $status: 204,
   $success: true,
   $message: '커뮤니티 게시글 삭제 성공',
 };
