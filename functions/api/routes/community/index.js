@@ -181,4 +181,33 @@ router.post(
     */
 );
 
+router.delete(
+  '/:communityPostId',
+  checkUser,
+  [...communityValidator.deleteCommunityPostValidator, validate],
+  require('./communityPostDELETE'),
+  /**
+     * #swagger.summary = "커뮤니티 게시글 삭제"
+     * #swagger.parameters['communityPostId'] = {
+            in: 'path',
+            description: '커뮤니티 게시글 아이디',
+            type: 'number',
+            required: true
+        }
+     * #swagger.responses[204] = {
+            description: "커뮤니티 게시글 삭제 성공",
+            content: {
+                "application/json": {
+                    schema:{
+                        $ref: "#/components/schemas/responseDeleteCommunityPostSchema"
+                    }
+                }
+            } 
+        }
+     * #swagger.responses[400]
+     * #swagger.responses[403]
+     * #swagger.responses[404]
+     */
+);
+
 module.exports = router;
