@@ -1,14 +1,15 @@
 const convertSnakeToCamel = require('../lib/convertSnakeToCamel');
 
-const getCommunityPostDetail = async (client, communityPostId) => {
+const getCommunityPostDetail = async (client, communityPostId, userId) => {
   const { rows } = await client.query(
     `
-    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
+    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at,
+      CASE WHEN cp.user_id = $2 THEN TRUE ELSE FALSE END as is_author
     FROM community_post cp
     JOIN "user" u on cp.user_id = u.id
     WHERE cp.id = $1 AND cp.is_deleted = FALSE
     `,
-    [communityPostId],
+    [communityPostId, userId],
   );
 
   return convertSnakeToCamel.keysToCamel(rows[0]);
@@ -17,7 +18,8 @@ const getCommunityPostDetail = async (client, communityPostId) => {
 const getCommunityPosts = async (client, userId, limit, offset) => {
   const { rows } = await client.query(
     `
-    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
+    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at,
+      CASE WHEN cp.user_id = $1 THEN TRUE ELSE FALSE END as is_author
     FROM community_post cp
     JOIN "user" u ON cp.user_id = u.id
     LEFT JOIN community_post_report_user cpru ON cp.id = cpru.community_post_id AND cpru.report_user_id = $1

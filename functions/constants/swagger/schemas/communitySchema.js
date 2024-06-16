@@ -25,6 +25,7 @@ const responseCommunityPostsDetailSchema = {
     contentDescription: '콘텐츠 링크 설명',
     $thumbnailUrl: 'https://content-thumbnail-image-url',
     $createdAt: '2024. 02. 01',
+    $isAuthor: true,
   },
 };
 
@@ -45,6 +46,7 @@ const responseCommunityPostsSchema = {
         contentDescription: '콘텐츠 링크 설명1',
         $thumbnailUrl: 'https://content-thumbnail-image-url1',
         $createdAt: '2024. 02. 01',
+        $isAuthor: true,
       },
       {
         $id: 2,
@@ -57,6 +59,7 @@ const responseCommunityPostsSchema = {
         contentDescription: '콘텐츠 링크 설명2',
         $thumbnailUrl: 'https://content-thumbnail-image-url2',
         $createdAt: '2024. 02. 02',
+        $isAuthor: false,
       },
       {
         $id: 3,
@@ -69,6 +72,7 @@ const responseCommunityPostsSchema = {
         contentDescription: '콘텐츠 링크 설명3',
         $thumbnailUrl: 'https://content-thumbnail-image-url3',
         $createdAt: '2024. 02. 03',
+        $isAuthor: false,
       },
     ],
     $currentPage: 1,
