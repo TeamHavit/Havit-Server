@@ -35,7 +35,11 @@ module.exports = asyncWrapper(async (req, res) => {
   dayjs().format();
   dayjs.extend(customParseFormat);
 
-  const communityPost = await communityDB.getCommunityPostDetail(dbConnection, communityPostId);
+  const communityPost = await communityDB.getCommunityPostDetail(
+    dbConnection,
+    communityPostId,
+    userId,
+  );
   if (!communityPost) {
     return res
       .status(statusCode.NOT_FOUND)
