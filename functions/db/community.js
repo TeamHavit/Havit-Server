@@ -183,6 +183,9 @@ const reportCommunityPost = async (client, userId, communityPostId) => {
     [communityPostId],
   );
   if (!existingCommunityPosts[0]) return existingCommunityPosts[0];
+
+  const { title, user_id: postUserId } = existingCommunityPosts[0];
+
   const { rows: communityPostReports } = await client.query(
     `
     INSERT INTO community_post_report_user
@@ -193,7 +196,11 @@ const reportCommunityPost = async (client, userId, communityPostId) => {
     `,
     [userId, communityPostId],
   );
-  return convertSnakeToCamel.keysToCamel(communityPostReports[0]);
+  return {
+    ...convertSnakeToCamel.keysToCamel(communityPostReports[0]),
+    title,
+    postUserId,
+  };
 };
 
 const getCommunityPostById = async (client, communityPostId) => {
