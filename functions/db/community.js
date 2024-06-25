@@ -157,7 +157,8 @@ const getCommunityCategoryPostsById = async (
 ) => {
   const { rows } = await client.query(
     `
-    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at
+    SELECT cp.id, u.nickname, cp.title, cp.body, cp.content_url, cp.content_title, cp.content_description, cp.thumbnail_url, cp.created_at,
+      CASE WHEN cp.user_id = $1 THEN TRUE ELSE FALSE END as is_author
     FROM community_post cp
     JOIN "user" u ON cp.user_id = u.id
     JOIN community_category_post ccp ON cp.id = ccp.community_post_id
