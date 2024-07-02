@@ -1,5 +1,5 @@
 # Havit-Server  
-### 기억하고 싶은 모든 콘텐츠를 내 손 안에, HAVIT
+### [기억하고 싶은 모든 콘텐츠를 내 손 안에, HAVIT](www.havit.app)
 https://user-images.githubusercontent.com/55099365/150919289-52d35f31-c658-433a-8ffa-d84c8e6e85d8.mp4
 
 ![해빗표지2](https://user-images.githubusercontent.com/20807197/150502331-7122ba4e-5544-496b-baac-0cee2a21edc5.png)
