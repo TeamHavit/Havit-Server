@@ -9,7 +9,8 @@
     "dev": "cross-env NODE_ENV=development firebase deploy --only functions,hosting",
     "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
     "logs": "firebase functions:log",
-    "test": "mocha"
+    "test": "mocha",
+    "swagger": "node config/swagger.js"
   },
   "engines": {
     "node": "16"
@@ -25,6 +26,7 @@
     "dotenv": "^10.0.0",
     "eslint-config-prettier": "^8.3.0",
     "express": "^4.17.2",
+    "express-validator": "^7.0.1",
     "firebase-admin": "^10.2.0",
     "firebase-functions": "^3.14.1",
     "helmet": "^5.0.1",
@@ -36,7 +38,9 @@
     "open-graph-scraper": "^4.11.0",
     "pg": "^8.7.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^4.3.4",

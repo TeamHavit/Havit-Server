@@ -7,19 +7,21 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 const Sentry = require('@sentry/node');
 const errorHandler = require('../middlewares/errorHandler');
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("../constants/swagger/swagger-output.json");
 
 // initializing
 const app = express();
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: `${process.env.NODE_ENV}_app`,
-  integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
-    new Sentry.Integrations.Express({ app }),
-    ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-  ],
-  tracesSampleRate: process.env.SENTRY_TRACES_SAMPLE_RATE,
+    dsn: process.env.SENTRY_DSN,
+    environment: `${process.env.NODE_ENV}_app`,
+    integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+        new Sentry.Integrations.Express({ app }),
+        ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+    ],
+    tracesSampleRate: process.env.SENTRY_TRACES_SAMPLE_RATE,
 });
 
 app.use(Sentry.Handlers.requestHandler());
@@ -39,8 +41,13 @@ if (process.env.NODE_ENV === "production") {
 
 // request에 담긴 정보를 json 형태로 파싱하기 위한 미들웨어들
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+if (process.env.NODE_ENV === "development") {
+    app.use("/swagger", swaggerUi.serve);
+    app.get("/swagger", swaggerUi.setup(swaggerFile));
+}
 
 // 라우팅: routes 폴더로 정리
 app.use("/", require("./routes"));
@@ -65,7 +72,7 @@ module.exports = functions
     })
     .region("asia-northeast3") // 서버가 돌아갈 region. asia-northeast3는 서울
     .https.onRequest(async (req, res) => {
-        
+
         // 들어오는 요청에 대한 로그를 콘솔에 찍기. 디버깅 때 유용하게 쓰일 예정.
         // 콘솔에 찍고 싶은 내용을 원하는 대로 추가하면 됨. (req.headers, req.query 등)
         console.log("\n\n", "[api]", `[${req.method.toUpperCase()}]`, req.originalUrl, req.body);

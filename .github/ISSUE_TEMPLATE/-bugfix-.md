@@ -1,5 +1,5 @@
 ---
-name: "[FIX]"
+name: "[BUGFIX]"
 about: Describe this issue template's purpose here.
 title: ''
 labels: ''
