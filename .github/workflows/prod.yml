@@ -85,8 +85,8 @@ jobs:
       - name: Deploy to Firebase
         run: |
           cd functions
-          firebase use prod --token ${{ secrets.PROD_FIREBASE_TOKEN }}
-          npm run deploy --token ${{ secrets.PROD_FIREBASE_TOKEN }}
+          firebase use prod
+          npm run deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.PROD_FIREBASE_TOKEN }}
 
