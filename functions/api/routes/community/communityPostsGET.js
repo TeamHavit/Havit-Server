@@ -28,6 +28,13 @@ module.exports = asyncWrapper(async (req, res) => {
   const totalPageCount = Math.ceil(totalItemCount / limit);
   const currentPage = +page;
 
+  // 게시글이 없는 경우
+  if (totalItemCount === 0) {
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, responseMessage.NO_COMMUNITY_POST));
+  }
+
   // 요청한 페이지가 존재하지 않는 경우
   if (page > totalPageCount) {
     return res
